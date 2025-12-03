@@ -1,6 +1,6 @@
 import { Link  } from "@tanstack/react-router";
-import type {LinkProps} from "@tanstack/react-router";
-import type {LucideIcon} from "lucide-react";
+import type { LinkOptions } from "@tanstack/react-router";
+import type { LucideIcon } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -10,10 +10,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-type Items = Array<{
-  title: string
-  url: LinkProps['to'],
+type Items = Array<LinkOptions & {
   icon: LucideIcon
+  label: string;
 }>
 
 export function NavMain({ items }: { items: Items }) {
@@ -22,11 +21,15 @@ export function NavMain({ items }: { items: Items }) {
       <SidebarGroupLabel>General</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild tooltip={item.title}>
-              <Link to={item.url}>
+          <SidebarMenuItem key={item.label}>
+            <SidebarMenuButton asChild tooltip={item.label}>
+              <Link 
+                to={item.to}
+                {...item}
+                activeProps={{ className: 'bg-muted' }} 
+              >
                 <item.icon />
-                <span>{item.title}</span>
+                <span>{item.label}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

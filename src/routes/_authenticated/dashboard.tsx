@@ -1,14 +1,45 @@
+import * as React from 'react';
 import { Separator } from '@radix-ui/react-separator'
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import {
+  Link,
+  Outlet,
+  createFileRoute,
+  isMatch,
+  useMatches,
+} from '@tanstack/react-router'
 import { AppSidebar } from '@/components/app-sidebar'
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/components/ui/sidebar'
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
-  component: RouteComponent,
-})
+  beforeLoad: () => ({
+    breadcrumb: 'Inicio',
+  }),
+  component: Dashboard,
+});
 
-function RouteComponent() {
+function Dashboard() {
+  const matches = useMatches()
+
+  const matchesWithCrumbs = matches
+    .filter((match) => isMatch(match, 'context.breadcrumb'))
+    .map((b, idx, list) => ({
+      title: b.context.breadcrumb,
+      path: b.pathname,
+      actual: idx === list.length - 1,
+    }));
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -22,15 +53,22 @@ function RouteComponent() {
             />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {matchesWithCrumbs.map((bread, idx) =>
+                  bread.actual ? (
+                    <BreadcrumbItem key={idx}>
+                      <BreadcrumbPage>{bread.title}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  ) : (
+                    <React.Fragment key={idx}>
+                      <BreadcrumbItem className="hidden md:block">
+                        <BreadcrumbLink asChild>
+                          <Link to={bread.path}>{bread.title}</Link>
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                      <BreadcrumbSeparator className="hidden md:block" />
+                    </React.Fragment>
+                  ),
+                )}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

@@ -10,8 +10,7 @@ import {
   Users2,
 } from "lucide-react"
 
-import { Link   } from "@tanstack/react-router"
-import type { LinkProps } from "@tanstack/react-router";
+import { Link, linkOptions   } from "@tanstack/react-router"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
@@ -25,48 +24,36 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-type Item = {
-  title: string;
-  url: LinkProps['to'];
-  icon: React.ForwardRefExoticComponent<any>,
-  isActive?: boolean;
-}
-
-type Options = {
-  navMain: Array<Item>;
-  navSecondary: Array<Item>
-}
-
-const data: Options = {
+const data = {
   navMain: [
-    {
-      title: "Inicio",
-      url: "/dashboard",
+    linkOptions({
+      label: 'Inicio',
+      to: '/dashboard',
+      activeOptions: { exact: true },
       icon: Home,
-      isActive: true,
-    },
-    {
-      title: "Usuarios",
-      url: "/dashboard/users",
+    }),
+    linkOptions({
+      label: 'Usuarios',
+      to: '/dashboard/users',
       icon: Users2,
-    },
-    {
-      title: "Ajustes",
-      url: "/dashboard/settings",
+    }),
+    linkOptions({
+      label: 'Ajustes',
+      to: '/dashboard/settings',
       icon: Settings2,
-    },
+    }),
   ],
   navSecondary: [
-    {
-      title: "Soporte",
-      url: "/dashboard",
+    linkOptions({
+      label: 'Soporte',
+      to: '/dashboard/settings',
       icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "/dashboard",
+    }),
+    linkOptions({
+      label: 'Feedback',
+      to: '/dashboard/settings',
       icon: Send,
-    },
+    }),
   ],
 }
 
