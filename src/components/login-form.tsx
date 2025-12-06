@@ -1,4 +1,3 @@
-import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter } from '@tanstack/react-router';
@@ -15,15 +14,13 @@ import {
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
-  FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import { Auth } from '@/services/auth';
 import { Spinner } from '@/components/ui/spinner';
 import { authQueryOptions } from '@/query-options';
+import { useAppForm } from '@/hooks/form';
 
 const loginSchema = z.object({
   email: z.email(),
@@ -49,7 +46,7 @@ export function LoginForm({
     },
   });
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
       email: '',
       password: '',
@@ -95,51 +92,27 @@ export function LoginForm({
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 O continua con
               </FieldSeparator>
-              <form.Field 
+              <form.AppField 
                 name="email"
                 children={(field) => (
-                  <Field>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      onBlur={field.handleBlur}
-                      type="email"
-                      placeholder="m@example.com"
-                    />
-                    <FieldError errors={field.state.meta.errors} />
-                  </Field>
+                  <field.TextField 
+                    label="Email"
+                    id="email" 
+                    type="email" 
+                    placeholder="m@gmail.com" 
+                  />
                 )}
               />
-              
-              <form.Field 
+              <form.AppField 
                 name="password"
                 children={(field) => (
-                  <Field>
-                    <div className="flex items-center">
-                      <FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
-                      <a
-                        href="#"
-                        className="ml-auto text-sm underline-offset-4 hover:underline"
-                      >
-                        Olvidaste tu contraseña?
-                      </a>
-                    </div>
-                    <Input 
-                      id={field.name} 
-                      name={field.name}
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      onBlur={field.handleBlur}
-                      type="password"
-                    />
-                    <FieldError errors={field.state.meta.errors} />
-                  </Field>
+                  <field.TextField 
+                    label="Contraseña" 
+                    id="password"
+                    type="password"  
+                  />
                 )}
               />
-              
               <Field>
                 <form.Subscribe 
                   selector={(state) => [state.canSubmit, state.isSubmitting]}
