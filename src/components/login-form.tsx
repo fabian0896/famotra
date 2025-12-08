@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { useRouter } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -104,7 +104,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                   )}
                 />
                 <FieldDescription className="text-center">
-                  No tienes cuenta aún? <a href="#">Registrate</a>
+                  No tienes cuenta aún? <Link to="/register">Registrate</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
