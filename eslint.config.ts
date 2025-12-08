@@ -11,7 +11,7 @@ import pluginPrettier from 'eslint-plugin-prettier';
 
 export default defineConfig([
   {
-    ignores: ['*.config.js'],
+    ignores: ['*.config.js', 'src/models/database.types.ts'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
