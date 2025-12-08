@@ -7,8 +7,9 @@ export default function TextField({
   ...props
 }: { label: string } & React.ComponentProps<'input'>) {
   const field = useFieldContext<string>();
+  const isError = field.state.meta.isDirty && !field.state.meta.isValid;
   return (
-    <Field>
+    <Field data-invalid={isError}>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
       <Input
         id={field.name}

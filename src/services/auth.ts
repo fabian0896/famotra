@@ -1,4 +1,4 @@
-import type { LoginOptions } from '@/models/auth.model';
+import type { LoginOptions, SignUpOptions } from '@/models/auth.model';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Auth {
@@ -18,5 +18,17 @@ export class Auth {
     const { data, error } = await supabase.auth.getUser();
     if (error) return null;
     return data.user;
+  }
+
+  static async signUp(options: SignUpOptions) {
+    const { name, ...credentials } = options;
+    const emailRedirectTo = `${location.origin}/dashboard`;
+    const data = { name };
+    const { data: user, error } = await supabase.auth.signUp({
+      ...credentials,
+      options: { emailRedirectTo, data },
+    });
+    if (error) throw error;
+    return user;
   }
 }

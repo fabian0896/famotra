@@ -1,11 +1,61 @@
-import { Link } from '@tanstack/react-router';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import { Link, useRouter } from '@tanstack/react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { z } from 'zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
+import { useAppForm } from '@/hooks/form';
+import { Auth } from '@/services/auth';
+import { authQueryOptions } from '@/query-options';
+
+const signupSchema = z
+  .object({
+    name: z.string(),
+    email: z.email(),
+    password: z.string().min(8),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirmPassword'],
+  });
 
 export function SignupForm({ className, ...props }: React.ComponentProps<'div'>) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const signup = useMutation({
+    mutationFn: Auth.signUp,
+    onSuccess: async () => {
+      const queryKey = authQueryOptions.queryKey;
+      await queryClient.invalidateQueries({ queryKey });
+      toast.success('Registro Exitoso', {
+        description: 'Valida tu correo para poder ingresar a la plataforma',
+      });
+      router.navigate({ to: '/dashboard' });
+    },
+    onError: () => {
+      toast.error('Algo salió mal, intenta nuevamente');
+    },
+  });
+
+  const form = useAppForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validators: {
+      onSubmit: signupSchema,
+    },
+    onSubmit: async ({ value, formApi }) => {
+      await signup.mutateAsync(value);
+      formApi.reset();
+    },
+  });
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
@@ -14,31 +64,61 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
           <CardDescription>Completa los datos para crear tu cuenta</CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              form.handleSubmit();
+            }}
+          >
             <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="name">Nombre completo</FieldLabel>
-                <Input id="name" type="text" placeholder="John Doe" required />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="email">Correo</FieldLabel>
-                <Input id="email" type="email" placeholder="m@example.com" required />
-              </Field>
+              <form.AppField
+                name="name"
+                children={(field) => (
+                  <field.TextField id="name" name="name" label="Nombre completo" />
+                )}
+              />
+              <form.AppField
+                name="email"
+                children={(field) => (
+                  <field.TextField
+                    id="email"
+                    label="Correo"
+                    type="email"
+                    placeholder="m@example.com"
+                  />
+                )}
+              />
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
-                  <Field>
-                    <FieldLabel htmlFor="password">Contraseña</FieldLabel>
-                    <Input id="password" type="password" required />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="confirm-password">Confirmar contraseña</FieldLabel>
-                    <Input id="confirm-password" type="password" required />
-                  </Field>
+                  <form.AppField
+                    name="password"
+                    children={(field) => (
+                      <field.TextField
+                        id="password"
+                        name="password"
+                        type="password"
+                        label="contraseña"
+                      />
+                    )}
+                  />
+                  <form.AppField
+                    name="confirmPassword"
+                    children={(field) => (
+                      <field.TextField
+                        id="confirm-password"
+                        name="confirm-password"
+                        type="password"
+                        label="Confirmar contraseña"
+                      />
+                    )}
+                  />
                 </Field>
-                <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+                <FieldDescription>Debe tener al menos 8 caracteres.</FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Crear Cuenta</Button>
+                <form.AppForm>
+                  <form.SubmitButton>Crear Cuenta</form.SubmitButton>
+                </form.AppForm>
                 <FieldDescription className="text-center">
                   Ya tienes una cuenta? <Link to="/">Ingresar</Link>
                 </FieldDescription>

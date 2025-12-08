@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldSeparator } from '@/components/ui/field';
 import { Auth } from '@/services/auth';
-import { Spinner } from '@/components/ui/spinner';
 import { authQueryOptions } from '@/query-options';
 import { useAppForm } from '@/hooks/form';
 
@@ -94,15 +93,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                 )}
               />
               <Field>
-                <form.Subscribe
-                  selector={(state) => [state.canSubmit, state.isSubmitting]}
-                  children={([canSubmit, isSubmitting]) => (
-                    <Button disabled={!canSubmit || isSubmitting} type="submit">
-                      {isSubmitting && <Spinner />}
-                      Ingresar
-                    </Button>
-                  )}
-                />
+                <form.AppForm>
+                  <form.SubmitButton>Ingresar</form.SubmitButton>
+                </form.AppForm>
                 <FieldDescription className="text-center">
                   No tienes cuenta aún? <Link to="/register">Registrate</Link>
                 </FieldDescription>
