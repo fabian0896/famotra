@@ -1,7 +1,16 @@
 'use client';
 
 import * as React from 'react';
-import { CircleDollarSign, Home, LifeBuoy, Send, Settings2, Users2 } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  CircleDollarSign,
+  Home,
+  LayoutDashboard,
+  LifeBuoy,
+  Send,
+  Settings2,
+  Wallet,
+} from 'lucide-react';
 
 import { Link, linkOptions } from '@tanstack/react-router';
 import { NavMain } from '@/components/nav-main';
@@ -26,9 +35,19 @@ const data = {
       icon: Home,
     }),
     linkOptions({
-      label: 'Usuarios',
-      to: '/dashboard/users',
-      icon: Users2,
+      label: 'Transacciones',
+      to: '/dashboard/transactions',
+      icon: ArrowLeftRight,
+    }),
+    linkOptions({
+      label: 'Cuentas',
+      to: '/dashboard/accounts',
+      icon: Wallet,
+    }),
+    linkOptions({
+      label: 'Categorias',
+      to: '/dashboard/categories',
+      icon: LayoutDashboard,
     }),
     linkOptions({
       label: 'Ajustes',
