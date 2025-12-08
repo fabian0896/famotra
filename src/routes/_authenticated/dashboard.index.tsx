@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/dashboard/')({
   component: Index,
-})
+});
 
 function Index() {
-  return <div>Home Page</div>
+  return <div>Home Page</div>;
 }

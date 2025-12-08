@@ -1,5 +1,5 @@
-import type { LoginOptions } from "@/models/auth.model";
-import { supabase } from "@/integrations/supabase/client";
+import type { LoginOptions } from '@/models/auth.model';
+import { supabase } from '@/integrations/supabase/client';
 
 export class Auth {
   static async login(options: LoginOptions) {

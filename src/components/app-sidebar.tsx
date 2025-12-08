@@ -1,19 +1,12 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import {
-  CircleDollarSign,
-  Home,
-  LifeBuoy,
-  Send,
-  Settings2,
-  Users2,
-} from "lucide-react"
+import * as React from 'react';
+import { CircleDollarSign, Home, LifeBuoy, Send, Settings2, Users2 } from 'lucide-react';
 
-import { Link, linkOptions   } from "@tanstack/react-router"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { Link, linkOptions } from '@tanstack/react-router';
+import { NavMain } from '@/components/nav-main';
+import { NavSecondary } from '@/components/nav-secondary';
+import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
@@ -22,7 +15,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 const data = {
   navMain: [
@@ -55,7 +48,7 @@ const data = {
       icon: Send,
     }),
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -85,5 +78,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

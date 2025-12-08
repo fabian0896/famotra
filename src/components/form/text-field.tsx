@@ -1,8 +1,11 @@
-import { Field, FieldError, FieldLabel } from "../ui/field";
-import { Input } from "../ui/input";
-import { useFieldContext } from "@/hooks/form";
+import { Field, FieldError, FieldLabel } from '../ui/field';
+import { Input } from '../ui/input';
+import { useFieldContext } from '@/hooks/form';
 
-export default function TextField({ label, ...props } : { label: string } & React.ComponentProps<"input">) {
+export default function TextField({
+  label,
+  ...props
+}: { label: string } & React.ComponentProps<'input'>) {
   const field = useFieldContext<string>();
   return (
     <Field>

@@ -2,21 +2,10 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldSeparator,
-} from "@/components/ui/field"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Field, FieldDescription, FieldGroup, FieldSeparator } from '@/components/ui/field';
 import { Auth } from '@/services/auth';
 import { Spinner } from '@/components/ui/spinner';
 import { authQueryOptions } from '@/query-options';
@@ -27,10 +16,7 @@ const loginSchema = z.object({
   password: z.string().min(5),
 });
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -57,20 +43,18 @@ export function LoginForm({
     onSubmit: async ({ value, formApi }) => {
       await login.mutateAsync(value);
       formApi.reset();
-    }
+    },
   });
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Bienvenido</CardTitle>
-          <CardDescription>
-            Ingresa de forma rapida con tu cuenta de Google
-          </CardDescription>
+          <CardDescription>Ingresa de forma rapida con tu cuenta de Google</CardDescription>
         </CardHeader>
         <CardContent>
-          <form 
+          <form
             onSubmit={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -92,35 +76,28 @@ export function LoginForm({
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 O continua con
               </FieldSeparator>
-              <form.AppField 
+              <form.AppField
                 name="email"
                 children={(field) => (
-                  <field.TextField 
+                  <field.TextField
                     label="Email"
-                    id="email" 
-                    type="email" 
-                    placeholder="m@gmail.com" 
+                    id="email"
+                    type="email"
+                    placeholder="m@gmail.com"
                   />
                 )}
               />
-              <form.AppField 
+              <form.AppField
                 name="password"
                 children={(field) => (
-                  <field.TextField 
-                    label="Contraseña" 
-                    id="password"
-                    type="password"  
-                  />
+                  <field.TextField label="Contraseña" id="password" type="password" />
                 )}
               />
               <Field>
-                <form.Subscribe 
+                <form.Subscribe
                   selector={(state) => [state.canSubmit, state.isSubmitting]}
                   children={([canSubmit, isSubmitting]) => (
-                    <Button 
-                      disabled={!canSubmit || isSubmitting} 
-                      type="submit"
-                    >
+                    <Button disabled={!canSubmit || isSubmitting} type="submit">
                       {isSubmitting && <Spinner />}
                       Ingresar
                     </Button>
@@ -135,5 +112,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

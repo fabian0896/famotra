@@ -1,7 +1,7 @@
-import * as React from "react"
-import { Link  } from "@tanstack/react-router"
-import type {LinkOptions} from "@tanstack/react-router";
-import type {LucideIcon} from "lucide-react";
+import * as React from 'react';
+import { Link } from '@tanstack/react-router';
+import type { LinkOptions } from '@tanstack/react-router';
+import type { LucideIcon } from 'lucide-react';
 
 import {
   SidebarGroup,
@@ -9,16 +9,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
 
 export function NavSecondary({
   items,
   ...props
 }: {
-  items: Array<LinkOptions & {
-    label: string
-    icon: LucideIcon
-  }>
+  items: (LinkOptions & {
+    label: string;
+    icon: LucideIcon;
+  })[];
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>
@@ -37,5 +37,5 @@ export function NavSecondary({
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { CircleDollarSign } from "lucide-react"
-import { LoginForm } from "@/components/login-form"
+import { CircleDollarSign } from 'lucide-react';
+import { LoginForm } from '@/components/login-form';
 
 export const Route = createFileRoute('/')({
   component: Index,

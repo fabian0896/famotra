@@ -1,19 +1,7 @@
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react"
-
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query"
-import { useRouter } from "@tanstack/react-router"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,15 +10,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { authQueryOptions } from "@/query-options"
-import { Auth } from "@/services/auth"
+} from '@/components/ui/sidebar';
+import { authQueryOptions } from '@/query-options';
+import { Auth } from '@/services/auth';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -38,14 +26,13 @@ export function NavUser() {
   const queryClient = useQueryClient();
   const { data: user } = useSuspenseQuery(authQueryOptions);
 
-
   const logout = useMutation({
     mutationFn: Auth.logout,
     onSettled: async () => {
       const queryKey = authQueryOptions.queryKey;
       router.navigate({ to: '/' });
       await queryClient.invalidateQueries({ queryKey });
-    }
+    },
   });
 
   return (
@@ -70,7 +57,7 @@ export function NavUser() {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
           >
@@ -117,5 +104,5 @@ export function NavUser() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
