@@ -13,9 +13,6 @@ import {
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
-  beforeLoad: () => ({
-    breadcrumb: 'Inicio',
-  }),
   component: Dashboard,
 });
 
