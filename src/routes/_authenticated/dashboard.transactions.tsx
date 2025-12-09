@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { AddTransactionDialog } from '@/components/add-transaction-dialog';
 
 export const Route = createFileRoute('/_authenticated/dashboard/transactions')({
   beforeLoad: () => ({
@@ -8,5 +9,9 @@ export const Route = createFileRoute('/_authenticated/dashboard/transactions')({
 });
 
 function Transactions() {
-  return <div>Transactions</div>;
+  return (
+    <div>
+      <AddTransactionDialog />
+    </div>
+  );
 }
