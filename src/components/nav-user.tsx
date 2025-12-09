@@ -17,9 +17,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { authQueryOptions } from '@/query-options';
+import { authQueryOptions } from '@/query-options/auth';
 import { Auth } from '@/services/auth';
-import { useAvatar } from '@/hooks/avatar';
+import { useAvatar } from '@/hooks/use-avatar';
 
 export function NavUser() {
   const { isMobile } = useSidebar();

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup, FieldSeparator } from '@/components/ui/field';
 import { Auth } from '@/services/auth';
-import { authQueryOptions } from '@/query-options';
+import { authQueryOptions } from '@/query-options/auth';
 import { useAppForm } from '@/hooks/form';
 
 const loginSchema = z.object({

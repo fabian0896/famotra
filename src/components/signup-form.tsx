@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
 import { useAppForm } from '@/hooks/form';
 import { Auth } from '@/services/auth';
-import { authQueryOptions } from '@/query-options';
+import { authQueryOptions } from '@/query-options/auth';
 
 const signupSchema = z
   .object({
