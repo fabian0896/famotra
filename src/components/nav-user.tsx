@@ -27,7 +27,7 @@ export function NavUser() {
   const queryClient = useQueryClient();
   const { data: user } = useSuspenseQuery(authQueryOptions);
 
-  const { avatar } = useAvatar(user?.user_metadata['name']);
+  const { avatar } = useAvatar(user?.user_metadata.name);
 
   const logout = useMutation({
     mutationFn: Auth.logout,
@@ -52,7 +52,7 @@ export function NavUser() {
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.user_metadata['name']}</span>
+                <span className="truncate font-medium">{user?.user_metadata.name}</span>
                 <span className="truncate text-xs">{user?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -71,7 +71,7 @@ export function NavUser() {
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.email}</span>
+                  <span className="truncate font-medium">{user?.user_metadata.name}</span>
                   <span className="truncate text-xs">{user?.email}</span>
                 </div>
               </div>

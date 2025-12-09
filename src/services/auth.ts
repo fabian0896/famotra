@@ -1,4 +1,4 @@
-import type { LoginOptions, SignUpOptions } from '@/models/auth.model';
+import type { LoginOptions, SignUpOptions, User } from '@/models/auth.model';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Auth {
@@ -17,7 +17,7 @@ export class Auth {
   static async getUser() {
     const { data, error } = await supabase.auth.getUser();
     if (error) return null;
-    return data.user;
+    return data.user as User;
   }
 
   static async signUp(options: SignUpOptions) {

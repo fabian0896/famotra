@@ -18,12 +18,15 @@ export function AddTransactionDialog() {
 
   const form = useAppForm({
     defaultValues: {
-      descriptions: '',
+      description: '',
+      category: '',
+      account: '',
       amount: 0,
     },
-    onSubmit: ({ value }) => {
+    onSubmit: ({ value, formApi }) => {
       console.log({ value });
       setOpen(false);
+      formApi.reset();
     },
   });
 
@@ -47,23 +50,23 @@ export function AddTransactionDialog() {
             form.handleSubmit();
           }}
         >
-          <DialogHeader>
+          <DialogHeader className="mb-6">
             <DialogTitle>Nueva Transacción</DialogTitle>
             <DialogDescription>
               Completa todos los datos para agregar una nueva transaccion
             </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 mb-6">
             <form.AppField
-              name="descriptions"
+              name="account"
               children={(field) => <field.TextField label="Cuenta" />}
             />
             <form.AppField
-              name="descriptions"
+              name="category"
               children={(field) => <field.TextField label="Categoría" />}
             />
             <form.AppField
-              name="descriptions"
+              name="description"
               children={(field) => <field.TextField label="Descripción" />}
             />
             <form.AppField
@@ -71,7 +74,7 @@ export function AddTransactionDialog() {
               children={(field) => <field.AmountField label="Valor" />}
             />
           </div>
-          <DialogFooter className="mt-6">
+          <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline">
                 Cancel
