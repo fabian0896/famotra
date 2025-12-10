@@ -41,20 +41,26 @@ export type Database = {
       categories: {
         Row: {
           created_at: string
+          icon: string | null
           id: string
           name: string
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
           user_id: string | null
         }
         Insert: {
           created_at?: string
+          icon?: string | null
           id?: string
           name: string
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
           user_id?: string | null
         }
         Update: {
           created_at?: string
+          icon?: string | null
           id?: string
           name?: string
+          transaction_type?: Database["public"]["Enums"]["transaction_type"]
           user_id?: string | null
         }
         Relationships: []

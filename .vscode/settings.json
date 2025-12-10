@@ -26,5 +26,6 @@
   },
   "search.exclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "tailwindCSS.classFunctions": ["cva", "cx"]
 }
