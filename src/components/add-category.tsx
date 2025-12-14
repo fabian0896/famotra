@@ -20,7 +20,7 @@ import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
 
 const addCategorySchema = z.object({
-  name: z.string(),
+  name: z.string().nonempty({ message: 'Debes ingresar un nombre para la categoría' }),
   icon: z.emoji(),
   transaction_type: z.enum(['income', 'expense', 'transfer']),
 });
@@ -72,7 +72,7 @@ export function AddCategory({ type }: { type: TransactionType }) {
             <LucidePlus className="text-primary" size={30} strokeWidth={3} />
           </button>
         </DialogTrigger>
-        <span className="text-muted-foreground text-center font-medium text-sm">Agregar</span>
+        <span className="text-muted-foreground text-center text-sm">Agregar</span>
       </div>
       <DialogContent className="sm:max-w-md">
         <form

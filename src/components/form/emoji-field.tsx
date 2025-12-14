@@ -6,7 +6,7 @@ import { EmojiPicker, EmojiPickerContent, EmojiPickerSearch } from '../ui/emoji-
 import { useFieldContext } from '@/hooks/form';
 
 const emojiFieldVariants = cva(
-  'w-24 transition-all h-24 rounded-full  mx-auto flex items-center justify-center',
+  'w-24 transition-all h-24 rounded-full  mx-auto flex items-center justify-center text-muted-foreground',
   {
     variants: {
       selected: {
@@ -14,7 +14,7 @@ const emojiFieldVariants = cva(
         false: 'border border-dashed bg-muted border-muted-foreground',
       },
       error: {
-        true: 'bg-red-100 border-red-500',
+        true: 'bg-red-100 border-red-500 text-red-600',
       },
     },
   }
@@ -36,7 +36,7 @@ export default function EmojiField({ className, ...props }: React.ComponentProps
           {emoji ? (
             <span className="text-4xl">{emoji}</span>
           ) : (
-            <SmilePlus className="text-muted-foreground opacity-50" size={30} />
+            <SmilePlus className="opacity-50" size={30} />
           )}
         </button>
       </PopoverTrigger>
@@ -47,7 +47,7 @@ export default function EmojiField({ className, ...props }: React.ComponentProps
             field.handleChange(e);
             setIsOpen(false);
           }}
-          className="h-[342px]"
+          className="h-[342px] shadow-md"
         >
           <EmojiPickerSearch />
           <EmojiPickerContent />
