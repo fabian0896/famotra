@@ -30,7 +30,7 @@ export function AddCategory({ type }: { type: TransactionType }) {
   const queryClient = useQueryClient();
 
   const create = useMutation({
-    mutationFn: Categories.create,
+    mutationFn: Categories.upsert,
     onSuccess: () => {
       toast.success('Cargeoría agregada correctamente');
     },
@@ -45,6 +45,7 @@ export function AddCategory({ type }: { type: TransactionType }) {
 
   const form = useAppForm({
     defaultValues: {
+      id: undefined,
       name: '',
       icon: '',
       transaction_type: type,

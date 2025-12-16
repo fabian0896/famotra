@@ -3,7 +3,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowUpLeft, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from './ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from './ui/sheet';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Separator } from './ui/separator';
@@ -21,7 +28,6 @@ import {
 import { Spinner } from './ui/spinner';
 import type React from 'react';
 import type { Category } from '@/models/categories.models';
-import { cn } from '@/lib/utils';
 import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
 
@@ -57,12 +63,23 @@ function DeleteCategoryDialog({
   );
 }
 
-export function CategoryList({ children, className, ...props }: React.ComponentProps<'ul'>) {
+export function CategoryList({
+  children,
+  title,
+  description,
+  ...props
+}: { title: string; description: string } & React.ComponentProps<'div'>) {
   const [parent] = useAutoAnimate();
   return (
-    <ul ref={parent} className={cn('flex gap-8 flex-wrap', className)} {...props}>
-      {children}
-    </ul>
+    <div {...props}>
+      <div className="mb-4">
+        <h2 className="text-base font-semibold">{title}</h2>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+      <ul ref={parent} className="flex gap-8 flex-wrap">
+        {children}
+      </ul>
+    </div>
   );
 }
 
@@ -105,11 +122,13 @@ export function CategoryItem({ category }: { category: Category }) {
             <div className="w-22 h-22 rounded-full bg-primary-foreground flex items-center justify-center text-4xl border border-primary">
               {category.icon}
             </div>
-            <h2 className="text-4xl font-semibold mt-1">{category.name}</h2>
-            <Badge>
-              <ArrowUpLeft />
-              {category.transaction_type}
-            </Badge>
+            <SheetTitle className="text-4xl font-semibold mt-1">{category.name}</SheetTitle>
+            <SheetDescription>
+              <Badge>
+                <ArrowUpLeft />
+                {category.transaction_type}
+              </Badge>
+            </SheetDescription>
           </SheetHeader>
           <div className="flex gap-4 px-4">
             <Button className="flex-1" variant="outline">

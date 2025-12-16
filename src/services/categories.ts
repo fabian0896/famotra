@@ -3,12 +3,30 @@ import { supabase } from '@/integrations/supabase/client';
 
 export class Categories {
   static async get() {
-    const { data } = await supabase.from('categories').select().throwOnError();
-    return data;
+    const incomesPromise = supabase
+      .from('categories')
+      .select()
+      .eq('transaction_type', 'income')
+      .throwOnError();
+    const expensesPromise = supabase
+      .from('categories')
+      .select()
+      .eq('transaction_type', 'expense')
+      .throwOnError();
+    const [{ data: incomes }, { data: expenses }] = await Promise.all([
+      incomesPromise,
+      expensesPromise,
+    ]);
+    return { incomes, expenses };
   }
 
   static async create(data: CategoryInsert) {
     const { data: category } = await supabase.from('categories').insert(data).throwOnError();
+    return category;
+  }
+
+  static async upsert(data: CategoryInsert) {
+    const { data: category } = await supabase.from('categories').upsert(data).throwOnError();
     return category;
   }
 
