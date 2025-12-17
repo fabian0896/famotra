@@ -3,8 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 export class Accounts {
   static async get() {
-    const { data } = await supabase.from('accounts').select().throwOnError();
-    return data;
+    const { data: account } = await supabase.from('accounts').select().throwOnError();
+    return account;
   }
 
   static async create(data: AccountInsert) {
