@@ -38,6 +38,27 @@ export type Database = {
         }
         Relationships: []
       }
+      bank_list: {
+        Row: {
+          created_at: string
+          id: string
+          logo: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo?: string
+          name?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
