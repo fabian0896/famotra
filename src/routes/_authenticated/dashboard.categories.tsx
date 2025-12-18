@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { AddCategory } from '@/components/add-category';
+import { AddCategotyButton, CreateEditCategoryDialog } from '@/components/create-edit-category';
 import { categoriesQueryOptions } from '@/query-options/categories';
 import { CategoryItem, CategoryList } from '@/components/category-item';
 
@@ -31,7 +31,9 @@ function Categories() {
           {categories.incomes.map((category) => (
             <CategoryItem key={category.id} category={category} />
           ))}
-          <AddCategory type="income" />
+          <CreateEditCategoryDialog type="income">
+            <AddCategotyButton />
+          </CreateEditCategoryDialog>
         </CategoryList>
 
         <CategoryList
@@ -41,7 +43,9 @@ function Categories() {
           {categories.expenses.map((category) => (
             <CategoryItem key={category.id} category={category} />
           ))}
-          <AddCategory type="expense" />
+          <CreateEditCategoryDialog type="expense">
+            <AddCategotyButton />
+          </CreateEditCategoryDialog>
         </CategoryList>
       </div>
     </div>

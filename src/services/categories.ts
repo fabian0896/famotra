@@ -20,6 +20,16 @@ export class Categories {
     return { incomes, expenses };
   }
 
+  static async getById(categoryId: string) {
+    const { data: category } = await supabase
+      .from('categories')
+      .select()
+      .eq('id', categoryId)
+      .single()
+      .throwOnError();
+    return category;
+  }
+
   static async create(data: CategoryInsert) {
     const { data: category } = await supabase.from('categories').insert(data).throwOnError();
     return category;

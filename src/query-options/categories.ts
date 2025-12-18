@@ -6,3 +6,11 @@ export const categoriesQueryOptions = queryOptions({
   queryKey: [QueryKeys.CATEGORIES],
   queryFn: () => Categories.get(),
 });
+
+export const cagoryQueryOptions = (categoryId?: string) => {
+  return queryOptions({
+    queryKey: [QueryKeys.CATEGORIES, categoryId],
+    queryFn: () => Categories.getById(categoryId!),
+    enabled: !!categoryId,
+  });
+};

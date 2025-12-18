@@ -1,5 +1,5 @@
 import { LucidePlus } from 'lucide-react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from './ui/dialog';
 import { Button } from './ui/button';
-import type { CategoryInsert, TransactionType } from '@/models/categories.models';
+import type { Category, CategoryInsert, TransactionType } from '@/models/categories.models';
 import { useAppForm } from '@/hooks/form';
 import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
@@ -25,7 +25,36 @@ const addCategorySchema = z.object({
   transaction_type: z.enum(['income', 'expense', 'transfer']),
 });
 
-export function AddCategory({ type }: { type: TransactionType }) {
+export function AddCategotyButton() {
+  return (
+    <DialogTrigger asChild>
+      <button className="flex flex-col justify-center items-center gap-1.5 group">
+        <div className="bg-primary-foreground rounded-full w-16 h-16 text-2xl flex items-center justify-center">
+          <span className="group-hover:scale-110 group-hover:rotate-12 transition-all">
+            <LucidePlus className="text-primary" size={30} strokeWidth={3} />
+          </span>
+        </div>
+        <span className="text-muted-foreground text-center font-medium text-sm lowercase first-letter:capitalize group-hover:text-foreground">
+          Agregar
+        </span>
+      </button>
+    </DialogTrigger>
+  );
+}
+
+export function CreateEditCategoryDialog({
+  isOpen,
+  type,
+  category,
+  children,
+  onOpenChange,
+}: {
+  isOpen?: boolean;
+  type?: TransactionType;
+  category?: Category;
+  children?: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -43,12 +72,17 @@ export function AddCategory({ type }: { type: TransactionType }) {
     },
   });
 
+  useEffect(() => {
+    if (isOpen === undefined) return;
+    setOpen(isOpen);
+  }, [isOpen]);
+
   const form = useAppForm({
     defaultValues: {
-      id: undefined,
-      name: '',
-      icon: '',
-      transaction_type: type,
+      id: category?.id || undefined,
+      name: category?.name || '',
+      icon: category?.icon || '',
+      transaction_type: category?.transaction_type || type,
     } as CategoryInsert,
     validators: {
       onSubmit: addCategorySchema,
@@ -57,24 +91,19 @@ export function AddCategory({ type }: { type: TransactionType }) {
       await create.mutateAsync(value);
       formApi.reset();
       setOpen(false);
+      onOpenChange?.(false);
     },
   });
 
   const handleClose = (state: boolean) => {
+    onOpenChange?.(state);
     setOpen(state);
     form.reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <div className="flex flex-col gap-1.5">
-        <DialogTrigger asChild>
-          <button className="h-16 w-16 rounded-full bg-primary-foreground flex transition-all justify-center items-center hover:scale-105">
-            <LucidePlus className="text-primary" size={30} strokeWidth={3} />
-          </button>
-        </DialogTrigger>
-        <span className="text-muted-foreground text-center text-sm">Agregar</span>
-      </div>
+      {children}
       <DialogContent className="sm:max-w-md">
         <form
           onSubmit={(event) => {

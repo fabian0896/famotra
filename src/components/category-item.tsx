@@ -26,6 +26,7 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog';
 import { Spinner } from './ui/spinner';
+import { CreateEditCategoryDialog } from './create-edit-category';
 import type React from 'react';
 import type { Category } from '@/models/categories.models';
 import { Categories } from '@/services/categories';
@@ -85,6 +86,7 @@ export function CategoryList({
 
 export function CategoryItem({ category }: { category: Category }) {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const remove = useMutation({
@@ -102,8 +104,14 @@ export function CategoryItem({ category }: { category: Category }) {
     },
   });
 
+  const handleOpenEdit = () => {
+    setSheetOpen(false);
+    setEditOpen(true);
+  };
+
   return (
     <li>
+      <CreateEditCategoryDialog isOpen={editOpen} onOpenChange={setEditOpen} category={category} />
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
           <button className="flex flex-col justify-center items-center gap-1.5 group">
@@ -131,7 +139,7 @@ export function CategoryItem({ category }: { category: Category }) {
             </SheetDescription>
           </SheetHeader>
           <div className="flex gap-4 px-4">
-            <Button className="flex-1" variant="outline">
+            <Button onClick={handleOpenEdit} className="flex-1" variant="outline">
               Editar
             </Button>
             <DeleteCategoryDialog
