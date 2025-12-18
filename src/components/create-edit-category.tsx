@@ -15,6 +15,7 @@ import {
 } from './ui/dialog';
 import { Button } from './ui/button';
 import type { Category, CategoryInsert, TransactionType } from '@/models/categories.models';
+import { TRANSACTION_TYPES } from '@/models/categories.models';
 import { useAppForm } from '@/hooks/form';
 import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
@@ -41,12 +42,6 @@ export function AddCategotyButton() {
     </DialogTrigger>
   );
 }
-
-const TRANSACTION_TYPES: Record<TransactionType, string> = {
-  income: 'Ingreso',
-  expense: 'Gasto',
-  transfer: 'Transferencia',
-};
 
 export function CreateEditCategoryDialog({
   isOpen,
