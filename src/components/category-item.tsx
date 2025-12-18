@@ -1,6 +1,6 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowUpLeft, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import {
@@ -29,6 +29,7 @@ import { Spinner } from './ui/spinner';
 import { CreateEditCategoryDialog } from './create-edit-category';
 import type React from 'react';
 import type { Category } from '@/models/categories.models';
+import { TRANSACTION_TYPES } from '@/models/categories.models';
 import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
 
@@ -132,10 +133,7 @@ export function CategoryItem({ category }: { category: Category }) {
             </div>
             <SheetTitle className="text-4xl font-semibold mt-1">{category.name}</SheetTitle>
             <SheetDescription>
-              <Badge>
-                <ArrowUpLeft />
-                {category.transaction_type}
-              </Badge>
+              <Badge>{TRANSACTION_TYPES[category.transaction_type]}</Badge>
             </SheetDescription>
           </SheetHeader>
           <div className="flex gap-4 px-4">
