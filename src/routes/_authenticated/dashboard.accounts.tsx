@@ -1,26 +1,34 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { LucidePlus } from 'lucide-react';
-import { Card, CardDescription } from '@/components/ui/card';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { accountsQueryOptions } from '@/query-options/accounts';
+import { authQueryOptions } from '@/query-options/auth';
+import { AccountItem } from '@/components/account-item';
+import { AddAcount } from '@/components/add-account';
 
 export const Route = createFileRoute('/_authenticated/dashboard/accounts')({
   beforeLoad: () => ({
     breadcrumb: 'Cuentas',
   }),
+  loader: async ({ context }) => {
+    const queryClient = context.queryClient;
+    await queryClient.ensureQueryData(accountsQueryOptions);
+    await queryClient.ensureQueryData(authQueryOptions);
+  },
   component: Accounts,
 });
 
 function Accounts() {
+  const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
+  const { data: user } = useSuspenseQuery(authQueryOptions);
   return (
     <div className="container mx-auto">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">Cuentas</h1>
       <h2 className="py-4 text-muted-foreground text-sm">Controla y administra tus cuentas</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <Card className="items-center rounded-sm gap-3">
-          <button className="h-16 w-16 rounded-full bg-primary-foreground flex transition-all justify-center items-center hover:scale-105">
-            <LucidePlus className="text-primary" size={30} strokeWidth={3} />
-          </button>
-          <CardDescription>Agregar cuenta</CardDescription>
-        </Card>
+        <AddAcount></AddAcount>
+        {accounts.map((account) => (
+          <AccountItem account={account} user={user} key={account.id} />
+        ))}
       </div>
     </div>
   );
