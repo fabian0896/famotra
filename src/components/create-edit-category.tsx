@@ -42,6 +42,12 @@ export function AddCategotyButton() {
   );
 }
 
+const TRANSACTION_TYPES: Record<TransactionType, string> = {
+  income: 'Ingreso',
+  expense: 'Gasto',
+  transfer: 'Transferencia',
+};
+
 export function CreateEditCategoryDialog({
   isOpen,
   type,
@@ -112,8 +118,12 @@ export function CreateEditCategoryDialog({
           }}
         >
           <DialogHeader className="mb-8">
-            <DialogTitle>Nueva Categoría</DialogTitle>
-            <DialogDescription>Agrega una nueva categoría para tus transacciones</DialogDescription>
+            <DialogTitle>{category ? 'Editar' : 'Nueva'} Categoría</DialogTitle>
+            <DialogDescription>
+              {category
+                ? 'Edita tu categoría con los nuevos datos'
+                : `Agrega una nueva categoría para tus ${TRANSACTION_TYPES[type || 'income'].toLowerCase()}`}
+            </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-6 mb-8">
             <form.AppField name="icon" children={(field) => <field.EmojiField />} />
