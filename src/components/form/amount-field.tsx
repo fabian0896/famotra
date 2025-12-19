@@ -3,7 +3,7 @@ import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 import { useFieldContext } from '@/hooks/form';
 
-export default function AmountField({
+export function AmountField({
   label,
   ...props
 }: { label: string } & React.ComponentProps<'input'>) {

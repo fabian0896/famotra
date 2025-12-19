@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { Spinner } from '../ui/spinner';
 import { useFormContext } from '@/hooks/form';
 
-export default function SubmitButton({ children, ...props }: React.ComponentProps<typeof Button>) {
+export function SubmitButton({ children, ...props }: React.ComponentProps<typeof Button>) {
   const form = useFormContext();
   return (
     <form.Subscribe

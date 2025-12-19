@@ -20,6 +20,15 @@ export class Categories {
     return { incomes, expenses };
   }
 
+  static async search(search: string) {
+    const { data: categories } = await supabase
+      .from('categories')
+      .select()
+      .ilike('name', `%${search}%`)
+      .throwOnError();
+    return categories;
+  }
+
   static async getById(categoryId: string) {
     const { data: category } = await supabase
       .from('categories')

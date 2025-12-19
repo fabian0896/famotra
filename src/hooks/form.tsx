@@ -1,10 +1,10 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
-import { lazy } from 'react';
-
-const TextField = lazy(() => import('@/components/form/text-field'));
-const EmojiField = lazy(() => import('@/components/form/emoji-field'));
-const AmountField = lazy(() => import('@/components/form/amount-field'));
-const SubmitButton = lazy(() => import('@/components/form/subcribe-button'));
+import { AmountField } from '@/components/form/amount-field';
+import { CategoryField } from '@/components/form/category-field';
+import { EmojiField } from '@/components/form/emoji-field';
+import { SubmitButton } from '@/components/form/subcribe-button';
+import { TextField } from '@/components/form/text-field';
+import { DateField } from '@/components/form/date-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -14,6 +14,8 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     TextField,
     AmountField,
     EmojiField,
+    CategoryField,
+    DateField,
   },
   formComponents: {
     SubmitButton,
