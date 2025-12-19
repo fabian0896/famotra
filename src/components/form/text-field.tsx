@@ -2,10 +2,7 @@ import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 import { useFieldContext } from '@/hooks/form';
 
-export default function TextField({
-  label,
-  ...props
-}: { label: string } & React.ComponentProps<'input'>) {
+export function TextField({ label, ...props }: { label: string } & React.ComponentProps<'input'>) {
   const field = useFieldContext<string>();
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
   const fieldId = props.id ?? field.name;

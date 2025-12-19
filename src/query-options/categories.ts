@@ -7,6 +7,13 @@ export const categoriesQueryOptions = queryOptions({
   queryFn: () => Categories.get(),
 });
 
+export const categorySearchQueryOptions = (search: string) => {
+  return queryOptions({
+    queryKey: [QueryKeys.CATEGORIES, 'search', search],
+    queryFn: () => Categories.search(search),
+  });
+};
+
 export const cagoryQueryOptions = (categoryId?: string) => {
   return queryOptions({
     queryKey: [QueryKeys.CATEGORIES, categoryId],

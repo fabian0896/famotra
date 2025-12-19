@@ -103,6 +103,7 @@ export type Database = {
           amount: number | null
           category_id: string
           created_at: string
+          date: string | null
           description: string | null
           id: string
           transaction_type: Database["public"]["Enums"]["transaction_type"]
@@ -113,6 +114,7 @@ export type Database = {
           amount?: number | null
           category_id: string
           created_at?: string
+          date?: string | null
           description?: string | null
           id?: string
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
@@ -123,6 +125,7 @@ export type Database = {
           amount?: number | null
           category_id?: string
           created_at?: string
+          date?: string | null
           description?: string | null
           id?: string
           transaction_type?: Database["public"]["Enums"]["transaction_type"]

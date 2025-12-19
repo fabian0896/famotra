@@ -20,7 +20,7 @@ const emojiFieldVariants = cva(
   }
 );
 
-export default function EmojiField({ className, ...props }: React.ComponentProps<'button'>) {
+export function EmojiField({ className, ...props }: React.ComponentProps<'button'>) {
   const [isOpen, setIsOpen] = useState(false);
   const field = useFieldContext<string>();
   const emoji = field.state.value;
