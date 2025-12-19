@@ -9,6 +9,7 @@ import { routeTree } from './routeTree.gen';
 
 import './styles.css';
 import reportWebVitals from './reportWebVitals.ts';
+import { ThemeProvider } from './components/theme-provider.tsx';
 
 // Create a new router instance
 
@@ -39,7 +40,9 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
-        <RouterProvider router={router} />
+        <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </TanStackQueryProvider.Provider>
     </StrictMode>
   );
