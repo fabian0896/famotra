@@ -28,4 +28,10 @@ export class Accounts {
       .throwOnError();
     return account;
   }
+
+  static async getTotalBalance() {
+    const { data } = await supabase.rpc('get_my_total_balance').throwOnError();
+
+    return data;
+  }
 }

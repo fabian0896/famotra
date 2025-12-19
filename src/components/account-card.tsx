@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Accounts } from '@/services/accounts';
 import { accountsQueryOptions } from '@/query-options/accounts';
+import { QueryKeys } from '@/constants/query-keys';
 
 interface AccountCardProps {
   account: Account;
@@ -77,6 +78,8 @@ export function AccountCard({ account }: AccountCardProps) {
     onSettled: () => {
       const queryKey = accountsQueryOptions.queryKey;
       queryClient.invalidateQueries({ queryKey });
+
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TOTAL_BALANCES] });
     },
   });
 

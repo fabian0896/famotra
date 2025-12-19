@@ -16,6 +16,7 @@ import {
 import { useAppForm } from '@/hooks/form';
 import { Accounts } from '@/services/accounts';
 import { accountsQueryOptions } from '@/query-options/accounts';
+import { QueryKeys } from '@/constants/query-keys';
 
 const addAccountSchema = z.object({
   name: z.string().nonempty({ message: 'Debes ingresar un nombre para la cuenta' }),
@@ -51,6 +52,7 @@ export function CreateEditAccountDialog({
     onSettled: () => {
       const queryKey = accountsQueryOptions.queryKey;
       queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TOTAL_BALANCES] });
     },
   });
 

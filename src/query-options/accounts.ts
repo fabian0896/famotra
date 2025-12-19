@@ -8,3 +8,10 @@ export const accountsQueryOptions = queryOptions({
   staleTime: Infinity,
   refetchOnWindowFocus: true,
 });
+
+export const totalBalancesQueryOptions = queryOptions({
+  queryKey: [QueryKeys.TOTAL_BALANCES],
+  queryFn: () => Accounts.getTotalBalance(),
+  staleTime: Infinity,
+  refetchOnWindowFocus: true,
+});
