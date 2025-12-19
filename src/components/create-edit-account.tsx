@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react';
-import type { Account } from '@/models/accounts.models';
+import z from 'zod';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button } from './ui/button';
+import type { Account, AccountInsert } from '@/models/accounts.models';
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAppForm } from '@/hooks/form';
+import { Accounts } from '@/services/accounts';
+import { accountsQueryOptions } from '@/query-options/accounts';
 
-const addAccountSchema = {
-  name: 'string',
-  bank_name: 'string',
-  balance: 'number',
-};
+const addAccountSchema = z.object({
+  name: z.string().nonempty({ message: 'Debes ingresar un nombre para la cuenta' }),
+  bank_id: z.string().nonempty({ message: 'Debes escoger un banco' }),
+  balance: z.number().min(0),
+});
 
 interface AccountDialogProps {
   account?: Account;
@@ -35,9 +37,21 @@ export function CreateEditAccountDialog({
   onOpenChange,
 }: AccountDialogProps) {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [bankName, setBankName] = useState<string>('otro');
-  const [balance, setBalance] = useState('');
+  const queryClient = useQueryClient();
+
+  const create = useMutation({
+    mutationFn: Accounts.upsert,
+    onSuccess: () => {
+      toast.success('Cuenta agregada correctamente');
+    },
+    onError: () => {
+      toast.error('Algo salió mal, por favor intenta más tarde');
+    },
+    onSettled: () => {
+      const queryKey = accountsQueryOptions.queryKey;
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 
   useEffect(() => {
     if (isOpen === undefined) return;
@@ -48,14 +62,24 @@ export function CreateEditAccountDialog({
     defaultValues: {
       id: account?.id || undefined,
       name: account?.name || '',
-      bank_name: account?.bank?.name || 'otro',
-      balance: account?.balance?.toString() || '0',
+      bank_id: account?.bank?.id || '',
+      balance: account?.balance || 0,
+    } as AccountInsert,
+    validators: {
+      onSubmit: addAccountSchema,
+    },
+    onSubmit: async ({ value, formApi }) => {
+      await create.mutateAsync(value);
+      formApi.reset();
+      setOpen(false);
+      onOpenChange?.(false);
     },
   });
 
   const handleClose = (state: boolean) => {
     onOpenChange?.(state);
     setOpen(state);
+    if (!state) form.reset();
   };
 
   const isEditing = !!account;
@@ -64,58 +88,53 @@ export function CreateEditAccountDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       {children}
       <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{isEditing ? 'Editar cuenta' : 'Nueva cuenta'}</DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? 'Edita tu cuenta con los nuevos datos'
-              : 'Agrega una nueva cuenta para administrar mejor tus finanzas'}
-          </DialogDescription>
-        </DialogHeader>
-
-        <form className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nombre de la cuenta</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Ej: Cuenta nómina"
-              required
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            form.handleSubmit();
+          }}
+        >
+          <DialogHeader className="mb-8">
+            <DialogTitle>{isEditing ? 'Editar' : 'Nueva'} cuenta</DialogTitle>
+            <DialogDescription>
+              {isEditing
+                ? 'Edita tu cuenta con los nuevos datos'
+                : 'Agrega una nueva cuenta para administrar mejor tus finanzas'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className=" flex flex-col gap-8 mb-8">
+            <form.AppField
+              name="name"
+              children={(field) => (
+                <field.TextField
+                  id="name"
+                  name="name"
+                  placeholder="Ahorro"
+                  label="Nombre de cuenta"
+                />
+              )}
+            />
+            <form.AppField
+              name="balance"
+              children={(field) => (
+                <field.AmountField id="balance" name="balance" label="Balance" />
+              )}
+            />
+            <form.AppField
+              name="bank_id"
+              children={(field) => <field.BankField label="Nombre de banco" />}
             />
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="bank">Banco</Label>
-            <Select value={bankName} onValueChange={(value: string) => setBankName(value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un banco" />
-              </SelectTrigger>
-              <SelectContent></SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="balance">Saldo</Label>
-            <Input
-              id="balance"
-              type="number"
-              value={balance}
-              onChange={(e) => setBalance(e.target.value)}
-              placeholder="0.00"
-              step="0.01"
-              required
-            />
-          </div>
-
-          <div className="flex gap-2 pt-4">
+          <DialogFooter>
             <DialogClose asChild>
-              <div className="flex-1">Cancelar</div>
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit" className="flex-1">
-              {isEditing ? 'Guardar' : 'Agregar'}
-            </Button>
-          </div>
+            <form.AppForm>
+              <form.SubmitButton>Confirmar</form.SubmitButton>
+            </form.AppForm>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
