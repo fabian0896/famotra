@@ -22,16 +22,22 @@ function Accounts() {
   const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
 
   return (
-    <div className="container mx-auto">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">Cuentas</h1>
-      <h2 className="py-4 text-muted-foreground text-sm">Controla y administra tus cuentas</h2>
-      <div className="grid gap-5">
-        <CreateEditAccountDialog>
-          <AddAcountCard />
-        </CreateEditAccountDialog>
-        {accounts.map((account) => {
-          return <AccountCard account={account} key={account.id}></AccountCard>;
-        })}
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto max-w-5xl">
+        <header>
+          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
+            Cuentas
+          </h1>
+          <p className="py-4 text-muted-foreground text-sm">Controla y administra tus cuentas</p>
+        </header>
+        <div className="grid gap-5">
+          <CreateEditAccountDialog>
+            <AddAcountCard />
+          </CreateEditAccountDialog>
+          {accounts.map((account) => {
+            return <AccountCard account={account} key={account.id}></AccountCard>;
+          })}
+        </div>
       </div>
     </div>
   );

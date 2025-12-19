@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { MoreVertical } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { NumericFormat } from 'react-number-format';
 import { CreateEditAccountDialog } from './create-edit-account';
 import {
   AlertDialog,
@@ -89,9 +88,9 @@ export function AccountCard({ account }: AccountCardProps) {
       <CreateEditAccountDialog isOpen={editOpen} onOpenChange={setEditOpen} account={account} />
       <Card className="relative overflow-hidden transition-all duration-200 hover:shadow-md">
         {/* Color accent bar */}
-        <div className={`absolute left-0 top-0 h-full w-1`} />
+        <div className="absolute left-0 top-0 h-full w-1" />
 
-        <div className="flex items-center justify-between p-4 pl-5">
+        <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             {/* Icon with bank color */}
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted overflow-hidden pl">
@@ -102,7 +101,7 @@ export function AccountCard({ account }: AccountCardProps) {
               />
             </div>
 
-            <div className="flex flex-col pl-15">
+            <div className="flex flex-col">
               <span className="font-medium text-foreground">{account.name}</span>
               <span className="text-sm text-muted-foreground capitalize">
                 {account.bank?.name ?? 'Sin banco'}
@@ -110,22 +109,21 @@ export function AccountCard({ account }: AccountCardProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <NumericFormat
-              className="text-lg font-semibold text-foreground"
-              value={account.balance}
-              prefix="$ "
-              suffix=" COP"
-              thousandSeparator
-            />
+          <div className="flex items-center">
+            <span className="text-lg font-semibold text-foreground">
+              {account.balance?.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+              })}
+            </span>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVertical className="h-4 w-4" />
+                  <MoreVertical />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="start">
                 <DropdownMenuItem onClick={handleOpenEdit}>Editar</DropdownMenuItem>
                 <DeleteAccountDialog
                   onConfirm={() => remove.mutate({ id: account.id })}
