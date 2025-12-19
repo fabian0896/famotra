@@ -11,6 +11,7 @@ export type Database = {
       accounts: {
         Row: {
           balance: number | null;
+          bank_id: string | null;
           created_at: string;
           id: string;
           name: string;
@@ -18,6 +19,7 @@ export type Database = {
         };
         Insert: {
           balance?: number | null;
+          bank_id?: string | null;
           created_at?: string;
           id?: string;
           name: string;
@@ -25,10 +27,40 @@ export type Database = {
         };
         Update: {
           balance?: number | null;
+          bank_id?: string | null;
           created_at?: string;
           id?: string;
           name?: string;
           user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'accounts_bank_id_fkey';
+            columns: ['bank_id'];
+            isOneToOne: false;
+            referencedRelation: 'bank_list';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      bank_list: {
+        Row: {
+          created_at: string;
+          id: string;
+          logo: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          logo: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          logo?: string;
+          name?: string;
         };
         Relationships: [];
       };

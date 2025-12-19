@@ -3,7 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 
 export class Accounts {
   static async get() {
-    const { data: account } = await supabase.from('accounts').select().throwOnError();
+    const { data: account } = await supabase
+      .from('accounts')
+      .select('*, bank:bank_list(name,logo)')
+      .throwOnError();
     return account;
   }
 
