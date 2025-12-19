@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MoreVertical } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { NumericFormat } from 'react-number-format';
 import { CreateEditAccountDialog } from './create-edit-account';
 import {
   AlertDialog,
@@ -93,7 +94,7 @@ export function AccountCard({ account }: AccountCardProps) {
         <div className="flex items-center justify-between p-4 pl-5">
           <div className="flex items-center gap-3">
             {/* Icon with bank color */}
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted overflow-hidden">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted overflow-hidden pl">
               <img
                 className="w-full h-full object-cover"
                 src={account.bank?.logo}
@@ -101,7 +102,7 @@ export function AccountCard({ account }: AccountCardProps) {
               />
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col pl-15">
               <span className="font-medium text-foreground">{account.name}</span>
               <span className="text-sm text-muted-foreground capitalize">
                 {account.bank?.name ?? 'Sin banco'}
@@ -110,7 +111,13 @@ export function AccountCard({ account }: AccountCardProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold text-foreground">{account.balance}</span>
+            <NumericFormat
+              className="text-lg font-semibold text-foreground"
+              value={account.balance}
+              prefix="$ "
+              suffix=" COP"
+              thousandSeparator
+            />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -119,7 +126,7 @@ export function AccountCard({ account }: AccountCardProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => handleOpenEdit}>Editar</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleOpenEdit}>Editar</DropdownMenuItem>
                 <DeleteAccountDialog
                   onConfirm={() => remove.mutate({ id: account.id })}
                   account={account}

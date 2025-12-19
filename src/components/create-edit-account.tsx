@@ -38,6 +38,7 @@ export function CreateEditAccountDialog({
 }: AccountDialogProps) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
+  const isEditing = !!account;
 
   const create = useMutation({
     mutationFn: Accounts.upsert,
@@ -81,8 +82,6 @@ export function CreateEditAccountDialog({
     setOpen(state);
     if (!state) form.reset();
   };
-
-  const isEditing = !!account;
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
