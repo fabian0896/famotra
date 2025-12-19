@@ -63,7 +63,7 @@ export function CreateEditAccountDialog({
     defaultValues: {
       id: account?.id || undefined,
       name: account?.name || '',
-      bank_id: account?.bank?.id || '',
+      bank_id: account?.bank?.id || undefined,
       balance: account?.balance || 0,
     } as AccountInsert,
     validators: {
@@ -131,7 +131,7 @@ export function CreateEditAccountDialog({
               </Button>
             </DialogClose>
             <form.AppForm>
-              <form.SubmitButton>Confirmar</form.SubmitButton>
+              <form.SubmitButton>{isEditing ? 'Editar' : 'Crear'} cuenta</form.SubmitButton>
             </form.AppForm>
           </DialogFooter>
         </form>

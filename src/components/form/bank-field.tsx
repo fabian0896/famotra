@@ -23,7 +23,7 @@ export function BankField({ label }: { label: string }) {
   return (
     <Field data-invalid={isError}>
       <FieldLabel>{label}</FieldLabel>
-      <Select onValueChange={(value) => field.setValue(value)}>
+      <Select value={field.state.value} onValueChange={(value) => field.setValue(value)}>
         <SelectTrigger>
           <SelectValue placeholder={isLoading ? 'Cargando bancos...' : 'Selecciona un banco'} />
         </SelectTrigger>
