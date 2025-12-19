@@ -70,16 +70,13 @@ export function AccountCard({ account }: AccountCardProps) {
     mutationFn: Accounts.remove,
     onSuccess: () => {
       toast.info('Se eliminó la cuenta correctamente');
-      console.log('bien');
     },
     onError: () => {
       toast.error('Algo salió mal por favor intenta nuevamente');
-      console.log('mal');
     },
     onSettled: () => {
       const queryKey = accountsQueryOptions.queryKey;
       queryClient.invalidateQueries({ queryKey });
-      console.log('bien bien');
     },
   });
 
