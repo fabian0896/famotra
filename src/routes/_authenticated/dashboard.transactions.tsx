@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { AddTransactionDialog } from '@/components/add-transaction-dialog';
 import { transactionsQueryOptions } from '@/query-options/transactions';
-import { Transaction, TransactionGroup, TransactionList } from '@/components/transactions';
+import { Transaction, TransactionGroup, TransactionList } from '@/components/transactions-list';
 
 export const Route = createFileRoute('/_authenticated/dashboard/transactions')({
   beforeLoad: () => ({
@@ -21,7 +21,7 @@ function Transactions() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Transacciones</h1>
-        <AddTransactionDialog />
+        {transactions.length ? <AddTransactionDialog /> : null}
       </div>
       <TransactionList>
         {transactions.map((group) => (
