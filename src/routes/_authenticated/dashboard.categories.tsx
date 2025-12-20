@@ -28,7 +28,7 @@ function Categories() {
           title="Categorías de Ingresos"
           description="Gestiona tus categorías de ingresos aquí."
         >
-          {categories.incomes.map((category) => (
+          {categories.income.map((category) => (
             <CategoryItem key={category.id} category={category} />
           ))}
           <CreateEditCategoryDialog type="income">
@@ -40,7 +40,7 @@ function Categories() {
           title="Categorías de Gastos"
           description="Gestiona tus categorías de gastos aquí."
         >
-          {categories.expenses.map((category) => (
+          {categories.expense.map((category) => (
             <CategoryItem key={category.id} category={category} />
           ))}
           <CreateEditCategoryDialog type="expense">

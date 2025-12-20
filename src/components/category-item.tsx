@@ -29,7 +29,7 @@ import { Spinner } from './ui/spinner';
 import { CreateEditCategoryDialog } from './create-edit-category';
 import type React from 'react';
 import type { Category } from '@/models/categories.models';
-import { TRANSACTION_TYPES } from '@/models/categories.models';
+import { CATEGORY_TYPES } from '@/models/categories.models';
 import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
 
@@ -133,7 +133,7 @@ export function CategoryItem({ category }: { category: Category }) {
             </div>
             <SheetTitle className="text-4xl font-semibold mt-1">{category.name}</SheetTitle>
             <SheetDescription>
-              <Badge>{TRANSACTION_TYPES[category.transaction_type]}</Badge>
+              <Badge>{CATEGORY_TYPES[category.type]}</Badge>
             </SheetDescription>
           </SheetHeader>
           <div className="flex gap-4 px-4">

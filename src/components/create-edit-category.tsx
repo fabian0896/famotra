@@ -14,8 +14,8 @@ import {
   DialogTrigger,
 } from './ui/dialog';
 import { Button } from './ui/button';
-import type { Category, CategoryInsert, TransactionType } from '@/models/categories.models';
-import { TRANSACTION_TYPES } from '@/models/categories.models';
+import type { Category, CategoryInsert, CategoryTypes } from '@/models/categories.models';
+import { CATEGORY_TYPES } from '@/models/categories.models';
 import { useAppForm } from '@/hooks/form';
 import { Categories } from '@/services/categories';
 import { categoriesQueryOptions } from '@/query-options/categories';
@@ -23,7 +23,7 @@ import { categoriesQueryOptions } from '@/query-options/categories';
 const addCategorySchema = z.object({
   name: z.string().nonempty({ message: 'Debes ingresar un nombre para la categoría' }),
   icon: z.emoji(),
-  transaction_type: z.enum(['income', 'expense', 'transfer']),
+  type: z.enum(['income', 'expense']),
 });
 
 export function AddCategotyButton() {
@@ -51,7 +51,7 @@ export function CreateEditCategoryDialog({
   onOpenChange,
 }: {
   isOpen?: boolean;
-  type?: TransactionType;
+  type?: CategoryTypes;
   category?: Category;
   children?: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
@@ -83,7 +83,7 @@ export function CreateEditCategoryDialog({
       id: category?.id || undefined,
       name: category?.name || '',
       icon: category?.icon || '',
-      transaction_type: category?.transaction_type || type,
+      type: category?.type || type,
     } as CategoryInsert,
     validators: {
       onSubmit: addCategorySchema,
@@ -117,7 +117,7 @@ export function CreateEditCategoryDialog({
             <DialogDescription>
               {category
                 ? 'Edita tu categoría con los nuevos datos'
-                : `Agrega una nueva categoría para tus ${TRANSACTION_TYPES[type || 'income'].toLowerCase()}`}
+                : `Agrega una nueva categoría para tus ${CATEGORY_TYPES[type || 'income'].toLowerCase()}`}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-6 mb-8">

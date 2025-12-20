@@ -1,3 +1,23 @@
-import type { TablesInsert } from './database.types';
+import type { Enums, Tables, TablesInsert } from './database.types';
 
+export type Transaction = Tables<'transactions'> & {
+  category: {
+    name: string;
+    icon: string;
+  };
+  account: {
+    name: string;
+    bank: {
+      id: string;
+      logo: string;
+      name: string;
+    } | null;
+  };
+};
 export type TransactionsInsert = TablesInsert<'transactions'>;
+export type TransactionTypes = Enums<'transaction_type'>;
+export const TRANSACTION_TYPES: Record<TransactionTypes, string> = {
+  income: 'Ingreso',
+  expense: 'Gasto',
+  transfer: 'Transferencia',
+};

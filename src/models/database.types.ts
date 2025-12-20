@@ -73,26 +73,26 @@ export type Database = {
       categories: {
         Row: {
           created_at: string
-          icon: string | null
+          icon: string
           id: string
           name: string
-          transaction_type: Database["public"]["Enums"]["transaction_type"]
+          type: Database["public"]["Enums"]["category_type"]
           user_id: string | null
         }
         Insert: {
           created_at?: string
-          icon?: string | null
+          icon?: string
           id?: string
           name: string
-          transaction_type: Database["public"]["Enums"]["transaction_type"]
+          type: Database["public"]["Enums"]["category_type"]
           user_id?: string | null
         }
         Update: {
           created_at?: string
-          icon?: string | null
+          icon?: string
           id?: string
           name?: string
-          transaction_type?: Database["public"]["Enums"]["transaction_type"]
+          type?: Database["public"]["Enums"]["category_type"]
           user_id?: string | null
         }
         Relationships: []
@@ -156,6 +156,7 @@ export type Database = {
       get_my_total_balance: { Args: never; Returns: number }
     }
     Enums: {
+      category_type: "income" | "expense"
       transaction_type: "income" | "expense" | "transfer"
     }
     CompositeTypes: {
@@ -284,6 +285,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      category_type: ["income", "expense"],
       transaction_type: ["income", "expense", "transfer"],
     },
   },

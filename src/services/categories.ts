@@ -1,23 +1,24 @@
-import type { CategoryDelete, CategoryInsert } from '@/models/categories.models';
+import type {
+  Category,
+  CategoryDelete,
+  CategoryInsert,
+  CategoryTypes,
+} from '@/models/categories.models';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Categories {
-  static async get() {
-    const incomesPromise = supabase
-      .from('categories')
-      .select()
-      .eq('transaction_type', 'income')
-      .throwOnError();
+  static async get(): Promise<Record<CategoryTypes, Category[]>> {
+    const incomesPromise = supabase.from('categories').select().eq('type', 'income').throwOnError();
     const expensesPromise = supabase
       .from('categories')
       .select()
-      .eq('transaction_type', 'expense')
+      .eq('type', 'expense')
       .throwOnError();
-    const [{ data: incomes }, { data: expenses }] = await Promise.all([
+    const [{ data: income }, { data: expense }] = await Promise.all([
       incomesPromise,
       expensesPromise,
     ]);
-    return { incomes, expenses };
+    return { income, expense };
   }
 
   static async search(search: string) {

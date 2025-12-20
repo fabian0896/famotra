@@ -21,7 +21,7 @@ export class Transactions {
         `
         *, 
         category:categories (name, icon),
-        account:accounts (name, bank:bank_list (logo, name))
+        account:accounts (name, bank:bank_list (id, logo, name))
         `
       )
       .order('date', { ascending: false })

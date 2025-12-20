@@ -10,14 +10,15 @@ import {
   SelectValue,
 } from '../ui/select';
 import { Spinner } from '../ui/spinner';
+import type { CategoryTypes } from '@/models/categories.models';
 import { categoriesQueryOptions } from '@/query-options/categories';
 import { useFieldContext } from '@/hooks/form';
 
-export function CategoryField({ label, type }: { label?: string; type: 'incomes' | 'expenses' }) {
+export function CategoryField({ label, type }: { label?: string; type: CategoryTypes }) {
   const field = useFieldContext<string>();
   const { data, isLoading } = useQuery(categoriesQueryOptions);
 
-  const categories = data?.[type] ?? [];
+  const categories = data?.[type] || [];
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
 
   return (
