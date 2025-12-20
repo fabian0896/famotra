@@ -1,12 +1,53 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { accountsQueryOptions, totalBalancesQueryOptions } from '@/query-options/accounts';
+import { AccountCard } from '@/components/account-card';
+import { CreateEditAccountDialog } from '@/components/create-edit-account';
+import { banksQueryOptions } from '@/query-options/banks';
+import { AddAcountCard } from '@/components/add-account';
 
 export const Route = createFileRoute('/_authenticated/dashboard/accounts')({
   beforeLoad: () => ({
     breadcrumb: 'Cuentas',
   }),
+  loader: async ({ context }) => {
+    const queryClient = context.queryClient;
+    await queryClient.ensureQueryData(accountsQueryOptions);
+    await queryClient.ensureQueryData(banksQueryOptions);
+  },
   component: Accounts,
 });
 
 function Accounts() {
-  return <div>Accounts</div>;
+  const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
+  const { data: totalBalance } = useSuspenseQuery(totalBalancesQueryOptions);
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto max-w-5xl">
+        <header className="mb-8">
+          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
+            Cuentas
+          </h1>
+          <p className="py-4 text-muted-foreground text-sm">Controla y administra tus cuentas</p>
+          <div className="mt-4 rounded-lg bg-card p-4 shadow-sm">
+            <span className="text-sm text-muted-foreground">Balance total</span>
+            <p className="text-2xl font-bold ">
+              {totalBalance?.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+              })}
+            </p>
+          </div>
+        </header>
+        <div className="grid gap-5">
+          {accounts.map((account) => {
+            return <AccountCard account={account} key={account.id}></AccountCard>;
+          })}
+          <CreateEditAccountDialog>
+            <AddAcountCard />
+          </CreateEditAccountDialog>
+        </div>
+      </div>
+    </div>
+  );
 }
