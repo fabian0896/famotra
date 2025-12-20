@@ -13,7 +13,7 @@ import { Spinner } from '../ui/spinner';
 import { categoriesQueryOptions } from '@/query-options/categories';
 import { useFieldContext } from '@/hooks/form';
 
-export function CategoryField({ lablel, type }: { lablel?: string; type: 'incomes' | 'expenses' }) {
+export function CategoryField({ label, type }: { label?: string; type: 'incomes' | 'expenses' }) {
   const field = useFieldContext<string>();
   const { data, isLoading } = useQuery(categoriesQueryOptions);
 
@@ -22,16 +22,16 @@ export function CategoryField({ lablel, type }: { lablel?: string; type: 'income
 
   return (
     <Field data-invalid={isError}>
-      <FieldLabel>{lablel}</FieldLabel>
+      <FieldLabel>{label}</FieldLabel>
       <Select onValueChange={(value) => field.setValue(value)}>
         <SelectTrigger>
           <SelectValue
-            placeholder={isLoading ? 'Cargando categorías...' : 'Selecciona una categoría'}
+            placeholder={isLoading ? 'Cargando categorías...' : 'Selecciona categoría'}
           />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>{lablel}</SelectLabel>
+            <SelectLabel>{label}</SelectLabel>
             {isLoading ? (
               <div className="flex items-center justify-center p-4">
                 <Spinner />

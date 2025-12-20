@@ -1,0 +1,66 @@
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
+import { Field, FieldError, FieldLabel } from '../ui/field';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Spinner } from '../ui/spinner';
+import { useFieldContext } from '@/hooks/form';
+import { accountsQueryOptions } from '@/query-options/accounts';
+
+export function AccountsField({ label }: { label?: string }) {
+  const field = useFieldContext<string>();
+  const { data, isLoading } = useQuery(accountsQueryOptions);
+
+  const accounts = data ?? [];
+  const isError = field.state.meta.isTouched && !field.state.meta.isValid;
+
+  const selected = React.useMemo(() => {
+    return accounts.find((a) => a.id === field.state.value);
+  }, [field.state.value, accounts]);
+
+  return (
+    <Field data-invalid={isError}>
+      <FieldLabel>{label}</FieldLabel>
+      <Select value={field.state.value} onValueChange={(value) => field.setValue(value)}>
+        <SelectTrigger>
+          <SelectValue placeholder={isLoading ? 'Cargando cuentas...' : 'Selecciona cuenta'}>
+            {selected && (
+              <div className="flex items-center gap-2">
+                <img className="w-4 h-4" src={selected.bank?.logo} alt={selected.bank?.name} />
+                <span>{selected.name}</span>
+              </div>
+            )}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>{label}</SelectLabel>
+            {isLoading ? (
+              <div className="flex items-center justify-center p-4">
+                <Spinner />
+              </div>
+            ) : (
+              accounts.map((account) => (
+                <SelectItem key={account.id} value={account.id}>
+                  <img className="w-6 h-6" src={account.bank?.logo} alt={account.bank?.name} />
+                  <div>
+                    <p>{account.name}</p>
+                    <p className="text-xs text-muted-foreground">{account.bank?.name}</p>
+                  </div>
+                </SelectItem>
+              ))
+            )}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <FieldError errors={field.state.meta.errors} />
+    </Field>
+  );
+}

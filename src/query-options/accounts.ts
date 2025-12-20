@@ -6,12 +6,9 @@ export const accountsQueryOptions = queryOptions({
   queryKey: [QueryKeys.ACCOUNTS],
   queryFn: () => Accounts.get(),
   staleTime: Infinity,
-  refetchOnWindowFocus: true,
 });
 
 export const totalBalancesQueryOptions = queryOptions({
   queryKey: [QueryKeys.TOTAL_BALANCES],
   queryFn: () => Accounts.getTotalBalance(),
-  staleTime: Infinity,
-  refetchOnWindowFocus: true,
 });

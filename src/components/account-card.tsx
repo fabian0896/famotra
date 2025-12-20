@@ -89,7 +89,7 @@ export function AccountCard({ account }: AccountCardProps) {
   return (
     <>
       <CreateEditAccountDialog isOpen={editOpen} onOpenChange={setEditOpen} account={account} />
-      <Card className="relative overflow-hidden transition-all duration-200 hover:shadow-md">
+      <Card className="relative overflow-hidden transition-all duration-200 hover:shadow-md py-2">
         {/* Color accent bar */}
         <div className="absolute left-0 top-0 h-full w-1" />
 

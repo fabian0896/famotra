@@ -5,6 +5,7 @@ import { Categories } from '@/services/categories';
 export const categoriesQueryOptions = queryOptions({
   queryKey: [QueryKeys.CATEGORIES],
   queryFn: () => Categories.get(),
+  staleTime: Infinity,
 });
 
 export const categorySearchQueryOptions = (search: string) => {

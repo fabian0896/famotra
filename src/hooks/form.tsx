@@ -6,6 +6,7 @@ import { SubmitButton } from '@/components/form/subcribe-button';
 import { TextField } from '@/components/form/text-field';
 import { DateField } from '@/components/form/date-field';
 import { BankField } from '@/components/form/bank-field';
+import { AccountsField } from '@/components/form/accounts-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -18,6 +19,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     CategoryField,
     DateField,
     BankField,
+    AccountsField,
   },
   formComponents: {
     SubmitButton,

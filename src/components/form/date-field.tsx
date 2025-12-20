@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDownIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, formatISO, parseISO } from 'date-fns';
 import { Field, FieldLabel } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
@@ -9,11 +9,17 @@ import { useFieldContext } from '@/hooks/form';
 
 export function DateField({ label }: { label: string }) {
   const [open, setOpen] = React.useState(false);
-  const field = useFieldContext<Date | undefined>();
+  const field = useFieldContext<string | undefined>();
 
   const dateValue = React.useMemo(() => {
     if (!field.state.value) return 'Seleccionar fecha';
     return format(field.state.value, 'dd/MM/yyyy');
+  }, [field.state.value]);
+
+  const selected = React.useMemo(() => {
+    const value = field.state.value;
+    if (!value) return undefined;
+    return parseISO(value);
   }, [field.state.value]);
 
   return (
@@ -29,10 +35,12 @@ export function DateField({ label }: { label: string }) {
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
             mode="single"
-            selected={field.state.value}
+            selected={selected}
             captionLayout="dropdown"
             onSelect={(date) => {
-              field.setValue(date);
+              if (!date) field.setValue(date);
+              const value = formatISO(date!);
+              field.setValue(value);
               setOpen(false);
             }}
           />

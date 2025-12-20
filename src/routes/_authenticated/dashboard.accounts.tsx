@@ -32,7 +32,7 @@ function Accounts() {
           <div className="mt-4 rounded-lg bg-card p-4 shadow-sm">
             <span className="text-sm text-muted-foreground">Balance total</span>
             <p className="text-2xl font-bold ">
-              {totalBalance?.toLocaleString('es-CO', {
+              {totalBalance.toLocaleString('es-CO', {
                 style: 'currency',
                 currency: 'COP',
               })}

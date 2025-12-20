@@ -1,5 +1,9 @@
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
+import { formatISO } from 'date-fns';
+import { toast } from 'sonner';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -12,21 +16,56 @@ import {
   DialogTrigger,
 } from './ui/dialog';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
+import type { TransactionsInsert } from '@/models/transactions.models';
 import { useAppForm } from '@/hooks/form';
+import { accountsQueryOptions, totalBalancesQueryOptions } from '@/query-options/accounts';
+import { Transactions } from '@/services/transactions';
+import { transactionsQueryOptions } from '@/query-options/transactions';
+import { formatError } from '@/lib/format-error';
+
+const addTransactionsSchema = z.object({
+  description: z.string(),
+  category_id: z.uuidv4(),
+  account_id: z.uuidv4(),
+  amount: z.number(),
+  date: z.string(),
+});
 
 export function AddTransactionDialog() {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { data: accounts } = useQuery(accountsQueryOptions);
+
+  const create = useMutation({
+    mutationFn: Transactions.create,
+    onSuccess: () => {
+      toast.success('Transaccion creade correctamente!');
+    },
+    onError: (error) => {
+      const { message } = formatError(error);
+      toast.error(message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: totalBalancesQueryOptions.queryKey });
+    },
+  });
 
   const form = useAppForm({
     defaultValues: {
       description: '',
-      category: '',
-      account: '',
+      category_id: '',
+      account_id: accounts?.at(0)?.id,
       amount: 0,
-      date: new Date(),
+      date: formatISO(new Date()),
+      transaction_type: 'expense',
+    } as TransactionsInsert,
+    validators: {
+      onSubmit: addTransactionsSchema,
     },
-    onSubmit: ({ value, formApi }) => {
-      console.log({ value });
+    onSubmit: async ({ value, formApi }) => {
+      await create.mutateAsync(value);
       setOpen(false);
       formApi.reset();
     },
@@ -66,7 +105,7 @@ export function AddTransactionDialog() {
                 <TabsTrigger value="transferencia">Transferencias</TabsTrigger>
               </TabsList>
             </Tabs>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               <form.AppField
                 name="amount"
                 children={(field) => <field.AmountField label="Valor" />}
@@ -76,14 +115,14 @@ export function AddTransactionDialog() {
                 children={(field) => <field.TextField label="Descripción" />}
               />
             </div>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               <form.AppField
-                name="category"
-                children={(field) => <field.CategoryField type="expenses" lablel="Categoría" />}
+                name="category_id"
+                children={(field) => <field.CategoryField type="expenses" label="Categoría" />}
               />
               <form.AppField
-                name="account"
-                children={(field) => <field.TextField label="Cuenta" />}
+                name="account_id"
+                children={(field) => <field.AccountsField label="Cuenta" />}
               />
             </div>
             <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
