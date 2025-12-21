@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { formatISO } from 'date-fns';
 import { toast } from 'sonner';
 import { TabsContent } from '@radix-ui/react-tabs';
+import { Link } from '@tanstack/react-router';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -26,10 +27,12 @@ import { transactionsQueryOptions } from '@/query-options/transactions';
 import { formatError } from '@/lib/format-error';
 
 const addTransactionsSchema = z.object({
-  description: z.string(),
-  category_id: z.uuidv4(),
-  account_id: z.uuidv4(),
-  amount: z.number(),
+  description: z.string().nonempty({ message: 'La descripción es requedrida' }),
+  category_id: z.uuidv4({ message: 'Debe seleccionar una categoría válida' }),
+  account_id: z.uuidv4({ message: 'Debe seleccionar una cuenta válida' }),
+  amount: z.number().refine((val) => val !== 0, {
+    message: 'El monto debe ser diferente de 0',
+  }),
   date: z.string(),
 });
 
@@ -91,18 +94,28 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <form.AppField
-              name="category_id"
-              children={(field) => <field.CategoryField type={type} label="Categoría" />}
-            />
-            <form.AppField
-              name="account_id"
-              children={(field) => <field.AccountsField label="Cuenta" />}
-            />
+            <div>
+              <form.AppField
+                name="category_id"
+                children={(field) => <field.CategoryField type={type} label="Categoría" />}
+              />
+              <Link to="/dashboard/categories" className="text-sm inline-block mt-2 text-primary">
+                + Agregar Categoría
+              </Link>
+            </div>
+            <div>
+              <form.AppField
+                name="account_id"
+                children={(field) => <field.AccountsField label="Cuenta" />}
+              />
+              <Link to="/dashboard/accounts" className="text-sm inline-block mt-2 text-primary">
+                + Agregar Cuenta
+              </Link>
+            </div>
           </div>
           <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
         </div>
-        <DialogFooter>
+        <DialogFooter className="pt-4">
           <DialogClose asChild>
             <Button type="button" variant="outline">
               Cancel

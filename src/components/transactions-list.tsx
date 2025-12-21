@@ -85,7 +85,7 @@ export function Transaction({ transaction }: { transaction: Transaction }) {
   return (
     <li className="flex items-center gap-4 px-3 py-2 rounded-lg w-full">
       <div className="flex gap-4 items-center flex-1">
-        <div className="text-sm leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
+        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
           {transaction.category.icon}
         </div>
         <div className="flex-1">
