@@ -1,5 +1,4 @@
-import type { TransactionsInsert } from '@/models/transactions.models';
-import type { TransactionType } from '@/models/categories.models';
+import type { TransactionTypes, TransactionsInsert } from '@/models/transactions.models';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Transactions {
@@ -30,7 +29,7 @@ export class Transactions {
     return transactions;
   }
 
-  private static formatAmount(amount = 0, type: TransactionType = 'expense') {
+  private static formatAmount(amount = 0, type: TransactionTypes = 'expense') {
     const value = Math.abs(amount);
     if (type === 'expense') {
       return value * -1;
