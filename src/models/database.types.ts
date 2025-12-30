@@ -16,7 +16,7 @@ export type Database = {
     Tables: {
       accounts: {
         Row: {
-          balance: number | null
+          balance: number
           bank_id: string | null
           created_at: string
           id: string
@@ -24,7 +24,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          balance?: number | null
+          balance?: number
           bank_id?: string | null
           created_at?: string
           id?: string
@@ -32,7 +32,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          balance?: number | null
+          balance?: number
           bank_id?: string | null
           created_at?: string
           id?: string
@@ -153,7 +153,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_my_total_balance: { Args: never; Returns: number }
+      [_ in never]: never
     }
     Enums: {
       category_type: "income" | "expense"

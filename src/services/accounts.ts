@@ -30,8 +30,7 @@ export class Accounts {
   }
 
   static async getTotalBalance() {
-    const { data } = await supabase.rpc('get_my_total_balance').throwOnError();
-
-    return data;
+    const { data } = await supabase.from('accounts').select('balance').throwOnError();
+    return data.reduce((total, current) => total + current.balance, 0);
   }
 }

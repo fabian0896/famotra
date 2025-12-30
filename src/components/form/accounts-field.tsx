@@ -33,7 +33,11 @@ export function AccountsField({ label }: { label?: string }) {
           <SelectValue placeholder={isLoading ? 'Cargando cuentas...' : 'Selecciona cuenta'}>
             {selected && (
               <div className="flex items-center gap-2">
-                <img className="w-4 h-4" src={selected.bank?.logo} alt={selected.bank?.name} />
+                <img
+                  className="w-4 h-4 rounded-full"
+                  src={selected.bank?.logo}
+                  alt={selected.bank?.name}
+                />
                 <span>{selected.name}</span>
               </div>
             )}
@@ -49,7 +53,11 @@ export function AccountsField({ label }: { label?: string }) {
             ) : (
               accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  <img className="w-6 h-6" src={account.bank?.logo} alt={account.bank?.name} />
+                  <img
+                    className="w-6 h-6 rounded-full"
+                    src={account.bank?.logo}
+                    alt={account.bank?.name}
+                  />
                   <div>
                     <p>{account.name}</p>
                     <p className="text-xs text-muted-foreground">{account.bank?.name}</p>
