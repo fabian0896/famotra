@@ -4,7 +4,9 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { cva } from 'class-variance-authority';
-import { DollarSign } from 'lucide-react';
+import { DollarSign, Edit2, MoreVertical, Trash2 } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   Empty,
   EmptyContent,
@@ -14,7 +16,20 @@ import {
   EmptyTitle,
 } from './ui/empty';
 import { AddTransactionDialog } from './add-transaction-dialog';
+import { Card } from './ui/card';
+import { Button } from './ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+import { Spinner } from './ui/spinner';
 import type { Transaction } from '@/models/transactions.models';
+import { Transactions } from '@/services/transactions';
+import { transactionsQueryOptions } from '@/query-options/transactions';
+import { formatError } from '@/lib/format-error';
+import { accountsQueryOptions, totalBalancesQueryOptions } from '@/query-options/accounts';
 
 const moneyClx = cva('text-base font-medium', {
   variants: {
@@ -82,31 +97,72 @@ export function TransactionGroup({ date, children }: { date: string; children: R
 }
 
 export function Transaction({ transaction }: { transaction: Transaction }) {
+  const queryClient = useQueryClient();
+
+  const remove = useMutation({
+    mutationFn: Transactions.remove,
+    onError: (error) => {
+      const { message } = formatError(error);
+      toast.error(message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: totalBalancesQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
+      return queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
+    },
+  });
+
   return (
-    <li className="flex items-center gap-4 px-3 py-2 rounded-lg w-full">
-      <div className="flex gap-4 items-center flex-1">
-        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
-          {transaction.category.icon}
+    <li className="block">
+      <Card className="flex flex-row items-center gap-4 p-3 rounded-lg w-full">
+        <div className="flex gap-4 items-center flex-1">
+          <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
+            {transaction.category.icon}
+          </div>
+          <div className="flex-1">
+            <p className="text-foreground font-medium mb-0.6">{transaction.description}</p>
+            <p className="text-sm text-muted-foreground">{transaction.category.name}</p>
+          </div>
         </div>
-        <div className="flex-1">
-          <p className="text-foreground font-medium mb-0.6">{transaction.description}</p>
-          <p className="text-sm text-muted-foreground">{transaction.category.name}</p>
+        <div className="flex-1 flex justify-center items-center gap-2">
+          <img
+            src={transaction.account.bank?.logo}
+            alt={transaction.account.bank?.name}
+            className="w-6 h-6 rounded-full"
+          />
+          <div>
+            <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
+            <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
+          </div>
         </div>
-      </div>
-      <div className="flex-1 flex justify-center items-center gap-2">
-        <img
-          src={transaction.account.bank?.logo}
-          alt={transaction.account.bank?.name}
-          className="w-6 h-6 rounded"
-        />
-        <div>
-          <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
-          <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
+        <div className="flex-1 flex justify-end">
+          <FormattedMoney value={transaction.amount} />
         </div>
-      </div>
-      <div className="flex-1 flex justify-end">
-        <FormattedMoney value={transaction.amount} />
-      </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="ghost">
+              <MoreVertical className="text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <Edit2 />
+              Editar
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={remove.isPending}
+              onClick={(event) => {
+                event.preventDefault();
+                remove.mutate({ id: transaction.id });
+              }}
+              variant="destructive"
+            >
+              {remove.isPending ? <Spinner /> : <Trash2 />}
+              Eliminar
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </Card>
     </li>
   );
 }

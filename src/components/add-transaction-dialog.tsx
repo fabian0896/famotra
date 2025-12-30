@@ -43,7 +43,7 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
   const create = useMutation({
     mutationFn: Transactions.create,
     onSuccess: () => {
-      toast.success('Transaccion creade correctamente!');
+      toast.success('Transaccion creada correctamente!');
       onSuccess?.();
     },
     onError: (error) => {

@@ -29,6 +29,17 @@ export class Transactions {
     return transactions;
   }
 
+  static async remove({ id }: { id: string }) {
+    console.log({ id });
+    const { data } = await supabase
+      .from('transactions')
+      .delete()
+      .eq('id', id)
+      .single()
+      .throwOnError();
+    return data;
+  }
+
   private static formatAmount(amount = 0, type: TransactionTypes = 'expense') {
     const value = Math.abs(amount);
     if (type === 'expense') {
