@@ -3,11 +3,12 @@ import { supabase } from '@/integrations/supabase/client';
 
 export class Accounts {
   static async get() {
-    const { data: account } = await supabase
+    const { data: accounts } = await supabase
       .from('accounts')
       .select('*, bank:bank_list(id,name,logo)')
       .throwOnError();
-    return account;
+    const total = accounts.reduce((t, a) => t + a.balance, 0);
+    return { accounts, total };
   }
 
   static async create(data: AccountInsert) {
@@ -27,10 +28,5 @@ export class Accounts {
       .single()
       .throwOnError();
     return account;
-  }
-
-  static async getTotalBalance() {
-    const { data } = await supabase.from('accounts').select('balance').throwOnError();
-    return data.reduce((total, current) => total + current.balance, 0);
   }
 }

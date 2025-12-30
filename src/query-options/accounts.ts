@@ -7,8 +7,3 @@ export const accountsQueryOptions = queryOptions({
   queryFn: () => Accounts.get(),
   staleTime: Infinity,
 });
-
-export const totalBalancesQueryOptions = queryOptions({
-  queryKey: [QueryKeys.TOTAL_BALANCES],
-  queryFn: () => Accounts.getTotalBalance(),
-});

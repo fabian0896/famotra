@@ -21,7 +21,7 @@ import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import type { TransactionsInsert } from '@/models/transactions.models';
 import type { CategoryTypes } from '@/models/categories.models';
 import { useAppForm } from '@/hooks/form';
-import { accountsQueryOptions, totalBalancesQueryOptions } from '@/query-options/accounts';
+import { accountsQueryOptions } from '@/query-options/accounts';
 import { Transactions } from '@/services/transactions';
 import { transactionsQueryOptions } from '@/query-options/transactions';
 import { formatError } from '@/lib/format-error';
@@ -38,7 +38,8 @@ const addTransactionsSchema = z.object({
 
 function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?: () => void }) {
   const queryClient = useQueryClient();
-  const { data: accounts } = useQuery(accountsQueryOptions);
+  const { data } = useQuery(accountsQueryOptions);
+  const accounts = data?.accounts || [];
 
   const create = useMutation({
     mutationFn: Transactions.create,
@@ -53,7 +54,6 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
       queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
-      queryClient.invalidateQueries({ queryKey: totalBalancesQueryOptions.queryKey });
     },
   });
 
@@ -61,7 +61,7 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
     defaultValues: {
       description: '',
       category_id: '',
-      account_id: accounts?.at(0)?.id,
+      account_id: accounts.at(0)?.id,
       amount: 0,
       date: formatISO(new Date()),
       transaction_type: type,

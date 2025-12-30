@@ -1,9 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { accountsQueryOptions, totalBalancesQueryOptions } from '@/query-options/accounts';
+import { accountsQueryOptions } from '@/query-options/accounts';
 import { AccountCard } from '@/components/account-card';
 import { CreateEditAccountDialog } from '@/components/create-edit-account';
-import { banksQueryOptions } from '@/query-options/banks';
 import { AddAcountCard } from '@/components/add-account';
 
 export const Route = createFileRoute('/_authenticated/dashboard/accounts')({
@@ -13,14 +12,14 @@ export const Route = createFileRoute('/_authenticated/dashboard/accounts')({
   loader: async ({ context }) => {
     const queryClient = context.queryClient;
     await queryClient.ensureQueryData(accountsQueryOptions);
-    await queryClient.ensureQueryData(banksQueryOptions);
   },
   component: Accounts,
 });
 
 function Accounts() {
-  const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
-  const { data: totalBalance } = useSuspenseQuery(totalBalancesQueryOptions);
+  const { data } = useSuspenseQuery(accountsQueryOptions);
+  const accounts = data.accounts;
+  const totalBalance = data.total;
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-5xl">

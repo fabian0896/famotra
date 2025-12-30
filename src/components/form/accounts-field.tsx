@@ -18,7 +18,7 @@ export function AccountsField({ label }: { label?: string }) {
   const field = useFieldContext<string>();
   const { data, isLoading } = useQuery(accountsQueryOptions);
 
-  const accounts = data ?? [];
+  const accounts = data?.accounts ?? [];
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
 
   const selected = React.useMemo(() => {

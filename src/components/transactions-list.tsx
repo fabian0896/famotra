@@ -29,7 +29,7 @@ import type { Transaction } from '@/models/transactions.models';
 import { Transactions } from '@/services/transactions';
 import { transactionsQueryOptions } from '@/query-options/transactions';
 import { formatError } from '@/lib/format-error';
-import { accountsQueryOptions, totalBalancesQueryOptions } from '@/query-options/accounts';
+import { accountsQueryOptions } from '@/query-options/accounts';
 
 const moneyClx = cva('text-base font-medium', {
   variants: {
@@ -108,7 +108,6 @@ export function Transaction({ transaction }: { transaction: Transaction }) {
       toast.error(message);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: totalBalancesQueryOptions.queryKey });
       queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
       return queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
     },
