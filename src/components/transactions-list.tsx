@@ -81,9 +81,11 @@ export function TransactionList({ children }: { children: React.ReactNode }) {
 
 export function TransactionGroup({ date, children }: { date: string; children: React.ReactNode }) {
   const [parent] = useAutoAnimate();
+
   const groupName = React.useMemo(() => {
     return format(date, "d 'de' MMMM, yyyy", { locale: es });
   }, [date]);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
