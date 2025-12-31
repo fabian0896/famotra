@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { cva } from 'class-variance-authority';
-import { ArrowLeftRight, ArrowRight, DollarSign, Edit2, MoreVertical, Trash2 } from 'lucide-react';
+import { ArrowRight, DollarSign, Edit2, MoreVertical, Trash2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
@@ -37,20 +37,32 @@ const moneyClx = cva('text-base font-medium', {
       true: 'text-red-400',
       false: 'text-green-400',
     },
+    neutral: {
+      true: 'text-foreground!',
+      false: '',
+    },
   },
 });
 
-function FormattedMoney({ value }: { value: number }) {
+function FormattedMoney({
+  value,
+  neutral,
+  className,
+  ...props
+}: { value: number; neutral?: boolean } & React.ComponentProps<typeof NumericFormat>) {
   const isNegative = value < 0;
+  const prefix = isNegative || neutral ? '$' : '+$';
+  value = neutral ? Math.abs(value) : value;
   return (
     <NumericFormat
-      className={moneyClx({ isNegative })}
+      className={moneyClx({ isNegative, neutral, className })}
       value={value}
       displayType="text"
       thousandSeparator="."
       decimalSeparator=","
       allowNegative={true}
-      prefix={isNegative ? '$' : '+$'}
+      prefix={prefix}
+      {...props}
     />
   );
 }
@@ -186,47 +198,46 @@ function Transfer({ transaction }: { transaction: Transaction }) {
   return (
     <div className="flex flex-row items-center gap-4 rounded-lg w-full">
       <div className="flex gap-4 items-center flex-1">
-        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
-          <ArrowLeftRight size={20} className="text-primary" />
-        </div>
-        <div className="flex-1">
-          <p className="text-foreground font-medium mb-0.6 line-clamp-1">
-            {transaction.description}
-          </p>
-          <p className="text-sm text-muted-foreground">Transferencia</p>
-        </div>
-      </div>
-      <div className="flex gap-2 items-center">
-        <div className="flex-1 flex justify-center items-center gap-2">
+        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full overflow-hidden">
           <img
             src={transaction.account.bank?.logo}
             alt={transaction.account.bank?.name}
-            className="w-6 h-6 rounded-full"
+            className="w-full h-full object-cover"
           />
-          <div>
-            <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
-            <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
-          </div>
         </div>
-        <ArrowRight size={20} />
-        <div className="flex-1 flex justify-center items-center gap-2">
-          <div>
-            <p className="text-sm text-foreground font-base text-right">
-              {transaction.destination.name}
-            </p>
-            <p className="text-xs text-muted-foreground text-right">
-              {transaction.destination.bank?.name}
-            </p>
-          </div>
+        <div className="flex-1">
+          <p className="text-foreground font-medium mb-0.6 line-clamp-1">
+            {transaction.account.name}
+          </p>
+          <p className="text-sm text-muted-foreground">{transaction.account.bank?.name}</p>
+        </div>
+      </div>
+      <div className="flex-1 flex justify-center">
+        <ArrowRight />
+      </div>
+      <div className="flex flex-col justify-center items-center">
+        <FormattedMoney className="mb-1" neutral value={transaction.amount} />
+        <p className="text-xs text-muted-foreground text-center">{transaction.description}</p>
+      </div>
+      <div className="flex-1 flex justify-center">
+        <ArrowRight />
+      </div>
+      <div className="flex gap-4 items-center flex-1 justify-end">
+        <div className="flex-1">
+          <p className="text-foreground font-medium mb-0.6 line-clamp-1 text-right">
+            {transaction.destination.name}
+          </p>
+          <p className="text-sm text-muted-foreground text-right">
+            {transaction.destination.bank?.name}
+          </p>
+        </div>
+        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full overflow-hidden">
           <img
             src={transaction.destination.bank?.logo}
             alt={transaction.destination.bank?.name}
-            className="w-6 h-6 rounded-full"
+            className="w-full h-full object-cover"
           />
         </div>
-      </div>
-      <div className="flex-1 flex justify-end">
-        <FormattedMoney value={transaction.amount} />
       </div>
     </div>
   );

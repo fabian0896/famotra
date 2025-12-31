@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { NumericFormat } from 'react-number-format';
 import { Field, FieldError, FieldLabel } from '../ui/field';
 import {
   Select,
@@ -63,7 +64,15 @@ export function AccountsField({
                   />
                   <div>
                     <p>{account.name}</p>
-                    <p className="text-xs text-muted-foreground">{account.bank?.name}</p>
+                    <NumericFormat
+                      className="text-xs text-muted-foreground"
+                      value={account.balance}
+                      displayType="text"
+                      thousandSeparator="."
+                      decimalSeparator=","
+                      allowNegative={true}
+                      prefix="$"
+                    />
                   </div>
                 </SelectItem>
               ))
