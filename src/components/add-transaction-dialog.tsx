@@ -185,6 +185,16 @@ function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
         }}
       >
         <div className="flex flex-col gap-6 mb-6">
+          <div className="grid grid-cols-2 gap-4">
+            <form.AppField
+              name="amount"
+              children={(field) => <field.AmountField label="Monto" />}
+            />
+            <form.AppField
+              name="description"
+              children={(field) => <field.TextField label="Descripción" />}
+            />
+          </div>
           <div className="flex gap-2.5 items-end">
             <div className="flex-1">
               <form.AppField
@@ -207,16 +217,6 @@ function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
                 + Agregar Cuenta
               </Link>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <form.AppField
-              name="amount"
-              children={(field) => <field.AmountField label="Monto" />}
-            />
-            <form.AppField
-              name="description"
-              children={(field) => <field.TextField label="Descripción" />}
-            />
           </div>
           <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
         </div>
