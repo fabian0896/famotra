@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
@@ -34,6 +34,12 @@ const addTransactionsSchema = z.object({
     message: 'El monto debe ser diferente de 0',
   }),
   date: z.string(),
+});
+
+const addTransferSchema = addTransactionsSchema.extend({
+  destination_account_id: z.uuidv4({ message: 'Debe seleccionar una cuenta válida' }),
+  transaction_type: z.literal('transfer'),
+  category_id: z.uuidv4().optional(),
 });
 
 function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?: () => void }) {
@@ -74,6 +80,7 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
       formApi.reset();
     },
   });
+
   return (
     <React.Fragment>
       <form
@@ -132,6 +139,102 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
   );
 }
 
+function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
+  const queryClient = useQueryClient();
+
+  const create = useMutation({
+    mutationFn: Transactions.create,
+    onSuccess: () => {
+      toast.success('Transaccion creada correctamente!');
+      onSuccess?.();
+    },
+    onError: (error) => {
+      const { message } = formatError(error);
+      toast.error(message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
+    },
+  });
+
+  const form = useAppForm({
+    defaultValues: {
+      description: '',
+      account_id: '',
+      destination_account_id: '',
+      amount: 0,
+      date: formatISO(new Date()),
+      transaction_type: 'transfer',
+    } satisfies TransactionsInsert,
+    validators: {
+      onSubmit: addTransferSchema,
+    },
+    onSubmit: async ({ value, formApi }) => {
+      await create.mutateAsync(value);
+      formApi.reset();
+    },
+  });
+
+  return (
+    <React.Fragment>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          form.handleSubmit();
+        }}
+      >
+        <div className="flex flex-col gap-6 mb-6">
+          <div className="flex gap-2.5 items-end">
+            <div className="flex-1">
+              <form.AppField
+                name="account_id"
+                children={(field) => <field.AccountsField label="Desde" />}
+              />
+              <Link to="/dashboard/accounts" className="text-sm inline-block mt-2 text-primary">
+                + Agregar Cuenta
+              </Link>
+            </div>
+            <div className="h-9 flex items-center mb-7">
+              <ArrowRight strokeWidth={2.5} size="20" />
+            </div>
+            <div className="flex-1">
+              <form.AppField
+                name="destination_account_id"
+                children={(field) => <field.AccountsField label="Hasta" />}
+              />
+              <Link to="/dashboard/accounts" className="text-sm inline-block mt-2 text-primary">
+                + Agregar Cuenta
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <form.AppField
+              name="amount"
+              children={(field) => <field.AmountField label="Monto" />}
+            />
+            <form.AppField
+              name="description"
+              children={(field) => <field.TextField label="Descripción" />}
+            />
+          </div>
+          <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
+        </div>
+        <DialogFooter className="pt-4">
+          <DialogClose asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
+          <form.AppForm>
+            <form.SubmitButton>Agregar Transferencia</form.SubmitButton>
+          </form.AppForm>
+        </DialogFooter>
+      </form>
+    </React.Fragment>
+  );
+}
+
 export function AddTransactionDialog() {
   const [open, setOpen] = useState(false);
 
@@ -167,7 +270,7 @@ export function AddTransactionDialog() {
             <TransactionForm onSuccess={() => setOpen(false)} type="income" />
           </TabsContent>
           <TabsContent value="transfer">
-            <TransactionForm type="expense" />
+            <TransferForm onSuccess={() => setOpen(false)} />
           </TabsContent>
         </Tabs>
       </DialogContent>

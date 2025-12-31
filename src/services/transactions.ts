@@ -20,7 +20,8 @@ export class Transactions {
         `
         *, 
         category:categories (name, icon),
-        account:accounts (name, bank:bank_list (id, logo, name))
+        account:accounts!account_id (name, bank:bank_list (id, logo, name)),
+        destination:accounts!destination_account_id (name, bank:bank_list (id, logo, name))
         `
       )
       .order('date', { ascending: false })
@@ -42,12 +43,7 @@ export class Transactions {
 
   private static formatAmount(amount = 0, type: TransactionTypes = 'expense') {
     const value = Math.abs(amount);
-    if (type === 'expense') {
-      return value * -1;
-    }
-    if (type === 'income') {
-      return value;
-    }
+    if (type === 'income') return value;
     return value * -1;
   }
 }

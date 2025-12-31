@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { cva } from 'class-variance-authority';
-import { DollarSign, Edit2, MoreVertical, Trash2 } from 'lucide-react';
+import { ArrowLeftRight, ArrowRight, DollarSign, Edit2, MoreVertical, Trash2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
@@ -115,30 +115,12 @@ export function Transaction({ transaction }: { transaction: Transaction }) {
 
   return (
     <li className="block">
-      <Card className="flex flex-row items-center gap-4 p-3 rounded-lg w-full">
-        <div className="flex gap-4 items-center flex-1">
-          <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
-            {transaction.category.icon}
-          </div>
-          <div className="flex-1">
-            <p className="text-foreground font-medium mb-0.6">{transaction.description}</p>
-            <p className="text-sm text-muted-foreground">{transaction.category.name}</p>
-          </div>
-        </div>
-        <div className="flex-1 flex justify-center items-center gap-2">
-          <img
-            src={transaction.account.bank?.logo}
-            alt={transaction.account.bank?.name}
-            className="w-6 h-6 rounded-full"
-          />
-          <div>
-            <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
-            <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
-          </div>
-        </div>
-        <div className="flex-1 flex justify-end">
-          <FormattedMoney value={transaction.amount} />
-        </div>
+      <Card className="flex flex-row items-center gap-4 p-3 w-full">
+        {transaction.transaction_type === 'transfer' ? (
+          <Transfer transaction={transaction} />
+        ) : (
+          <IncomeExpense transaction={transaction} />
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant="ghost">
@@ -165,5 +147,87 @@ export function Transaction({ transaction }: { transaction: Transaction }) {
         </DropdownMenu>
       </Card>
     </li>
+  );
+}
+
+function IncomeExpense({ transaction }: { transaction: Transaction }) {
+  return (
+    <div className="flex flex-row items-center gap-4 w-full">
+      <div className="flex gap-4 items-center flex-1">
+        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
+          {transaction.category.icon}
+        </div>
+        <div className="flex-1">
+          <p className="text-foreground font-medium mb-0.6 line-clamp-1">
+            {transaction.description}
+          </p>
+          <p className="text-sm text-muted-foreground">{transaction.category.name}</p>
+        </div>
+      </div>
+      <div className="flex-1 flex justify-center items-center gap-2">
+        <img
+          src={transaction.account.bank?.logo}
+          alt={transaction.account.bank?.name}
+          className="w-6 h-6 rounded-full"
+        />
+        <div>
+          <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
+          <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
+        </div>
+      </div>
+      <div className="flex-1 flex justify-end">
+        <FormattedMoney value={transaction.amount} />
+      </div>
+    </div>
+  );
+}
+
+function Transfer({ transaction }: { transaction: Transaction }) {
+  return (
+    <div className="flex flex-row items-center gap-4 rounded-lg w-full">
+      <div className="flex gap-4 items-center flex-1">
+        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
+          <ArrowLeftRight size={20} className="text-primary" />
+        </div>
+        <div className="flex-1">
+          <p className="text-foreground font-medium mb-0.6 line-clamp-1">
+            {transaction.description}
+          </p>
+          <p className="text-sm text-muted-foreground">Transferencia</p>
+        </div>
+      </div>
+      <div className="flex gap-2 items-center">
+        <div className="flex-1 flex justify-center items-center gap-2">
+          <img
+            src={transaction.account.bank?.logo}
+            alt={transaction.account.bank?.name}
+            className="w-6 h-6 rounded-full"
+          />
+          <div>
+            <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
+            <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
+          </div>
+        </div>
+        <ArrowRight size={20} />
+        <div className="flex-1 flex justify-center items-center gap-2">
+          <div>
+            <p className="text-sm text-foreground font-base text-right">
+              {transaction.destination.name}
+            </p>
+            <p className="text-xs text-muted-foreground text-right">
+              {transaction.destination.bank?.name}
+            </p>
+          </div>
+          <img
+            src={transaction.destination.bank?.logo}
+            alt={transaction.destination.bank?.name}
+            className="w-6 h-6 rounded-full"
+          />
+        </div>
+      </div>
+      <div className="flex-1 flex justify-end">
+        <FormattedMoney value={transaction.amount} />
+      </div>
+    </div>
   );
 }

@@ -14,7 +14,10 @@ import { Spinner } from '../ui/spinner';
 import { useFieldContext } from '@/hooks/form';
 import { accountsQueryOptions } from '@/query-options/accounts';
 
-export function AccountsField({ label }: { label?: string }) {
+export function AccountsField({
+  label,
+  ...props
+}: { label?: string } & React.ComponentProps<typeof Field>) {
   const field = useFieldContext<string>();
   const { data, isLoading } = useQuery(accountsQueryOptions);
 
@@ -26,7 +29,7 @@ export function AccountsField({ label }: { label?: string }) {
   }, [field.state.value, accounts]);
 
   return (
-    <Field data-invalid={isError}>
+    <Field {...props} data-invalid={isError}>
       <FieldLabel>{label}</FieldLabel>
       <Select value={field.state.value} onValueChange={(value) => field.setValue(value)}>
         <SelectTrigger>
