@@ -24,7 +24,7 @@ export function CategoryField({ label, type }: { label?: string; type: CategoryT
   return (
     <Field data-invalid={isError}>
       <FieldLabel>{label}</FieldLabel>
-      <Select onValueChange={(value) => field.setValue(value)}>
+      <Select value={field.state.value} onValueChange={(value) => field.setValue(value)}>
         <SelectTrigger>
           <SelectValue
             placeholder={isLoading ? 'Cargando categorías...' : 'Selecciona categoría'}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MoreVertical } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { NumericFormat } from 'react-number-format';
 import { CreateEditAccountDialog } from './create-edit-account';
 import {
   AlertDialog,
@@ -113,13 +114,14 @@ export function AccountCard({ account }: AccountCardProps) {
           </div>
 
           <div className="flex items-center">
-            <span className="text-lg font-semibold text-foreground">
-              {account.balance?.toLocaleString('es-CO', {
-                style: 'currency',
-                currency: 'COP',
-              })}
-            </span>
-
+            <NumericFormat
+              value={account.balance}
+              className="text-lg font-semibold text-foreground"
+              prefix="$ "
+              thousandSeparator="."
+              decimalSeparator=","
+              displayType="text"
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { NumericFormat } from 'react-number-format';
 import { accountsQueryOptions } from '@/query-options/accounts';
 import { AccountCard } from '@/components/account-card';
 import { CreateEditAccountDialog } from '@/components/create-edit-account';
@@ -29,12 +30,15 @@ function Accounts() {
           </h1>
           <p className="py-4 text-muted-foreground text-sm">Controla y administra tus cuentas</p>
           <div className="mt-4 rounded-lg bg-card p-4 shadow-sm">
-            <span className="text-sm text-muted-foreground">Balance total</span>
-            <p className="text-2xl font-bold ">
-              {totalBalance.toLocaleString('es-CO', {
-                style: 'currency',
-                currency: 'COP',
-              })}
+            <h4 className="text-sm text-muted-foreground">Balance total</h4>
+            <p className="text-2xl font-bold mt-2">
+              <NumericFormat
+                value={totalBalance}
+                prefix="$ "
+                thousandSeparator="."
+                decimalSeparator=","
+                displayType="text"
+              />
             </p>
           </div>
         </header>

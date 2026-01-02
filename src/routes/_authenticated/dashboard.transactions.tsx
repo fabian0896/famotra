@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { AddTransactionDialog } from '@/components/add-transaction-dialog';
+import { Plus } from 'lucide-react';
+import { CreateEditTransactionDialog } from '@/components/add-transaction-dialog';
 import { transactionsQueryOptions } from '@/query-options/transactions';
 import { Transaction, TransactionGroup, TransactionList } from '@/components/transactions-list';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/_authenticated/dashboard/transactions')({
   beforeLoad: () => ({
@@ -23,7 +25,14 @@ function Transactions() {
       <div className="flex-1">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Transacciones</h1>
-          {transactions.length ? <AddTransactionDialog /> : null}
+          {transactions.length ? (
+            <CreateEditTransactionDialog>
+              <Button type="button">
+                <Plus />
+                Nueva Transacción
+              </Button>
+            </CreateEditTransactionDialog>
+          ) : null}
         </div>
         <TransactionList>
           {transactions.map((group) => (

@@ -18,8 +18,8 @@ export function BankField({ label }: { label: string }) {
   const { data, isLoading } = useQuery(banksQueryOptions);
 
   const banks = data ?? [];
-
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
+
   return (
     <Field data-invalid={isError}>
       <FieldLabel>{label}</FieldLabel>

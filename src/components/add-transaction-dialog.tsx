@@ -1,5 +1,5 @@
-import { ArrowRight, Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { formatISO } from 'date-fns';
@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from './ui/dialog';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
-import type { TransactionsInsert } from '@/models/transactions.models';
+import type { Transaction, TransactionsInsert } from '@/models/transactions.models';
 import type { CategoryTypes } from '@/models/categories.models';
 import { useAppForm } from '@/hooks/form';
 import { accountsQueryOptions } from '@/query-options/accounts';
@@ -27,6 +27,7 @@ import { transactionsQueryOptions } from '@/query-options/transactions';
 import { formatError } from '@/lib/format-error';
 
 const addTransactionsSchema = z.object({
+  id: z.union([z.string(), z.undefined()]),
   description: z.string().nonempty({ message: 'La descripción es requedrida' }),
   category_id: z.uuidv4({ message: 'Debe seleccionar una categoría válida' }),
   account_id: z.uuidv4({ message: 'Debe seleccionar una cuenta válida' }),
@@ -42,13 +43,23 @@ const addTransferSchema = addTransactionsSchema.extend({
   category_id: z.uuidv4().optional(),
 });
 
-function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?: () => void }) {
+function TransactionForm({
+  type,
+  transaction,
+  onSuccess,
+}: {
+  type: CategoryTypes;
+  transaction?: Transaction;
+  onSuccess?: () => void;
+}) {
   const queryClient = useQueryClient();
   const { data } = useQuery(accountsQueryOptions);
   const accounts = data?.accounts || [];
 
+  const isEdit = Boolean(transaction);
+
   const create = useMutation({
-    mutationFn: Transactions.create,
+    mutationFn: Transactions.upsert,
     onSuccess: () => {
       toast.success('Transaccion creada correctamente!');
       onSuccess?.();
@@ -65,11 +76,12 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
 
   const form = useAppForm({
     defaultValues: {
-      description: '',
-      category_id: '',
-      account_id: accounts.at(0)?.id,
-      amount: 0,
-      date: formatISO(new Date()),
+      id: transaction?.id,
+      description: transaction?.description ?? '',
+      category_id: transaction?.category_id ?? '',
+      account_id: transaction?.account_id ?? accounts.at(0)?.id,
+      date: transaction?.date ?? formatISO(new Date()),
+      amount: Math.abs(transaction?.amount ?? 0),
       transaction_type: type,
     } as TransactionsInsert,
     validators: {
@@ -130,7 +142,7 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
           </DialogClose>
           <form.AppForm>
             <form.SubmitButton>
-              Agregar {type === 'expense' ? 'Gasto' : 'Ingreso'}
+              {isEdit ? 'Editar' : 'Agregar'} {type === 'expense' ? 'Gasto' : 'Ingreso'}
             </form.SubmitButton>
           </form.AppForm>
         </DialogFooter>
@@ -139,8 +151,16 @@ function TransactionForm({ type, onSuccess }: { type: CategoryTypes; onSuccess?:
   );
 }
 
-function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
+function TransferForm({
+  transaction,
+  onSuccess,
+}: {
+  transaction?: Transaction;
+  onSuccess?: () => void;
+}) {
   const queryClient = useQueryClient();
+
+  const isEdit = Boolean(transaction);
 
   const create = useMutation({
     mutationFn: Transactions.create,
@@ -160,11 +180,12 @@ function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
 
   const form = useAppForm({
     defaultValues: {
-      description: '',
-      account_id: '',
-      destination_account_id: '',
-      amount: 0,
-      date: formatISO(new Date()),
+      id: transaction?.id,
+      description: transaction?.description ?? '',
+      account_id: transaction?.account_id ?? '',
+      destination_account_id: transaction?.destination_account_id ?? '',
+      date: transaction?.date ?? formatISO(new Date()),
+      amount: Math.abs(transaction?.amount ?? 0),
       transaction_type: 'transfer',
     } satisfies TransactionsInsert,
     validators: {
@@ -227,7 +248,7 @@ function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
             </Button>
           </DialogClose>
           <form.AppForm>
-            <form.SubmitButton>Agregar Transferencia</form.SubmitButton>
+            <form.SubmitButton>{isEdit ? 'Editar' : 'Agregar'} Transferencia</form.SubmitButton>
           </form.AppForm>
         </DialogFooter>
       </form>
@@ -235,27 +256,50 @@ function TransferForm({ onSuccess }: { onSuccess?: () => void }) {
   );
 }
 
-export function AddTransactionDialog() {
+export function CreateEditTransactionDialog({
+  children,
+  isOpen,
+  transaction,
+  onOpenChange,
+}: {
+  children?: React.ReactNode;
+  isOpen?: boolean;
+  transaction?: Transaction;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState('');
 
-  const handleClose = (isOpen: boolean) => {
-    setOpen(isOpen);
+  const isEdit = Boolean(transaction);
+
+  const handleClose = (state: boolean) => {
+    onOpenChange?.(state);
+    setOpen(state);
   };
+
+  useEffect(() => {
+    if (isOpen === undefined) return;
+    setOpen(isOpen);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!transaction) return;
+    setTab(transaction.transaction_type);
+  }, [transaction]);
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogTrigger type="button" asChild>
-        <Button type="button">
-          <Plus />
-          Nueva Transacción
-        </Button>
+        {children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
-        <Tabs defaultValue="expense">
+        <Tabs value={tab} onValueChange={setTab} defaultValue="expense">
           <DialogHeader className="mb-6">
-            <DialogTitle>Nueva Transacción</DialogTitle>
+            <DialogTitle>{isEdit ? 'Editar Transacción' : 'Nueva Transacción'}</DialogTitle>
             <DialogDescription>
-              Agrega una nueva transacción a tu registro financiero.
+              {isEdit
+                ? 'Edita tu transacción con los nuevos datos'
+                : 'Agrega una nueva transacción a tu registro financiero.'}
             </DialogDescription>
             <TabsList className="w-full mt-4">
               <TabsTrigger value="expense">Gasto</TabsTrigger>
@@ -264,13 +308,21 @@ export function AddTransactionDialog() {
             </TabsList>
           </DialogHeader>
           <TabsContent value="expense">
-            <TransactionForm onSuccess={() => setOpen(false)} type="expense" />
+            <TransactionForm
+              transaction={transaction}
+              onSuccess={() => handleClose(false)}
+              type="expense"
+            />
           </TabsContent>
           <TabsContent value="income">
-            <TransactionForm onSuccess={() => setOpen(false)} type="income" />
+            <TransactionForm
+              transaction={transaction}
+              onSuccess={() => handleClose(false)}
+              type="income"
+            />
           </TabsContent>
           <TabsContent value="transfer">
-            <TransferForm onSuccess={() => setOpen(false)} />
+            <TransferForm transaction={transaction} onSuccess={() => handleClose(false)} />
           </TabsContent>
         </Tabs>
       </DialogContent>

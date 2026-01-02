@@ -1,10 +1,10 @@
 import { NumericFormat } from 'react-number-format';
-import React from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { cva } from 'class-variance-authority';
-import { ArrowRight, DollarSign, Edit2, MoreVertical, Trash2 } from 'lucide-react';
+import { ArrowRight, DollarSign, Edit2, MoreVertical, Plus, Trash2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {
@@ -15,7 +15,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from './ui/empty';
-import { AddTransactionDialog } from './add-transaction-dialog';
+import { CreateEditTransactionDialog } from './add-transaction-dialog';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import {
@@ -83,7 +83,12 @@ export function TransactionList({ children }: { children: React.ReactNode }) {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <AddTransactionDialog></AddTransactionDialog>
+          <CreateEditTransactionDialog>
+            <Button type="button">
+              <Plus />
+              Nueva Transacción
+            </Button>
+          </CreateEditTransactionDialog>
         </EmptyContent>
       </Empty>
     );
@@ -111,6 +116,7 @@ export function TransactionGroup({ date, children }: { date: string; children: R
 }
 
 export function Transaction({ transaction }: { transaction: Transaction }) {
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const remove = useMutation({
@@ -140,7 +146,7 @@ export function Transaction({ transaction }: { transaction: Transaction }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
               <Edit2 />
               Editar
             </DropdownMenuItem>
@@ -158,11 +164,17 @@ export function Transaction({ transaction }: { transaction: Transaction }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </Card>
+      <CreateEditTransactionDialog
+        isOpen={editDialogOpen}
+        transaction={transaction}
+        onOpenChange={setEditDialogOpen}
+      />
     </li>
   );
 }
 
 function IncomeExpense({ transaction }: { transaction: Transaction }) {
+  if (!transaction.category) throw new Error('The IncomeExpense component needs a category');
   return (
     <div className="flex flex-row items-center gap-4 w-full">
       <div className="flex gap-4 items-center flex-1">
@@ -195,6 +207,7 @@ function IncomeExpense({ transaction }: { transaction: Transaction }) {
 }
 
 function Transfer({ transaction }: { transaction: Transaction }) {
+  if (!transaction.destination) throw new Error('Transfer componente needs a destination');
   return (
     <div className="flex flex-row items-center gap-4 rounded-lg w-full">
       <div className="flex gap-4 items-center flex-1">
@@ -213,14 +226,14 @@ function Transfer({ transaction }: { transaction: Transaction }) {
         </div>
       </div>
       <div className="flex-1 flex justify-center">
-        <ArrowRight />
+        <ArrowRight strokeWidth={2.5} className="text-red-400" />
       </div>
       <div className="flex flex-col justify-center items-center">
         <FormattedMoney className="mb-1" neutral value={transaction.amount} />
         <p className="text-xs text-muted-foreground text-center">{transaction.description}</p>
       </div>
       <div className="flex-1 flex justify-center">
-        <ArrowRight />
+        <ArrowRight strokeWidth={2.5} className="text-green-400" />
       </div>
       <div className="flex gap-4 items-center flex-1 justify-end">
         <div className="flex-1">

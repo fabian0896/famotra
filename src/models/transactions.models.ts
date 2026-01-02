@@ -1,6 +1,7 @@
 import type { Enums, Tables, TablesInsert } from './database.types';
 
 export type TransactionAccount = {
+  id: string;
   name: string;
   bank: {
     id: string;
@@ -10,11 +11,12 @@ export type TransactionAccount = {
 };
 export type Transaction = Tables<'transactions'> & {
   category: {
+    id: string;
     name: string;
     icon: string;
-  };
+  } | null;
   account: TransactionAccount;
-  destination: TransactionAccount;
+  destination: TransactionAccount | null;
 };
 export type TransactionsInsert = TablesInsert<'transactions'>;
 export type TransactionTypes = Enums<'transaction_type'>;

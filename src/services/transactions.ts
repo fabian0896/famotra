@@ -13,15 +13,26 @@ export class Transactions {
     return transaction;
   }
 
+  static async upsert(data: TransactionsInsert) {
+    data.amount = Transactions.formatAmount(data.amount, data.transaction_type);
+    const { data: transaction } = await supabase
+      .from('transactions')
+      .upsert(data)
+      .select()
+      .single()
+      .throwOnError();
+    return transaction;
+  }
+
   static async get() {
     const { data: transactions } = await supabase
       .from('transactions')
       .select(
         `
         *, 
-        category:categories (name, icon),
-        account:accounts!account_id (name, bank:bank_list (id, logo, name)),
-        destination:accounts!destination_account_id (name, bank:bank_list (id, logo, name))
+        category:categories (id, name, icon),
+        account:accounts!account_id (id, name, bank:bank_list (id, logo, name)),
+        destination:accounts!destination_account_id (id, name, bank:bank_list (id, logo, name))
         `
       )
       .order('date', { ascending: false })
