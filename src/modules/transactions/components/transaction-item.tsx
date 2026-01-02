@@ -1,122 +1,25 @@
-import { NumericFormat } from 'react-number-format';
-import React, { useState } from 'react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { cva } from 'class-variance-authority';
-import { ArrowRight, DollarSign, Edit2, MoreVertical, Plus, Trash2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from './ui/empty';
+import { ArrowRight, Edit2, MoreVertical, Trash2 } from 'lucide-react';
+import { Transactions } from '../services/transactions';
+import { transactionsQueryOptions } from '../query-options/transactions';
 import { CreateEditTransactionDialog } from './add-transaction-dialog';
-import { Card } from './ui/card';
-import { Button } from './ui/button';
+import { FormattedMoney } from './formatted-money';
+import type { Transaction } from '../models/transactions.models';
+import { formatError } from '@/lib/format-error';
+import { accountsQueryOptions } from '@/query-options/accounts';
+import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
-import { Spinner } from './ui/spinner';
-import type { Transaction } from '@/models/transactions.models';
-import { Transactions } from '@/services/transactions';
-import { transactionsQueryOptions } from '@/query-options/transactions';
-import { formatError } from '@/lib/format-error';
-import { accountsQueryOptions } from '@/query-options/accounts';
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 
-const moneyClx = cva('text-base font-medium', {
-  variants: {
-    isNegative: {
-      true: 'text-red-400',
-      false: 'text-green-400',
-    },
-    neutral: {
-      true: 'text-foreground!',
-      false: '',
-    },
-  },
-});
-
-function FormattedMoney({
-  value,
-  neutral,
-  className,
-  ...props
-}: { value: number; neutral?: boolean } & React.ComponentProps<typeof NumericFormat>) {
-  const isNegative = value < 0;
-  const prefix = isNegative || neutral ? '$' : '+$';
-  value = neutral ? Math.abs(value) : value;
-  return (
-    <NumericFormat
-      className={moneyClx({ isNegative, neutral, className })}
-      value={value}
-      displayType="text"
-      thousandSeparator="."
-      decimalSeparator=","
-      allowNegative={true}
-      prefix={prefix}
-      {...props}
-    />
-  );
-}
-
-export function TransactionList({ children }: { children: React.ReactNode }) {
-  const count = React.Children.count(children);
-  if (!count) {
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <DollarSign />
-          </EmptyMedia>
-          <EmptyTitle>Sin Transacciones</EmptyTitle>
-          <EmptyDescription>
-            ¿Listo para tomar control de tus finanzas? Agrega tu primera transacción para comenzar a
-            seguir tu dinero.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <CreateEditTransactionDialog>
-            <Button type="button">
-              <Plus />
-              Nueva Transacción
-            </Button>
-          </CreateEditTransactionDialog>
-        </EmptyContent>
-      </Empty>
-    );
-  }
-  return <div className="flex flex-col gap-6">{children}</div>;
-}
-
-export function TransactionGroup({ date, children }: { date: string; children: React.ReactNode }) {
-  const [parent] = useAutoAnimate();
-
-  const groupName = React.useMemo(() => {
-    const localDate = `${date}T12:00:00`;
-    return format(localDate, "d 'de' MMMM, yyyy", { locale: es });
-  }, [date]);
-
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <p className="text-sm text-muted-foreground">{groupName}</p>
-      </div>
-      <ul ref={parent} className="space-y-4">
-        {children}
-      </ul>
-    </div>
-  );
-}
-
-export function Transaction({ transaction }: { transaction: Transaction }) {
+export function TransactionItem({ transaction }: { transaction: Transaction }) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 

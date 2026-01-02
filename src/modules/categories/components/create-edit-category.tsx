@@ -1,8 +1,9 @@
-import { LucidePlus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { CATEGORY_TYPES } from '../models/categories.models';
+import { addCategorySchema } from '../models/schemas';
+import type { Category, CategoryInsert, CategoryTypes } from '../models/categories.models';
 import {
   Dialog,
   DialogClose,
@@ -11,37 +12,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from './ui/dialog';
-import { Button } from './ui/button';
-import type { Category, CategoryInsert, CategoryTypes } from '@/models/categories.models';
-import { CATEGORY_TYPES } from '@/models/categories.models';
+} from '@/components/ui/dialog';
 import { useAppForm } from '@/hooks/form';
-import { Categories } from '@/services/categories';
-import { categoriesQueryOptions } from '@/query-options/categories';
-
-const addCategorySchema = z.object({
-  name: z.string().nonempty({ message: 'Debes ingresar un nombre para la categoría' }),
-  icon: z.emoji(),
-  type: z.enum(['income', 'expense']),
-});
-
-export function AddCategotyButton() {
-  return (
-    <DialogTrigger asChild>
-      <button className="flex flex-col justify-center items-center gap-1.5 group">
-        <div className="bg-primary/20 rounded-full w-16 h-16 text-2xl flex items-center justify-center">
-          <span className="group-hover:scale-110 group-hover:rotate-12 transition-all">
-            <LucidePlus className="text-primary" size={30} strokeWidth={3} />
-          </span>
-        </div>
-        <span className="text-muted-foreground text-center font-medium text-sm lowercase first-letter:capitalize group-hover:text-foreground">
-          Agregar
-        </span>
-      </button>
-    </DialogTrigger>
-  );
-}
+import { Categories } from '@/modules/categories/services/categories';
+import { categoriesQueryOptions } from '@/modules/categories/query-options/categories';
+import { Button } from '@/components/ui/button';
 
 export function CreateEditCategoryDialog({
   isOpen,

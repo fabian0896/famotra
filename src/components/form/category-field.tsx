@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from '../ui/select';
 import { Spinner } from '../ui/spinner';
-import type { CategoryTypes } from '@/models/categories.models';
-import { categoriesQueryOptions } from '@/query-options/categories';
+import type { CategoryTypes } from '@/modules/categories/models/categories.models';
+import { categoriesQueryOptions } from '@/modules/categories/query-options/categories';
 import { useFieldContext } from '@/hooks/form';
 
 export function CategoryField({ label, type }: { label?: string; type: CategoryTypes }) {

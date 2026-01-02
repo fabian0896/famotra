@@ -1,4 +1,4 @@
-import type { LoginOptions, SignUpOptions, User } from '@/models/auth.model';
+import type { LoginOptions, SignUpOptions, User } from '@/modules/auth/models/auth.model';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Auth {

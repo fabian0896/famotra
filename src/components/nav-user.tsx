@@ -17,8 +17,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { authQueryOptions } from '@/query-options/auth';
-import { Auth } from '@/services/auth';
+import { authQueryOptions } from '@/modules/auth/query-options/auth';
+import { Auth } from '@/modules/auth/services/auth';
 import { useAvatar } from '@/hooks/use-avatar';
 
 export function NavUser() {

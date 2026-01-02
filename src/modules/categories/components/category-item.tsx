@@ -1,8 +1,13 @@
-import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { CATEGORY_TYPES } from '../models/categories.models';
+import { CreateEditCategoryDialog } from './create-edit-category';
+import { DeleteCategoryDialog } from './delete-category-dialog';
+import type { Category } from '../models/categories.models';
+import { Categories } from '@/modules/categories/services/categories';
+import { categoriesQueryOptions } from '@/modules/categories/query-options/categories';
 import {
   Sheet,
   SheetContent,
@@ -10,80 +15,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from './ui/sheet';
-import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Separator } from './ui/separator';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from './ui/alert-dialog';
-import { Spinner } from './ui/spinner';
-import { CreateEditCategoryDialog } from './create-edit-category';
-import type React from 'react';
-import type { Category } from '@/models/categories.models';
-import { CATEGORY_TYPES } from '@/models/categories.models';
-import { Categories } from '@/services/categories';
-import { categoriesQueryOptions } from '@/query-options/categories';
-
-function DeleteCategoryDialog({
-  category,
-  children,
-  onConfirm,
-}: {
-  category: Category;
-  children: React.ReactNode;
-  onConfirm: () => void;
-}) {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Eliminar Categoría {category.name}</AlertDialogTitle>
-          <AlertDialogDescription>
-            ¿Estás seguro que deseas eliminar la categoría{' '}
-            <span className="text-foreground font-semibold">{category.name}</span>? Esta acción
-            también eliminará todas las transacciones asociadas a esta categoría
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} variant="destructive">
-            Eliminar categoría
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
-
-export function CategoryList({
-  children,
-  title,
-  description,
-  ...props
-}: { title: string; description: string } & React.ComponentProps<'div'>) {
-  const [parent] = useAutoAnimate();
-  return (
-    <div {...props}>
-      <div className="mb-4">
-        <h2 className="text-base font-semibold">{title}</h2>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </div>
-      <ul ref={parent} className="flex gap-8 flex-wrap">
-        {children}
-      </ul>
-    </div>
-  );
-}
+} from '@/components/ui/sheet';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { Separator } from '@/components/ui/separator';
 
 export function CategoryItem({ category }: { category: Category }) {
   const [sheetOpen, setSheetOpen] = useState(false);

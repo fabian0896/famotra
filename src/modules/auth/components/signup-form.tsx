@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { cn } from '@/lib/utils';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
 import { useAppForm } from '@/hooks/form';
-import { Auth } from '@/services/auth';
-import { authQueryOptions } from '@/query-options/auth';
+import { Auth } from '@/modules/auth/services/auth';
+import { authQueryOptions } from '@/modules/auth/query-options/auth';
 
 const signupSchema = z
   .object({

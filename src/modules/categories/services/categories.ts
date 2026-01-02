@@ -3,7 +3,7 @@ import type {
   CategoryDelete,
   CategoryInsert,
   CategoryTypes,
-} from '@/models/categories.models';
+} from '../models/categories.models';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Categories {

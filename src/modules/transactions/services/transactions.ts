@@ -1,4 +1,4 @@
-import type { TransactionTypes, TransactionsInsert } from '@/models/transactions.models';
+import type { TransactionTypes, TransactionsInsert } from '../models/transactions.models';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Transactions {
@@ -42,7 +42,6 @@ export class Transactions {
   }
 
   static async remove({ id }: { id: string }) {
-    console.log({ id });
     const { data } = await supabase
       .from('transactions')
       .delete()

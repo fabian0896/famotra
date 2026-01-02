@@ -1,0 +1,21 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
+export function CategoryList({
+  children,
+  title,
+  description,
+  ...props
+}: { title: string; description: string } & React.ComponentProps<'div'>) {
+  const [parent] = useAutoAnimate();
+  return (
+    <div {...props}>
+      <div className="mb-4">
+        <h2 className="text-base font-semibold">{title}</h2>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </div>
+      <ul ref={parent} className="flex gap-8 flex-wrap">
+        {children}
+      </ul>
+    </div>
+  );
+}

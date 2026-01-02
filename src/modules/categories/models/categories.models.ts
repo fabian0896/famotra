@@ -1,4 +1,4 @@
-import type { Enums, Tables, TablesInsert, TablesUpdate } from './database.types';
+import type { Enums, Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
 
 export type Category = Tables<'categories'>;
 

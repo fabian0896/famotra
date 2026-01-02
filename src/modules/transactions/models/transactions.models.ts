@@ -1,4 +1,4 @@
-import type { Enums, Tables, TablesInsert } from './database.types';
+import type { Enums, Tables, TablesInsert } from '@/models/database.types';
 
 export type TransactionAccount = {
   id: string;
