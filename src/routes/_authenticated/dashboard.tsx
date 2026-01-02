@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Separator } from '@radix-ui/react-separator';
 import { Link, Outlet, createFileRoute, isMatch, useMatches } from '@tanstack/react-router';
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/navbar/app-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,

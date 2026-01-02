@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 import { QueryKeys } from '@/constants/query-keys';
-import { Accounts } from '@/services/accounts';
+import { Accounts } from '@/modules/accounts/services/accounts';
 
 export const accountsQueryOptions = queryOptions({
   queryKey: [QueryKeys.ACCOUNTS],

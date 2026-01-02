@@ -13,9 +13,9 @@ import {
 } from 'lucide-react';
 
 import { Link, linkOptions } from '@tanstack/react-router';
-import { NavMain } from '@/components/nav-main';
-import { NavSecondary } from '@/components/nav-secondary';
-import { NavUser } from '@/components/nav-user';
+import { NavMain } from '@/components/navbar/nav-main';
+import { NavSecondary } from '@/components/navbar/nav-secondary';
+import { NavUser } from '@/components/navbar/nav-user';
 import {
   Sidebar,
   SidebarContent,

@@ -1,6 +1,6 @@
 import { LucidePlus } from 'lucide-react';
-import { Card, CardDescription } from './ui/card';
-import { DialogTrigger } from './ui/dialog';
+import { Card, CardDescription } from '@/components/ui/card';
+import { DialogTrigger } from '@/components/ui/dialog';
 
 export function AddAcountCard() {
   return (

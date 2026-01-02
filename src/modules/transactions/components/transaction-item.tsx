@@ -8,7 +8,7 @@ import { CreateEditTransactionDialog } from './add-transaction-dialog';
 import { FormattedMoney } from './formatted-money';
 import type { Transaction } from '../models/transactions.models';
 import { formatError } from '@/lib/format-error';
-import { accountsQueryOptions } from '@/query-options/accounts';
+import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,

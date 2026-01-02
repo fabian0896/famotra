@@ -13,7 +13,7 @@ import {
 } from '../ui/select';
 import { Spinner } from '../ui/spinner';
 import { useFieldContext } from '@/hooks/form';
-import { accountsQueryOptions } from '@/query-options/accounts';
+import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 
 export function AccountsField({
   label,

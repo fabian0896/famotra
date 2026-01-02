@@ -4,18 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { NumericFormat } from 'react-number-format';
 import { CreateEditAccountDialog } from './create-edit-account';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from './ui/alert-dialog';
-import type { Account } from '@/models/accounts.models';
+import { DeleteAccountDialog } from './delete-account-dialog';
+import type { Account } from '../models/accounts.models';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,47 +14,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Accounts } from '@/services/accounts';
-import { accountsQueryOptions } from '@/query-options/accounts';
+import { Accounts } from '@/modules/accounts/services/accounts';
+import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { QueryKeys } from '@/constants/query-keys';
 
-interface AccountCardProps {
-  account: Account;
-}
-
-function DeleteAccountDialog({
-  account,
-  children,
-  onConfirm,
-}: {
-  account: Account;
-  children: React.ReactNode;
-  onConfirm?: () => void;
-}) {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Eliminar cuenta {account.name}</AlertDialogTitle>
-          <AlertDialogDescription>
-            ¿Estás seguro que deseas eliminar la cuenta{' '}
-            <span className="text-foreground font-semibold">{account.name}</span>? Esta acción
-            también eliminará todas las transacciones asociadas a esta cuenta
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onConfirm}>
-            Eliminar cuenta
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
-
-export function AccountCard({ account }: AccountCardProps) {
+export function AccountCard({ account }: { account: Account }) {
   const [editOpen, setEditOpen] = useState(false);
   const queryClient = useQueryClient();
 

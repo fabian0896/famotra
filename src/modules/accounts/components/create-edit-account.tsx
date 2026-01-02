@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import z from 'zod';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from './ui/button';
-import type { Account, AccountInsert } from '@/models/accounts.models';
+import { addAccountSchema } from '../models/schemas';
+import type { Account, AccountInsert } from '../models/accounts.models';
 import {
   Dialog,
   DialogClose,
@@ -14,28 +13,21 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useAppForm } from '@/hooks/form';
-import { Accounts } from '@/services/accounts';
-import { accountsQueryOptions } from '@/query-options/accounts';
-
-const addAccountSchema = z.object({
-  name: z.string().nonempty({ message: 'Debes ingresar un nombre para la cuenta' }),
-  bank_id: z.string().nonempty({ message: 'Debes escoger un banco' }),
-  balance: z.number().min(0),
-});
-
-interface AccountDialogProps {
-  account?: Account;
-  isOpen?: boolean;
-  children?: React.ReactNode;
-  onOpenChange?: (open: boolean) => void;
-}
+import { Accounts } from '@/modules/accounts/services/accounts';
+import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
+import { Button } from '@/components/ui/button';
 
 export function CreateEditAccountDialog({
   account,
   isOpen,
   children,
   onOpenChange,
-}: AccountDialogProps) {
+}: {
+  account?: Account;
+  isOpen?: boolean;
+  children?: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const isEditing = !!account;
