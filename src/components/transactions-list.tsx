@@ -100,7 +100,8 @@ export function TransactionGroup({ date, children }: { date: string; children: R
   const [parent] = useAutoAnimate();
 
   const groupName = React.useMemo(() => {
-    return format(date, "d 'de' MMMM, yyyy", { locale: es });
+    const localDate = `${date}T12:00:00`;
+    return format(localDate, "d 'de' MMMM, yyyy", { locale: es });
   }, [date]);
 
   return (

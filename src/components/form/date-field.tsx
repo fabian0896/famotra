@@ -13,7 +13,9 @@ export function DateField({ label }: { label: string }) {
 
   const dateValue = React.useMemo(() => {
     if (!field.state.value) return 'Seleccionar fecha';
-    return format(field.state.value, 'dd/MM/yyyy');
+    let value = field.state.value;
+    value = value.includes('T') ? value : `${value}T12:00:00`;
+    return format(value, 'dd/MM/yyyy');
   }, [field.state.value]);
 
   const selected = React.useMemo(() => {
@@ -34,6 +36,7 @@ export function DateField({ label }: { label: string }) {
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
+            timeZone="America/Bogota"
             mode="single"
             selected={selected}
             captionLayout="dropdown"
