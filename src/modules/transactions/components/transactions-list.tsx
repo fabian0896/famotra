@@ -1,5 +1,6 @@
 import React from 'react';
 import { DollarSign, Plus } from 'lucide-react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   Empty,
   EmptyContent,
@@ -11,7 +12,10 @@ import {
 import { Button } from '../../../components/ui/button';
 import { CreateEditTransactionDialog } from './add-transaction-dialog';
 
-export function TransactionList({ children }: { children: React.ReactNode }) {
+export function TransactionList({
+  children,
+  ...props
+}: React.ComponentProps<typeof InfiniteScroll>) {
   const count = React.Children.count(children);
   if (!count) {
     return (
@@ -37,5 +41,10 @@ export function TransactionList({ children }: { children: React.ReactNode }) {
       </Empty>
     );
   }
-  return <div className="flex flex-col gap-6">{children}</div>;
+  // return <div className="flex flex-col gap-6">{children}</div>;
+  return (
+    <InfiniteScroll {...props} className="flex flex-col gap-6">
+      {children}
+    </InfiniteScroll>
+  );
 }

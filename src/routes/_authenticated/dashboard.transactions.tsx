@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_authenticated/dashboard/transactions')({
   }),
   loader: async ({ context }) => {
     const queryClient = context.queryClient;
-    await queryClient.ensureQueryData(transactionsQueryOptions);
+    await queryClient.ensureInfiniteQueryData(transactionsQueryOptions);
   },
   component: TransactionsPage,
 });

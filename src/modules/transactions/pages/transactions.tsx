@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { transactionsQueryOptions } from '../query-options/transactions';
 import { TransactionGroup } from '../components/transaction-group';
@@ -9,7 +9,12 @@ import { TransactionList } from '@/modules/transactions/components/transactions-
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function TransactionsPage() {
-  const { data: transactions } = useSuspenseQuery(transactionsQueryOptions);
+  const {
+    data: transactions,
+    hasNextPage,
+    fetchNextPage,
+  } = useSuspenseInfiniteQuery(transactionsQueryOptions);
+
   return (
     <div className="flex gap-6 container mx-auto">
       <div className="flex-1">
@@ -24,7 +29,15 @@ export function TransactionsPage() {
             </CreateEditTransactionDialog>
           ) : null}
         </div>
-        <TransactionList>
+        <TransactionList
+          dataLength={transactions.length}
+          next={fetchNextPage}
+          hasMore={hasNextPage}
+          loader={<p className="text-xs text-muted-foreground text-center">Cargando...</p>}
+          endMessage={
+            <p className="text-xs text-muted-foreground text-center">No hay más transacciones</p>
+          }
+        >
           {transactions.map((group) => (
             <TransactionGroup key={group.date} date={group.date}>
               {group.transactions?.map((transaction) => (

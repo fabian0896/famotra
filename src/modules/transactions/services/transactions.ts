@@ -24,7 +24,9 @@ export class Transactions {
     return transaction;
   }
 
-  static async get() {
+  static async get({ page = 1, pageSize = 25 }: { page?: number; pageSize?: number }) {
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
     const { data: transactions } = await supabase
       .from('transactions')
       .select(
@@ -37,6 +39,7 @@ export class Transactions {
       )
       .order('date', { ascending: false })
       .order('created_at', { ascending: false })
+      .range(from, to)
       .throwOnError();
     return transactions;
   }
