@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { ArrowRight, Edit2, MoreVertical, Trash2 } from 'lucide-react';
 import { Transactions } from '../services/transactions';
@@ -18,8 +18,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { cn } from '@/lib/utils';
+import { AccountIcon } from '@/modules/accounts/components/account-icon';
 
-export function TransactionItem({ transaction }: { transaction: Transaction }) {
+export function TransactionItem({
+  transaction,
+  className,
+  ...props
+}: { transaction: Transaction } & React.ComponentProps<'li'>) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -36,7 +42,7 @@ export function TransactionItem({ transaction }: { transaction: Transaction }) {
   });
 
   return (
-    <li className="block">
+    <li className={cn('block', className)} {...props}>
       <Card className="flex flex-row items-center gap-4 p-3 w-full">
         {transaction.transaction_type === 'transfer' ? (
           <Transfer transaction={transaction} />
@@ -93,14 +99,12 @@ function IncomeExpense({ transaction }: { transaction: Transaction }) {
         </div>
       </div>
       <div className="flex-1 flex justify-center items-center gap-2">
-        <img
-          src={transaction.account.bank?.logo}
-          alt={transaction.account.bank?.name}
-          className="w-6 h-6 rounded-full"
-        />
+        <AccountIcon account={transaction.account} className="w-6 h-6 rounded-full" />
         <div>
           <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
-          <p className="text-xs text-muted-foreground">{transaction.account.bank?.name}</p>
+          <p className="text-xs text-muted-foreground">
+            {transaction.account.bank?.name || transaction.account.custom_bank_name}
+          </p>
         </div>
       </div>
       <div className="flex-1 flex justify-end">
@@ -116,11 +120,7 @@ function Transfer({ transaction }: { transaction: Transaction }) {
     <div className="flex flex-row items-center gap-4 rounded-lg w-full">
       <div className="flex gap-4 items-center flex-1">
         <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full overflow-hidden">
-          <img
-            src={transaction.account.bank?.logo}
-            alt={transaction.account.bank?.name}
-            className="w-full h-full object-cover"
-          />
+          <AccountIcon account={transaction.account} className="w-full h-full object-cover" />
         </div>
         <div className="flex-1">
           <p className="text-foreground font-medium mb-0.6 line-clamp-1">
@@ -145,15 +145,11 @@ function Transfer({ transaction }: { transaction: Transaction }) {
             {transaction.destination.name}
           </p>
           <p className="text-sm text-muted-foreground text-right">
-            {transaction.destination.bank?.name}
+            {transaction.destination.bank?.name || transaction.destination.custom_bank_name}
           </p>
         </div>
         <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full overflow-hidden">
-          <img
-            src={transaction.destination.bank?.logo}
-            alt={transaction.destination.bank?.name}
-            className="w-full h-full object-cover"
-          />
+          <AccountIcon account={transaction.destination} className="w-full h-full object-cover" />
         </div>
       </div>
     </div>

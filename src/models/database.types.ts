@@ -19,6 +19,8 @@ export type Database = {
           balance: number
           bank_id: string | null
           created_at: string
+          custom_bank_icon: string | null
+          custom_bank_name: string | null
           id: string
           name: string
           user_id: string | null
@@ -27,6 +29,8 @@ export type Database = {
           balance?: number
           bank_id?: string | null
           created_at?: string
+          custom_bank_icon?: string | null
+          custom_bank_name?: string | null
           id?: string
           name: string
           user_id?: string | null
@@ -35,6 +39,8 @@ export type Database = {
           balance?: number
           bank_id?: string | null
           created_at?: string
+          custom_bank_icon?: string | null
+          custom_bank_name?: string | null
           id?: string
           name?: string
           user_id?: string | null

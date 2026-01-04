@@ -41,7 +41,6 @@ export function TransactionList({
       </Empty>
     );
   }
-  // return <div className="flex flex-col gap-6">{children}</div>;
   return (
     <InfiniteScroll {...props} className="flex flex-col gap-6">
       {children}

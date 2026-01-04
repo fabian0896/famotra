@@ -14,6 +14,7 @@ import {
 import { Spinner } from '../ui/spinner';
 import { useFieldContext } from '@/hooks/form';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
+import { AccountIcon } from '@/modules/accounts/components/account-icon';
 
 export function AccountsField({
   label,
@@ -37,11 +38,7 @@ export function AccountsField({
           <SelectValue placeholder={isLoading ? 'Cargando cuentas...' : 'Selecciona cuenta'}>
             {selected && (
               <div className="flex items-center gap-2">
-                <img
-                  className="w-4 h-4 rounded-full"
-                  src={selected.bank?.logo}
-                  alt={selected.bank?.name}
-                />
+                <AccountIcon account={selected} className="w-4 h-4 rounded-full" />
                 <span>{selected.name}</span>
               </div>
             )}
@@ -57,11 +54,7 @@ export function AccountsField({
             ) : (
               accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  <img
-                    className="w-6 h-6 rounded-full"
-                    src={account.bank?.logo}
-                    alt={account.bank?.name}
-                  />
+                  <AccountIcon account={account} className="w-6 h-6 rounded-full" />
                   <div>
                     <p>{account.name}</p>
                     <NumericFormat

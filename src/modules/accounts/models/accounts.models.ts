@@ -1,4 +1,4 @@
-import type { Tables, TablesInsert, TablesUpdate } from './database.types';
+import type { Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
 
 export type Account = Tables<'accounts'> & {
   bank: { id: string; name: string; logo: string } | null;

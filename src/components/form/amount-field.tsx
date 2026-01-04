@@ -23,6 +23,7 @@ export function AmountField({
         onBlur={field.handleBlur}
         prefix="$ "
         thousandSeparator
+        disabled={props.disabled}
       />
       <FieldError errors={field.state.meta.errors} />
     </Field>

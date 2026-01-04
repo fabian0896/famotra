@@ -33,8 +33,20 @@ export class Transactions {
         `
         *, 
         category:categories (id, name, icon),
-        account:accounts!account_id (id, name, bank:bank_list (id, logo, name)),
-        destination:accounts!destination_account_id (id, name, bank:bank_list (id, logo, name))
+        account:accounts!account_id (
+          id, 
+          name, 
+          custom_bank_name, 
+          custom_bank_icon, 
+          bank:bank_list (id, logo, name)
+        ),
+        destination:accounts!destination_account_id (
+          id, 
+          name, 
+          custom_bank_name, 
+          custom_bank_icon, 
+          bank:bank_list (id, logo, name)
+        )
         `
       )
       .order('date', { ascending: false })

@@ -37,6 +37,7 @@ export function BankField({ label }: { label: string }) {
             ) : (
               banks.map((bank) => (
                 <SelectItem key={bank.id} value={bank.id}>
+                  <img className="w-4 h-4 rounded-full" src={bank.logo} alt={bank.name} />
                   {bank.name}
                 </SelectItem>
               ))

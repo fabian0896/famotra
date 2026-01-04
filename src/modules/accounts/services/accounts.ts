@@ -1,4 +1,4 @@
-import type { AccountDelete, AccountInsert } from '@/models/accounts.models';
+import type { AccountDelete, AccountInsert } from '../models/accounts.models';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Accounts {

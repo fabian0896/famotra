@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { NumericFormat } from 'react-number-format';
 import { CreateEditAccountDialog } from './create-edit-account';
 import { DeleteAccountDialog } from './delete-account-dialog';
+import { AccountIcon } from './account-icon';
 import type { Account } from '../models/accounts.models';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,18 +52,12 @@ export function AccountCard({ account }: { account: Account }) {
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             {/* Icon with bank color */}
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted overflow-hidden pl">
-              <img
-                className="w-full h-full object-cover"
-                src={account.bank?.logo}
-                alt={account.bank?.name}
-              />
-            </div>
+            <AccountIcon className="h-10 w-10 rounded-full overflow-hidden" account={account} />
 
             <div className="flex flex-col">
               <span className="font-medium text-foreground">{account.name}</span>
               <span className="text-sm text-muted-foreground capitalize">
-                {account.bank?.name ?? 'Sin banco'}
+                {account.bank?.name ?? account.custom_bank_name ?? 'Sin banco'}
               </span>
             </div>
           </div>

@@ -16,6 +16,7 @@ import { useAppForm } from '@/hooks/form';
 import { Accounts } from '@/modules/accounts/services/accounts';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function CreateEditAccountDialog({
   account,
@@ -28,6 +29,7 @@ export function CreateEditAccountDialog({
   children?: React.ReactNode;
   onOpenChange?: (open: boolean) => void;
 }) {
+  const [tab, setTab] = useState('bank');
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const isEditing = !!account;
@@ -51,13 +53,20 @@ export function CreateEditAccountDialog({
     setOpen(isOpen);
   }, [isOpen]);
 
+  useEffect(() => {
+    if (account === undefined) return;
+    if (!account.bank_id) setTab('custom');
+  }, [account]);
+
   const form = useAppForm({
     defaultValues: {
       id: account?.id || undefined,
       name: account?.name || '',
       bank_id: account?.bank?.id || undefined,
       balance: account?.balance || 0,
-    } as AccountInsert,
+      custom_bank_name: account?.custom_bank_name || undefined,
+      custom_bank_icon: account?.custom_bank_icon || undefined,
+    } satisfies AccountInsert,
     validators: {
       onSubmit: addAccountSchema,
     },
@@ -108,13 +117,40 @@ export function CreateEditAccountDialog({
             <form.AppField
               name="balance"
               children={(field) => (
-                <field.AmountField id="balance" name="balance" label="Balance" />
+                <field.AmountField
+                  id="balance"
+                  disabled={isEditing}
+                  name="balance"
+                  label="Balance"
+                />
               )}
             />
-            <form.AppField
-              name="bank_id"
-              children={(field) => <field.BankField label="Nombre de banco" />}
-            />
+            <Tabs value={tab} onValueChange={setTab} defaultValue="bank">
+              <TabsList className="w-full mb-4">
+                <TabsTrigger value="bank">Cuenta bancaria</TabsTrigger>
+                <TabsTrigger value="custom">Cuenta personalizada</TabsTrigger>
+              </TabsList>
+              <TabsContent value="bank">
+                <form.AppField
+                  name="bank_id"
+                  children={(field) => <field.BankField label="Nombre de banco" />}
+                />
+              </TabsContent>
+              <TabsContent value="custom">
+                <div className="flex flex-col gap-8">
+                  <form.AppField
+                    name="custom_bank_name"
+                    children={(field) => (
+                      <field.TextField placeholder="Efectivo" label="Nombre personalizado" />
+                    )}
+                  />
+                  <form.AppField
+                    name="custom_bank_icon"
+                    children={(field) => <field.AccountIconField label="Icono" />}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
           <DialogFooter>
             <DialogClose asChild>
