@@ -7,6 +7,7 @@ import {
   Home,
   LayoutDashboard,
   LifeBuoy,
+  Podcast,
   Send,
   Settings2,
   Wallet,
@@ -48,6 +49,11 @@ const data = {
       label: 'Categorias',
       to: '/dashboard/categories',
       icon: LayoutDashboard,
+    }),
+    linkOptions({
+      label: 'Suscripciones',
+      to: '/dashboard/subscriptions',
+      icon: Podcast,
     }),
     linkOptions({
       label: 'Ajustes',
