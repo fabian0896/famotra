@@ -103,6 +103,78 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_list: {
+        Row: {
+          created_at: string
+          id: string
+          logo: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          account_id: string
+          category_id: string
+          created_at: string
+          frequency: number
+          icon: string
+          id: string
+          name: string
+          start_day: string
+          user_id: string
+        }
+        Insert: {
+          account_id: string
+          category_id: string
+          created_at?: string
+          frequency: number
+          icon: string
+          id?: string
+          name: string
+          start_day: string
+          user_id?: string
+        }
+        Update: {
+          account_id?: string
+          category_id?: string
+          created_at?: string
+          frequency?: number
+          icon?: string
+          id?: string
+          name?: string
+          start_day?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           account_id: string
