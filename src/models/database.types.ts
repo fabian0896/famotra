@@ -55,6 +55,33 @@ export type Database = {
           },
         ]
       }
+      api_tokens: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          name: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          name: string
+          token: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bank_list: {
         Row: {
           created_at: string

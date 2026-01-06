@@ -16,7 +16,7 @@ export function TransactionsPage() {
   } = useSuspenseInfiniteQuery(transactionsQueryOptions);
 
   return (
-    <div className="flex gap-6 container mx-auto">
+    <div className="flex gap-6 max-w-7xl mx-auto">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Transacciones</h1>
