@@ -1,4 +1,3 @@
-import { Shortcuts } from '../components/shortcuts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function Settingspage() {
@@ -17,7 +16,7 @@ export function Settingspage() {
           <p>Perfil page</p>
         </TabsContent>
         <TabsContent value="shortcuts">
-          <Shortcuts />
+          <p>Holiwiii</p>
         </TabsContent>
         <TabsContent value="others">
           <p>Contenido de otros</p>

@@ -9,6 +9,7 @@ import {
   LifeBuoy,
   Send,
   Settings2,
+  SmartphoneIcon,
   Wallet,
 } from 'lucide-react';
 
@@ -48,6 +49,11 @@ const data = {
       label: 'Categorias',
       to: '/dashboard/categories',
       icon: LayoutDashboard,
+    }),
+    linkOptions({
+      label: 'Atajos (IOS)',
+      to: '/dashboard/shortcuts',
+      icon: SmartphoneIcon,
     }),
     linkOptions({
       label: 'Ajustes',

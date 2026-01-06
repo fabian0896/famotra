@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardTransactionsRouteImport } from './routes/_authenticated/dashboard.transactions'
+import { Route as AuthenticatedDashboardShortcutsRouteImport } from './routes/_authenticated/dashboard.shortcuts'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardCategoriesRouteImport } from './routes/_authenticated/dashboard.categories'
 import { Route as AuthenticatedDashboardAccountsRouteImport } from './routes/_authenticated/dashboard.accounts'
@@ -50,6 +51,12 @@ const AuthenticatedDashboardTransactionsRoute =
     path: '/transactions',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardShortcutsRoute =
+  AuthenticatedDashboardShortcutsRouteImport.update({
+    id: '/shortcuts',
+    path: '/shortcuts',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardSettingsRoute =
   AuthenticatedDashboardSettingsRouteImport.update({
     id: '/settings',
@@ -76,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
   '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -85,6 +93,7 @@ export interface FileRoutesByTo {
   '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
   '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
@@ -97,6 +106,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
   '/_authenticated/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
+  '/_authenticated/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/_authenticated/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/dashboard/accounts'
     | '/dashboard/categories'
     | '/dashboard/settings'
+    | '/dashboard/shortcuts'
     | '/dashboard/transactions'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/dashboard/accounts'
     | '/dashboard/categories'
     | '/dashboard/settings'
+    | '/dashboard/shortcuts'
     | '/dashboard/transactions'
     | '/dashboard'
   id:
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/accounts'
     | '/_authenticated/dashboard/categories'
     | '/_authenticated/dashboard/settings'
+    | '/_authenticated/dashboard/shortcuts'
     | '/_authenticated/dashboard/transactions'
     | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
@@ -183,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardTransactionsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/shortcuts': {
+      id: '/_authenticated/dashboard/shortcuts'
+      path: '/shortcuts'
+      fullPath: '/dashboard/shortcuts'
+      preLoaderRoute: typeof AuthenticatedDashboardShortcutsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/settings': {
       id: '/_authenticated/dashboard/settings'
       path: '/settings'
@@ -211,6 +231,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardAccountsRoute: typeof AuthenticatedDashboardAccountsRoute
   AuthenticatedDashboardCategoriesRoute: typeof AuthenticatedDashboardCategoriesRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
+  AuthenticatedDashboardShortcutsRoute: typeof AuthenticatedDashboardShortcutsRoute
   AuthenticatedDashboardTransactionsRoute: typeof AuthenticatedDashboardTransactionsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
@@ -221,6 +242,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardCategoriesRoute:
       AuthenticatedDashboardCategoriesRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
+    AuthenticatedDashboardShortcutsRoute: AuthenticatedDashboardShortcutsRoute,
     AuthenticatedDashboardTransactionsRoute:
       AuthenticatedDashboardTransactionsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,

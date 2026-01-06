@@ -1,13 +1,5 @@
-import {
-  AlertCircleIcon,
-  CheckIcon,
-  CopyIcon,
-  EyeIcon,
-  EyeOffIcon,
-  MoreVertical,
-  Trash2Icon,
-} from 'lucide-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, MoreVertical, Trash2Icon } from 'lucide-react';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import React, { useState } from 'react';
 import { tokensQueryOptions } from '../query-options/tokens';
@@ -39,8 +31,6 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 function ActionButton({
   children,
@@ -202,22 +192,7 @@ function TokenRow({ token }: { token: Token }) {
 }
 
 export function TokenTable() {
-  const { data: tokens, isLoading, error } = useQuery(tokensQueryOptions);
-
-  if (isLoading) {
-    return <Skeleton className="w-full h-40 rounded-md" />;
-  }
-
-  if (error) {
-    return (
-      <Alert>
-        <AlertCircleIcon />
-        <AlertTitle>Algo salió mal</AlertTitle>
-        <AlertDescription>{formatError(error).message}</AlertDescription>
-      </Alert>
-    );
-  }
-
+  const { data: tokens } = useSuspenseQuery(tokensQueryOptions);
   return (
     <div className="border rounded-md overflow-hidden">
       <Table className="bg-card">
@@ -229,7 +204,7 @@ export function TokenTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tokens?.map((token) => (
+          {tokens.map((token) => (
             <TokenRow token={token} key={token.id} />
           ))}
         </TableBody>
