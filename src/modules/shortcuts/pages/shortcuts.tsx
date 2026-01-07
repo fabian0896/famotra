@@ -1,8 +1,7 @@
-import { Plus } from 'lucide-react';
-import { CreateTokenDialog } from '../components/create-token-dialog';
-import { TokenTable } from '../components/token-table';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Cards } from '../components/cards';
+import { Merchants } from '../components/merchants';
+import { Tokens } from '../components/tokens';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function ShortcutsPage() {
   return (
@@ -13,25 +12,23 @@ export function ShortcutsPage() {
           Configura todos los datos para poder usar la api en tus atajos
         </p>
       </header>
-      <Separator />
-      <div className="mt-8">
-        <div className="mb-6 flex gap-8 items-center">
-          <div className="flex-1">
-            <h3 className="text-foreground text-xl font-medium">Tokens de API</h3>
-            <p className="text-sm text-muted-foreground max-w-2xl mt-1">
-              Este token de API te permite crear y acceder a diferente información sobre tu cuenta
-              desde shortcuts. Asegurate que no se filtre.
-            </p>
-          </div>
-          <CreateTokenDialog>
-            <Button>
-              <Plus />
-              Crear nueva llave
-            </Button>
-          </CreateTokenDialog>
-        </div>
-        <TokenTable />
-      </div>
+      <Tabs defaultValue="tokens">
+        <TabsList className="mb-4">
+          <TabsTrigger value="tokens">Tokens</TabsTrigger>
+          <TabsTrigger value="cards">Tarjetas</TabsTrigger>
+          <TabsTrigger value="merchants">Comercios</TabsTrigger>
+          <TabsTrigger value="pending">Transacciones pendientes</TabsTrigger>
+        </TabsList>
+        <TabsContent value="tokens">
+          <Tokens />
+        </TabsContent>
+        <TabsContent value="cards">
+          <Cards />
+        </TabsContent>
+        <TabsContent value="merchants">
+          <Merchants />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

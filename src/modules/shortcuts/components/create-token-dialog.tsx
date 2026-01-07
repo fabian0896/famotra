@@ -78,8 +78,8 @@ export function CreateTokenDialog({ children }: { children: React.ReactNode }) {
               <AlertCircleIcon />
               <AlertTitle>Token privado</AlertTitle>
               <AlertDescription>
-                Este token es privado por lo que no lo debes exponer ya que puede conllevar
-                problemas de seguridad
+                Este token es privado por lo que no lo debes exponerlo ya que puede conllevar
+                problemas de seguridad.
               </AlertDescription>
             </Alert>
           </div>

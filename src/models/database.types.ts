@@ -61,15 +61,13 @@ export type Database = {
           description: string
           id: string
           name: string
-          token: string
           user_id: string
         }
         Insert: {
           created_at?: string
           description: string
-          id?: string
+          id: string
           name: string
-          token: string
           user_id?: string
         }
         Update: {
@@ -77,7 +75,6 @@ export type Database = {
           description?: string
           id?: string
           name?: string
-          token?: string
           user_id?: string
         }
         Relationships: []
@@ -150,6 +147,51 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      shorcut_cards: {
+        Row: {
+          account_id: string | null
+          active: boolean
+          created_at: string
+          last_used_at: string
+          name: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          active?: boolean
+          created_at?: string
+          last_used_at?: string
+          name: string
+          token: string
+          user_id?: string
+        }
+        Update: {
+          account_id?: string | null
+          active?: boolean
+          created_at?: string
+          last_used_at?: string
+          name?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shorcut_cards_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shorcut_cards_token_fkey"
+            columns: ["token"]
+            isOneToOne: false
+            referencedRelation: "api_tokens"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscriptions: {
         Row: {

@@ -143,11 +143,11 @@ function TokenRow({ token }: { token: Token }) {
           <div className="flex items-center gap-2">
             <div className="text-xs relative flex py-1 px-2.5 rounded-full border font-mono bg-muted overflow-hidden w-[300px] h-[26px]">
               <span className="truncate">
-                <SecretValue hide={hideToken}>{token.token}</SecretValue>
+                <SecretValue hide={hideToken}>{token.id}</SecretValue>
               </span>
             </div>
             <HideButtton hide={hideToken} onHideChange={setHideToken} />
-            <CopyButton token={token.token} />
+            <CopyButton token={token.id} />
           </div>
         </TableCell>
         <TableCell className="px-4">

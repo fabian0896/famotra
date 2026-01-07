@@ -57,7 +57,7 @@ function Dashboard() {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex-1 p-8 pt-0">
+        <div className="flex-1 p-8 pb-10 pt-0">
           <Outlet />
         </div>
       </SidebarInset>
