@@ -37,7 +37,7 @@ function RelativeDate({ children }: { children: string }) {
 
 function CardRow({ card }: { card: ShortcutCard }) {
   const queryClient = useQueryClient();
-  const { data: accounts, isLoading } = useQuery(accountsQueryOptions);
+  const { data: accounts } = useQuery(accountsQueryOptions);
 
   const update = useMutation({
     mutationFn: ShortcutsCardService.update,
@@ -50,6 +50,9 @@ function CardRow({ card }: { card: ShortcutCard }) {
       return queryClient.invalidateQueries({ queryKey });
     },
   });
+
+  const active = update.isPending ? update.variables.active : card.active;
+  const accountId = update.isPending ? update.variables.account_id : card.account_id;
 
   return (
     <TableRow key={card.name + card.token}>
@@ -72,13 +75,13 @@ function CardRow({ card }: { card: ShortcutCard }) {
           </p>
         </div>
       </TableCell>
-      <TableCell className="px-4">
+      <TableCell className="px-4 w-[200px]">
         <Select
           onValueChange={(account_id) => update.mutate({ ...card, account_id })}
-          value={(update.isPending ? update.variables.account_id : card.account_id) ?? undefined}
+          value={accountId ?? undefined}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={isLoading ? 'Cargando...' : 'Sin cuenta asociada'} />
+            <SelectValue placeholder="Sin cuenta asociada" />
           </SelectTrigger>
           <SelectContent>
             {accounts?.accounts.map((account) => (
@@ -94,7 +97,7 @@ function CardRow({ card }: { card: ShortcutCard }) {
         <div className="flex justify-end">
           <Switch
             onCheckedChange={(checked) => update.mutate({ ...card, active: checked })}
-            checked={update.isPending ? update.variables.active : card.active}
+            checked={active}
           />
         </div>
       </TableCell>
@@ -111,7 +114,7 @@ export function CardsTable() {
           <TableRow>
             <TableHead className="px-4">Tarjeta</TableHead>
             <TableHead className="px-4">Último uso</TableHead>
-            <TableHead className="px-4">Cuenta asociada</TableHead>
+            <TableHead className="px-4 w-[200px]">Cuenta asociada</TableHead>
             <TableHead className="px-4 text-right">Activa</TableHead>
           </TableRow>
         </TableHeader>
