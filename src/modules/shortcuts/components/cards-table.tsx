@@ -1,6 +1,6 @@
 import { CalendarIcon } from 'lucide-react';
-import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import React from 'react';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import React, { Suspense } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { toast } from 'sonner';
@@ -27,6 +27,7 @@ import {
 import { AccountIcon } from '@/modules/accounts/components/account-icon';
 import { Switch } from '@/components/ui/switch';
 import { formatError } from '@/lib/format-error';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function RelativeDate({ children }: { children: string }) {
   const value = React.useMemo(() => {
@@ -35,9 +36,27 @@ function RelativeDate({ children }: { children: string }) {
   return value;
 }
 
+function AccountSelect(props: React.ComponentProps<typeof Select>) {
+  const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
+  return (
+    <Select {...props}>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Sin cuenta asociada" />
+      </SelectTrigger>
+      <SelectContent>
+        {accounts.accounts.map((account) => (
+          <SelectItem key={account.id} value={account.id}>
+            <AccountIcon className="w-4 h-4 rounded-full" account={account} />
+            {account.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
 function CardRow({ card }: { card: ShortcutCard }) {
   const queryClient = useQueryClient();
-  const { data: accounts } = useQuery(accountsQueryOptions);
 
   const update = useMutation({
     mutationFn: ShortcutsCardService.update,
@@ -76,22 +95,12 @@ function CardRow({ card }: { card: ShortcutCard }) {
         </div>
       </TableCell>
       <TableCell className="px-4 w-[200px]">
-        <Select
-          onValueChange={(account_id) => update.mutate({ ...card, account_id })}
-          value={accountId ?? undefined}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Sin cuenta asociada" />
-          </SelectTrigger>
-          <SelectContent>
-            {accounts?.accounts.map((account) => (
-              <SelectItem key={account.id} value={account.id}>
-                <AccountIcon className="w-4 h-4 rounded-full" account={account} />
-                {account.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Suspense fallback={<Skeleton className="w-full h-9" />}>
+          <AccountSelect
+            onValueChange={(account_id) => update.mutate({ ...card, account_id })}
+            value={accountId ?? undefined}
+          />
+        </Suspense>
       </TableCell>
       <TableCell className="px-4">
         <div className="flex justify-end">
