@@ -3,9 +3,7 @@ import { categoriesQueryOptions } from '@/modules/categories/query-options/categ
 import { CategoriesPage } from '@/modules/categories/pages/categories';
 
 export const Route = createFileRoute('/_authenticated/dashboard/categories')({
-  beforeLoad: () => ({
-    breadcrumb: 'Categorias',
-  }),
+  beforeLoad: () => ({ breadcrumb: 'Categorias' }),
   loader: async ({ context }) => {
     const queryClient = context.queryClient;
     await queryClient.ensureQueryData(categoriesQueryOptions);

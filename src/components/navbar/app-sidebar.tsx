@@ -10,6 +10,7 @@ import {
   Podcast,
   Send,
   Settings2,
+  SmartphoneIcon,
   Wallet,
 } from 'lucide-react';
 
@@ -54,6 +55,11 @@ const data = {
       label: 'Suscripciones',
       to: '/dashboard/subscriptions',
       icon: Podcast,
+    }),
+    linkOptions({
+      label: 'Atajos (IOS)',
+      to: '/dashboard/shortcuts',
+      icon: SmartphoneIcon,
     }),
     linkOptions({
       label: 'Ajustes',

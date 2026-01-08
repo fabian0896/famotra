@@ -1,9 +1,8 @@
-import { Shortcuts } from '../components/shortcuts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function Settingspage() {
   return (
-    <div className="container">
+    <div className="max-w-7xl mx-auto">
       <header className="mb-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-balance">Ajustes</h1>
       </header>
@@ -17,7 +16,7 @@ export function Settingspage() {
           <p>Perfil page</p>
         </TabsContent>
         <TabsContent value="shortcuts">
-          <Shortcuts />
+          <p>Holiwiii</p>
         </TabsContent>
         <TabsContent value="others">
           <p>Contenido de otros</p>

@@ -5,4 +5,6 @@ export const QueryKeys = {
   BANKS: 'banks',
   TOTAL_BALANCES: 'total-balances',
   TRANSACTIONS: 'transactions',
+  TOKENS: 'tokens',
+  SHORTCUTS_CARDS: 'shortcuts-cards',
 } as const;

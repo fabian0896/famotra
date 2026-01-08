@@ -1,9 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/dashboard/')({
-  beforeLoad: () => ({
-    breadcrumb: 'Inicio',
-  }),
+  beforeLoad: () => ({ breadcrumb: 'Inicio' }),
   component: Index,
 });
 
