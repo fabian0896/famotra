@@ -1,4 +1,13 @@
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { CreateEditSubscriptionDialog } from '../components/add-subscription-dialog';
+import { subscriptionsQueryOptions } from '../query-options/subscriptions';
+
 export function SubscriptionsPage() {
+  const {
+    data: subscriptions,
+    hasNextPage,
+    fetchNextPage,
+  } = useSuspenseInfiniteQuery(subscriptionsQueryOptions);
   return (
     <main className="flex-1 overflow-y-auto p-6 md:p-8">
       <div className="mx-auto max-w-7xl flex flex-col gap-8 pb-10">
@@ -9,10 +18,12 @@ export function SubscriptionsPage() {
               Administra y controla tus gastos fijos recurrentes.
             </p>
           </div>
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2 shadow-sm">
-            <span className="material-symbols-outlined text-[18px]">add</span>
-            Nueva Suscripción
-          </button>
+          <CreateEditSubscriptionDialog>
+            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2 shadow-sm">
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              Nueva Suscripción
+            </button>
+          </CreateEditSubscriptionDialog>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -76,7 +87,7 @@ export function SubscriptionsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <div className="xl:col-span-2 rounded-xl border border-border bg-card text-card-foreground shadow-sm overflow-hidden flex flex-col">
             <div className="p-6 pb-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
@@ -297,104 +308,6 @@ export function SubscriptionsPage() {
                 <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-4">
                   Siguiente
                 </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="xl:col-span-1 flex flex-col gap-6">
-            <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm">
-              <div className="p-6 flex flex-row items-center justify-between space-y-0">
-                <h3 className="tracking-tight text-sm font-medium">Gasto por Categoría</h3>
-                <button className="text-muted-foreground hover:text-foreground">
-                  <span className="material-symbols-outlined text-[18px]">more_horiz</span>
-                </button>
-              </div>
-              <div className="p-6 pt-0">
-                <div className="mb-6">
-                  <p className="text-3xl font-bold">$320.50</p>
-                  <p className="text-xs text-muted-foreground">Total este mes</p>
-                </div>
-                <div className="grid grid-cols-5 gap-2 h-[150px] items-end">
-                  <div className="flex flex-col items-center gap-2 h-full justify-end group">
-                    <div
-                      className="w-full bg-secondary rounded-t-sm relative group-hover:bg-muted-foreground/30 transition-colors"
-                      style={{ height: '65%' }}
-                    ></div>
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground">
-                      Soft
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 h-full justify-end group">
-                    <div
-                      className="w-full bg-primary rounded-t-sm relative"
-                      style={{ height: '85%' }}
-                    ></div>
-                    <span className="text-[10px] uppercase font-bold text-foreground">Strm</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 h-full justify-end group">
-                    <div
-                      className="w-full bg-secondary rounded-t-sm relative group-hover:bg-muted-foreground/30 transition-colors"
-                      style={{ height: '40%' }}
-                    ></div>
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground">
-                      Home
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 h-full justify-end group">
-                    <div
-                      className="w-full bg-secondary rounded-t-sm relative group-hover:bg-muted-foreground/30 transition-colors"
-                      style={{ height: '55%' }}
-                    ></div>
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground">
-                      Fit
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2 h-full justify-end group">
-                    <div
-                      className="w-full bg-secondary rounded-t-sm relative group-hover:bg-muted-foreground/30 transition-colors"
-                      style={{ height: '30%' }}
-                    ></div>
-                    <span className="text-[10px] uppercase font-bold text-muted-foreground">
-                      Otro
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm">
-              <div className="flex flex-col space-y-1.5 p-6 pb-3">
-                <h3 className="font-semibold leading-none tracking-tight">Alertas</h3>
-              </div>
-              <div className="p-6 pt-0 grid gap-4">
-                <div className="flex items-start gap-4 rounded-md border border-border p-3 bg-accent/20">
-                  <span className="material-symbols-outlined text-destructive mt-0.5 text-[20px]">
-                    trending_up
-                  </span>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">Aumento de Precio</p>
-                    <p className="text-sm text-muted-foreground">
-                      Netflix aumentará su tarifa en $2.00 el próximo mes.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4 rounded-md border border-border p-3 bg-accent/20">
-                  <span className="material-symbols-outlined text-foreground mt-0.5 text-[20px]">
-                    lightbulb
-                  </span>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">Sugerencia de Ahorro</p>
-                    <p className="text-sm text-muted-foreground">
-                      Ahorra $20 pagando Dropbox anualmente.
-                    </p>
-                    <a
-                      className="text-xs font-bold underline decoration-1 underline-offset-2"
-                      href="#"
-                    >
-                      Aplicar cambio
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

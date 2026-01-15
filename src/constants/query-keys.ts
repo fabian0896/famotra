@@ -7,4 +7,5 @@ export const QueryKeys = {
   TRANSACTIONS: 'transactions',
   TOKENS: 'tokens',
   SHORTCUTS_CARDS: 'shortcuts-cards',
+  SUBSCRIPTIONS: 'subscriptions',
 } as const;
