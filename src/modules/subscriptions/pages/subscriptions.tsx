@@ -1,6 +1,18 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { CreateEditSubscriptionDialog } from '../components/add-subscription-dialog';
 import { subscriptionsQueryOptions } from '../query-options/subscriptions';
+import {
+  Calendar,
+  CalendarIcon,
+  Filter,
+  LaptopMinimalCheck,
+  ListFilter,
+  Plus,
+  SortAsc,
+  SquareChartGantt,
+  TrendingUp,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export function SubscriptionsPage() {
   const {
@@ -19,10 +31,10 @@ export function SubscriptionsPage() {
             </p>
           </div>
           <CreateEditSubscriptionDialog>
-            <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 gap-2 shadow-sm">
-              <span className="material-symbols-outlined text-[18px]">add</span>
+            <Button type="button">
+              <Plus />
               Nueva Suscripción
-            </button>
+            </Button>
           </CreateEditSubscriptionDialog>
         </div>
 
@@ -32,15 +44,13 @@ export function SubscriptionsPage() {
               <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
                 Gasto Mensual
               </h3>
-              <span className="material-symbols-outlined text-muted-foreground text-[20px]">
-                calendar_month
-              </span>
+              <Calendar />
             </div>
             <div className="p-6 pt-0">
               <div className="text-2xl font-bold">$320.50</div>
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                <span className="text-emerald-500 flex items-center">
-                  <span className="material-symbols-outlined text-[16px] mr-0.5">trending_up</span>
+                <span className="text-emerald-500 flex items-center gap-1">
+                  <TrendingUp />
                   +2.4%
                 </span>
                 vs mes anterior
@@ -53,9 +63,7 @@ export function SubscriptionsPage() {
               <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
                 Anual Proyectado
               </h3>
-              <span className="material-symbols-outlined text-muted-foreground text-[20px]">
-                timeline
-              </span>
+              <SquareChartGantt />
             </div>
             <div className="p-6 pt-0">
               <div className="text-2xl font-bold">$3,846.00</div>
@@ -68,9 +76,7 @@ export function SubscriptionsPage() {
               <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
                 Próximo Pago
               </h3>
-              <span className="material-symbols-outlined text-muted-foreground text-[20px]">
-                notifications_active
-              </span>
+              <LaptopMinimalCheck />
             </div>
             <div className="p-6 pt-0 space-y-3">
               <div className="flex justify-between items-end">
@@ -98,11 +104,11 @@ export function SubscriptionsPage() {
               </div>
               <div className="flex gap-2">
                 <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 gap-2">
-                  <span className="material-symbols-outlined text-[16px]">filter_list</span>
+                  <ListFilter />
                   Filtros
                 </button>
                 <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 gap-2">
-                  <span className="material-symbols-outlined text-[16px]">sort</span>
+                  <SortAsc size={20} />
                   Ordenar
                 </button>
               </div>
@@ -130,7 +136,6 @@ export function SubscriptionsPage() {
                     <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                       Estado
                     </th>
-                    <th className="h-10 px-4 text-right align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"></th>
                   </tr>
                 </thead>
                 <tbody className="[&_tr:last-child]:border-0">
@@ -159,11 +164,6 @@ export function SubscriptionsPage() {
                         Activo
                       </div>
                     </td>
-                    <td className="p-4 align-middle text-right">
-                      <button className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground">
-                        <span className="material-symbols-outlined text-[18px]">more_horiz</span>
-                      </button>
-                    </td>
                   </tr>
 
                   <tr className="border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
@@ -189,11 +189,6 @@ export function SubscriptionsPage() {
                       <div className="inline-flex items-center rounded-full border border-transparent bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-500 transition-colors">
                         Activo
                       </div>
-                    </td>
-                    <td className="p-4 align-middle text-right">
-                      <button className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground">
-                        <span className="material-symbols-outlined text-[18px]">more_horiz</span>
-                      </button>
                     </td>
                   </tr>
 
@@ -222,11 +217,6 @@ export function SubscriptionsPage() {
                         Pausado
                       </div>
                     </td>
-                    <td className="p-4 align-middle text-right">
-                      <button className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground">
-                        <span className="material-symbols-outlined text-[18px]">more_horiz</span>
-                      </button>
-                    </td>
                   </tr>
 
                   <tr className="border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
@@ -252,11 +242,6 @@ export function SubscriptionsPage() {
                       <div className="inline-flex items-center rounded-full border border-transparent bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-500 transition-colors">
                         Activo
                       </div>
-                    </td>
-                    <td className="p-4 align-middle text-right">
-                      <button className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground">
-                        <span className="material-symbols-outlined text-[18px]">more_horiz</span>
-                      </button>
                     </td>
                   </tr>
 
@@ -285,11 +270,6 @@ export function SubscriptionsPage() {
                       <div className="inline-flex items-center rounded-full border border-transparent bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-500 transition-colors">
                         Activo
                       </div>
-                    </td>
-                    <td className="p-4 align-middle text-right">
-                      <button className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground">
-                        <span className="material-symbols-outlined text-[18px]">more_horiz</span>
-                      </button>
                     </td>
                   </tr>
                 </tbody>
