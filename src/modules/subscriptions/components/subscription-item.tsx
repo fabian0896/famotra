@@ -21,6 +21,7 @@ export function SubscriptionItem({
 
   return (
     <li className={cn('block', className)} {...props}>
+      {subscription.name}
       <Card className="flex flex-row items-center gap-4 p-3 w-full">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

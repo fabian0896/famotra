@@ -204,6 +204,7 @@ export type Database = {
           name: string
           start_day: string
           status: Database["public"]["Enums"]["subscription_state"]
+          subscription_type: Database["public"]["Enums"]["subscription_type"]
           user_id: string
         }
         Insert: {
@@ -214,8 +215,9 @@ export type Database = {
           icon: string
           id?: string
           name: string
-          start_day: string
+          start_day?: string
           status?: Database["public"]["Enums"]["subscription_state"]
+          subscription_type: Database["public"]["Enums"]["subscription_type"]
           user_id?: string
         }
         Update: {
@@ -228,6 +230,7 @@ export type Database = {
           name?: string
           start_day?: string
           status?: Database["public"]["Enums"]["subscription_state"]
+          subscription_type?: Database["public"]["Enums"]["subscription_type"]
           user_id?: string
         }
         Relationships: [
@@ -318,6 +321,7 @@ export type Database = {
     Enums: {
       category_type: "income" | "expense"
       subscription_state: "active" | "inactive"
+      subscription_type: "custom" | "preselect"
       transaction_type: "income" | "expense" | "transfer"
     }
     CompositeTypes: {
@@ -448,6 +452,7 @@ export const Constants = {
     Enums: {
       category_type: ["income", "expense"],
       subscription_state: ["active", "inactive"],
+      subscription_type: ["custom", "preselect"],
       transaction_type: ["income", "expense", "transfer"],
     },
   },
