@@ -196,7 +196,7 @@ export type Database = {
       subscriptions: {
         Row: {
           account_id: string
-          category_id: string
+          amount: number
           created_at: string
           frequency: number
           icon: string
@@ -209,7 +209,7 @@ export type Database = {
         }
         Insert: {
           account_id: string
-          category_id: string
+          amount?: number
           created_at?: string
           frequency: number
           icon: string
@@ -217,12 +217,12 @@ export type Database = {
           name: string
           start_day?: string
           status?: Database["public"]["Enums"]["subscription_state"]
-          subscription_type: Database["public"]["Enums"]["subscription_type"]
+          subscription_type?: Database["public"]["Enums"]["subscription_type"]
           user_id?: string
         }
         Update: {
           account_id?: string
-          category_id?: string
+          amount?: number
           created_at?: string
           frequency?: number
           icon?: string
@@ -239,13 +239,6 @@ export type Database = {
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "subscriptions_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
             referencedColumns: ["id"]
           },
         ]

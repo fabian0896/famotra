@@ -19,7 +19,15 @@ export class Subscriptions {
     return subscription;
   }
 
-  static async upsert() {}
+  static async upsert(data: SubscriptionInsert) {
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .upsert(data)
+      .select()
+      .single()
+      .throwOnError();
+    return subscription;
+  }
 
   static async remove(data: SubscriptionDelete) {
     const { data: account } = await supabase
