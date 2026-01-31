@@ -1,4 +1,5 @@
 import Boom from '@hapi/boom';
+import z, { ZodError } from 'zod';
 import type { Context } from '@hono/hono';
 import type { ContentfulStatusCode } from '@hono/hono/utils/http-status';
 
@@ -8,6 +9,9 @@ export const errorHandle = (error: unknown, c: Context) => {
 
   if (Boom.isBoom(error)) {
     boom = error;
+  } else if (error instanceof ZodError) {
+    boom = Boom.badRequest('Validation failed');
+    boom.output.payload['validation'] = z.treeifyError(error);
   } else if (error instanceof Error) {
     boom = Boom.internal(error.message);
   }
