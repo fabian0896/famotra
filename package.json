@@ -8,9 +8,10 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
+    "deploy": "supabase functions deploy api --project-ref ojvyqwxomskrzovvnxss",
     "format": "prettier --write .",
     "check": "prettier --write . && eslint --fix",
-    "update-types": "npx supabase gen types --lang=typescript --project-id \"ojvyqwxomskrzovvnxss\" > src/models/database.types.ts"
+    "update-types": "supabase gen types --lang=typescript --project-id \"ojvyqwxomskrzovvnxss\" > src/models/database.types.ts"
   },
   "dependencies": {
     "@dicebear/collection": "^9.2.4",
