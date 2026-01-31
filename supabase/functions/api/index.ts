@@ -9,15 +9,20 @@ const app = factory.createApp().basePath(`/${functionName}`);
 
 app.get('/hello', (c) => c.text('Hello from hono-server!'));
 
-app.get('/categories', authMiddleware, async (c) => {
+app.get('/categories/:type', authMiddleware, async (c) => {
+  const type = c.req.param('type') as 'income' | 'expense';
   const userId = c.var.userId;
-  const { data: categories } = await supabase
+  const { data } = await supabase
     .from('categories')
-    .select()
+    .select(`id, name, icon`)
     .eq('user_id', userId)
-    .eq('type', 'expense')
+    .eq('type', type)
     .throwOnError();
-  return c.json({ categories });
+  const categories = data.map((category) => ({
+    id: category.id,
+    name: `${category.icon} ${category.name}`,
+  }));
+  return c.json(categories);
 });
 
 app.get('/accounts', authMiddleware, async (c) => {
