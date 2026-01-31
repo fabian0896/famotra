@@ -2,6 +2,7 @@ import '@supabase/functions-js';
 import { factory } from '@/integrations/hono-factory.ts';
 import { authMiddleware } from '@/middlewares/auth.middlewate.ts';
 import { supabase } from '@/integrations/supabase-client.ts';
+import { errorHandle } from '@/middlewares/error-handle.ts';
 
 const functionName = 'api';
 const app = factory.createApp().basePath(`/${functionName}`);
@@ -37,5 +38,7 @@ app.post('/shorcut', authMiddleware, async (c) => {
   await supabase.from('api_tokens').select().eq('user_id', userId).throwOnError();
   return c.json({ message: `Preload data for user ${userId}` });
 });
+
+app.onError(errorHandle);
 
 Deno.serve(app.fetch);

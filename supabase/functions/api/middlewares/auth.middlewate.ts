@@ -1,3 +1,4 @@
+import Boom from '@hapi/boom';
 import { factory } from '@/integrations/hono-factory.ts';
 import { supabase } from '@/integrations/supabase-client.ts';
 
@@ -5,7 +6,7 @@ export const authMiddleware = factory.createMiddleware(async (c, next) => {
   const authorization = c.req.header('Authorization');
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return c.json({ error: 'Unauthorized' }, 401);
+    throw Boom.unauthorized('Invalid authorization header');
   }
   const token = authorization.replace('Bearer ', '');
 
@@ -16,9 +17,7 @@ export const authMiddleware = factory.createMiddleware(async (c, next) => {
     .single()
     .throwOnError();
 
-  if (!user) {
-    return c.json({ error: 'Unauthorized' }, 401);
-  }
+  if (!user) throw Boom.unauthorized('Invalid authorization header');
 
   c.set('userId', user.user_id);
   c.set('token', user);
