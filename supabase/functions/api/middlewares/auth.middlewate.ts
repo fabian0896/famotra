@@ -22,5 +22,5 @@ export const authMiddleware = factory.createMiddleware(async (c, next) => {
 
   c.set('userId', user.user_id);
   c.set('token', user);
-  return next();
+  await next();
 });
