@@ -27,12 +27,16 @@ app.get('/categories/:type', authMiddleware, async (c) => {
 
 app.get('/accounts', authMiddleware, async (c) => {
   const userId = c.var.userId;
-  const { data: accounts } = await supabase
+  const { data } = await supabase
     .from('accounts')
-    .select('*, bank:bank_list(id,name,logo)')
+    .select('id, custom_bank_name, bank:bank_list(name)')
     .eq('user_id', userId)
     .throwOnError();
-  return c.json({ accounts });
+  const accounts = data.map((account) => ({
+    id: account.id,
+    name: account.bank?.name ?? account.custom_bank_name ?? 'Unknown Bank',
+  }));
+  return c.json(accounts);
 });
 
 app.post('/shorcut', authMiddleware, async (c) => {
