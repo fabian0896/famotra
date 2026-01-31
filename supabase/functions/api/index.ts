@@ -29,13 +29,16 @@ app.get('/accounts', authMiddleware, async (c) => {
   const userId = c.var.userId;
   const { data } = await supabase
     .from('accounts')
-    .select('id, custom_bank_name, bank:bank_list(name)')
+    .select('id, name, custom_bank_name, bank:bank_list(name)')
     .eq('user_id', userId)
     .throwOnError();
-  const accounts = data.map((account) => ({
-    id: account.id,
-    name: account.bank?.name ?? account.custom_bank_name ?? 'Unknown Bank',
-  }));
+  const accounts = data.map((account) => {
+    const bankName = account.bank?.name ?? account.custom_bank_name ?? 'Unknown Bank';
+    return {
+      id: account.id,
+      name: `${account.name} - ${bankName}`,
+    };
+  });
   return c.json(accounts);
 });
 
