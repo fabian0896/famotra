@@ -1,21 +1,19 @@
 import '@supabase/functions-js';
 import { zValidator } from '@hono/zod-validator';
-import { z } from 'zod';
 import { factory } from '@/integrations/hono-factory.ts';
 import { authMiddleware } from '@/middlewares/auth.middlewate.ts';
 import { supabase } from '@/integrations/supabase-client.ts';
 import { errorHandle } from '@/middlewares/error-handle.ts';
+import { CategoryTypeSchema, CreateTransactionSchema } from '@/schemas/schemas.ts';
 
-const functionName = 'api';
+const functionName = 'shorcut';
 const app = factory.createApp().basePath(`/${functionName}`);
 
 app.onError(errorHandle);
 
 app.get('/hello', (c) => c.text('Hello from hono-server!'));
 
-const schema = z.object({ type: z.union([z.literal('expense'), z.literal('income')]) });
-
-app.get('/categories/:type', zValidator('param', schema), authMiddleware, async (c) => {
+app.get('/categories/:type', zValidator('param', CategoryTypeSchema), authMiddleware, async (c) => {
   const { type } = c.req.valid('param');
   const userId = c.var.userId;
   const { data } = await supabase
@@ -48,18 +46,13 @@ app.get('/accounts', authMiddleware, async (c) => {
   return c.json(accounts);
 });
 
-app.post(
-  '/shorcut',
-  zValidator('json', z.object({ user_id: z.string().uuid() })),
-  authMiddleware,
-  async (c) => {
-    const userId = c.var.userId;
-    // TODO: verificar si la cuenta ya existe en shorcut_cards y si no existe, crearla.
-    // TODO: ver si el comercio existe para obtener la categoria. Si no existe crearla para que luego puedan settear la categoria luego.
-    // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
-    await supabase.from('api_tokens').select().eq('user_id', userId).throwOnError();
-    return c.json({ message: `Preload data for user ${userId}` });
-  }
-);
+app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddleware, async (c) => {
+  const userId = c.var.userId;
+  // TODO: verificar si la cuenta ya existe en shorcut_cards y si no existe, crearla.
+  // TODO: ver si el comercio existe para obtener la categoria. Si no existe crearla para que luego puedan settear la categoria luego.
+  // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
+  await supabase.from('api_tokens').select().eq('user_id', userId).throwOnError();
+  return c.json({ message: `Preload data for user ${userId}` });
+});
 
 Deno.serve(app.fetch);

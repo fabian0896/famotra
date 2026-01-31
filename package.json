@@ -8,7 +8,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
-    "deploy": "supabase functions deploy api --project-ref ojvyqwxomskrzovvnxss",
+    "deploy": "supabase functions deploy shorcut --project-ref ojvyqwxomskrzovvnxss",
     "format": "prettier --write .",
     "check": "prettier --write . && eslint --fix",
     "update-types": "supabase gen types --lang=typescript --project-id \"ojvyqwxomskrzovvnxss\" > src/models/database.types.ts"
