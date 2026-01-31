@@ -29,8 +29,11 @@ app.get('/accounts', authMiddleware, async (c) => {
   return c.json({ accounts });
 });
 
-app.post('/preload', authMiddleware, async (c) => {
+app.post('/shorcut', authMiddleware, async (c) => {
   const userId = c.var.userId;
+  // TODO: verificar si la cuenta ya existe en shorcut_cards y si no existe, crearla.
+  // TODO: ver si el comercio existe para obtener la categoria. Si no existe crearla para que luego puedan settear la categoria luego.
+  // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
   await supabase.from('api_tokens').select().eq('user_id', userId).throwOnError();
   return c.json({ message: `Preload data for user ${userId}` });
 });
