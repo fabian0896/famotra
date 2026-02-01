@@ -23,6 +23,6 @@ jobs:
 
       - name: Deploy functions
         run: |
-          supabase functions deploy --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
+          supabase functions deploy --project-ref ${{ secrets.SUPABASE_PROJECT_ID }} --deno-version 2.6.7
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
