@@ -6,7 +6,7 @@ export class ShortcutsCardService {
     const { data } = await supabase
       .from('shorcut_cards')
       .select(`*, token_data:api_tokens (id, name)`)
-      .order('last_used_at')
+      .order('last_used_at', { ascending: false })
       .throwOnError();
     return data;
   }
