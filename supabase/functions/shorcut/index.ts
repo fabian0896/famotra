@@ -4,7 +4,11 @@ import { factory } from '@/integrations/hono-factory.ts';
 import { authMiddleware } from '@/middlewares/auth.middlewate.ts';
 import { supabase } from '@/integrations/supabase-client.ts';
 import { errorHandle } from '@/middlewares/error-handle.ts';
-import { CategoryTypeSchema, CreateTransactionSchema } from '@/schemas/schemas.ts';
+import {
+  CategoryTypeSchema,
+  CreateTransactionSchema,
+  UpdateTransactionSchema,
+} from '@/schemas/schemas.ts';
 import { parseToNumber } from '@/utils/parse-to-numbers.ts';
 
 const functionName = 'shorcut';
@@ -47,7 +51,7 @@ app.get('/accounts', authMiddleware, async (c) => {
   return c.json(accounts);
 });
 
-app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddleware, async (c) => {
+app.post('/transaction', zValidator('json', CreateTransactionSchema), authMiddleware, async (c) => {
   const token = c.var.token;
   const data = c.req.valid('json');
 
@@ -110,6 +114,31 @@ app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddlewa
       account_id: account_id,
     },
     201
+  );
+});
+
+app.patch('transaction', zValidator('json', UpdateTransactionSchema), authMiddleware, async (c) => {
+  const data = c.req.valid('json');
+
+  const { data: transaction } = await supabase
+    .from('transactions')
+    .update({
+      category_id: data.category_id,
+      account_id: data.account_id,
+    })
+    .eq('id', data.id)
+    .select()
+    .single()
+    .throwOnError();
+
+  return c.json(
+    {
+      message: 'Transaction created successfully.',
+      id: transaction.id,
+      category_id: transaction.category_id,
+      account_id: transaction.account_id,
+    },
+    200
   );
 });
 

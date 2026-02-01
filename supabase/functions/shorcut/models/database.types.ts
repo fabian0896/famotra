@@ -340,6 +340,13 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'transactions_card_id_fkey';
+            columns: ['card_id'];
+            isOneToOne: false;
+            referencedRelation: 'shorcut_cards';
+            referencedColumns: ['id'];
+          },
+          {
             foreignKeyName: 'transactions_category_id_fkey';
             columns: ['category_id'];
             isOneToOne: false;
