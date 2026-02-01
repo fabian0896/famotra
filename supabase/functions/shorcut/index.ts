@@ -85,6 +85,8 @@ app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddlewa
   const category_id = merchant.category_id;
   const amount = parseToNumber(data.amount);
 
+  // TODO: sino existe la categoria se podría responder con algo para que la la persona lo seleccione.
+
   // TODO: guardar la transaccion en una tabla de shorcuts_transactions.
   // En caso de tener category_id y account_id asignados, crear la transaccion en la tabla principal de transacciones.
 

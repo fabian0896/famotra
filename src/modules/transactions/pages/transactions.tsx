@@ -19,7 +19,9 @@ export function TransactionsPage() {
     <div className="flex gap-6 max-w-7xl mx-auto">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Transacciones</h1>
+          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
+            Transacciones
+          </h1>
           {transactions.length ? (
             <CreateEditTransactionDialog>
               <Button type="button">

@@ -1,9 +1,19 @@
-import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, MoreVertical, Trash2Icon } from 'lucide-react';
+import {
+  CheckIcon,
+  CopyIcon,
+  EyeIcon,
+  EyeOffIcon,
+  KeyIcon,
+  MoreVertical,
+  Plus,
+  Trash2Icon,
+} from 'lucide-react';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import React, { useState } from 'react';
 import { tokensQueryOptions } from '../query-options/tokens';
 import { TokenService } from '../services/tokens';
+import { CreateTokenDialog } from './create-token-dialog';
 import type { Token } from '../models/tokens.model';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,6 +41,14 @@ import {
   AlertDialogFooter,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
 
 function ActionButton({
   children,
@@ -193,6 +211,31 @@ function TokenRow({ token }: { token: Token }) {
 
 export function TokenTable() {
   const { data: tokens } = useSuspenseQuery(tokensQueryOptions);
+
+  if (tokens.length === 0) {
+    return (
+      <Empty className="border border-dashed">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <KeyIcon />
+          </EmptyMedia>
+          <EmptyTitle>Sin tokens</EmptyTitle>
+          <EmptyDescription>
+            Aun no tienes tokens creados para usar en atajos. Crea uno para comenzar a usar la API.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <CreateTokenDialog>
+            <Button>
+              <Plus />
+              Crear nuevo token
+            </Button>
+          </CreateTokenDialog>
+        </EmptyContent>
+      </Empty>
+    );
+  }
+
   return (
     <div className="border rounded-md overflow-hidden">
       <Table className="bg-card">

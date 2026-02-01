@@ -192,28 +192,28 @@ export type Database = {
           active: boolean;
           category_id: string | null;
           created_at: string;
-          last_used_at: string | null;
+          last_used_at: string;
           name: string;
           token: string;
-          user_id: string | null;
+          user_id: string;
         };
         Insert: {
           active?: boolean;
           category_id?: string | null;
           created_at?: string;
-          last_used_at?: string | null;
+          last_used_at?: string;
           name: string;
           token: string;
-          user_id?: string | null;
+          user_id?: string;
         };
         Update: {
           active?: boolean;
           category_id?: string | null;
           created_at?: string;
-          last_used_at?: string | null;
+          last_used_at?: string;
           name?: string;
           token?: string;
-          user_id?: string | null;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -221,6 +221,13 @@ export type Database = {
             columns: ['category_id'];
             isOneToOne: false;
             referencedRelation: 'categories';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'shorcuts_merchants_token_fkey';
+            columns: ['token'];
+            isOneToOne: false;
+            referencedRelation: 'api_tokens';
             referencedColumns: ['id'];
           },
         ];

@@ -1,12 +1,11 @@
 import { CalendarIcon } from 'lucide-react';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import React, { Suspense } from 'react';
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { toast } from 'sonner';
 import { shortcutsCardsQueryOptions } from '../query-options/shortcuts-cards';
 import { ShortcutsCardService } from '../services/shortcuts-cards';
 import { CardIcon } from './card-icon';
+import { RelativeDate } from './relative-date';
 import type { ShortcutCard } from '../models/shortcut-cards';
 import {
   Table,
@@ -28,13 +27,13 @@ import { AccountIcon } from '@/modules/accounts/components/account-icon';
 import { Switch } from '@/components/ui/switch';
 import { formatError } from '@/lib/format-error';
 import { Skeleton } from '@/components/ui/skeleton';
-
-function RelativeDate({ children }: { children: string }) {
-  const value = React.useMemo(() => {
-    return formatDistanceToNow(children, { locale: es });
-  }, [children]);
-  return value;
-}
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
 
 function AccountSelect(props: React.ComponentProps<typeof Select>) {
   const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
@@ -74,7 +73,7 @@ function CardRow({ card }: { card: ShortcutCard }) {
   const accountId = update.isPending ? update.variables.account_id : card.account_id;
 
   return (
-    <TableRow key={card.name + card.token}>
+    <TableRow>
       <TableCell className="px-4">
         <div className="flex gap-2 items-center">
           <CardIcon height={40} width={40} />
@@ -116,6 +115,24 @@ function CardRow({ card }: { card: ShortcutCard }) {
 
 export function CardsTable() {
   const { data: cards } = useSuspenseQuery(shortcutsCardsQueryOptions);
+
+  if (cards.length === 0) {
+    return (
+      <Empty className="border border-dashed">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <CardIcon />
+          </EmptyMedia>
+          <EmptyTitle>Sin tarjetas</EmptyTitle>
+          <EmptyDescription>
+            Aún no se han registrado tarjetas desde atajos. Una vez empieces a usar atajos, aquí
+            aparecerán
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    );
+  }
+
   return (
     <div className="border rounded-md overflow-hidden">
       <Table className="bg-card">
