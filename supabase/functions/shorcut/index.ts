@@ -5,6 +5,7 @@ import { authMiddleware } from '@/middlewares/auth.middlewate.ts';
 import { supabase } from '@/integrations/supabase-client.ts';
 import { errorHandle } from '@/middlewares/error-handle.ts';
 import { CategoryTypeSchema, CreateTransactionSchema } from '@/schemas/schemas.ts';
+import { parseToNumber } from '@/utils/parse-to-numbers.ts';
 
 const functionName = 'shorcut';
 const app = factory.createApp().basePath(`/${functionName}`);
@@ -47,12 +48,49 @@ app.get('/accounts', authMiddleware, async (c) => {
 });
 
 app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddleware, async (c) => {
-  const userId = c.var.userId;
-  // TODO: verificar si la cuenta ya existe en shorcut_cards y si no existe, crearla.
-  // TODO: ver si el comercio existe para obtener la categoria. Si no existe crearla para que luego puedan settear la categoria luego.
+  const token = c.var.token;
+  const data = c.req.valid('json');
+
+  const { data: card } = await supabase
+    .from('shorcut_cards')
+    .upsert({
+      token: token.id,
+      name: data.card,
+      user_id: token.user_id,
+    })
+    .select()
+    .single()
+    .throwOnError();
+
+  if (!card.active) {
+    return c.json({ message: 'Card is inactive, transaction not created.' }, 200);
+  }
+
+  const { data: merchant } = await supabase
+    .from('shorcuts_merchants')
+    .upsert({
+      token: token.id,
+      name: data.merchant,
+      user_id: token.user_id,
+    })
+    .select()
+    .single()
+    .throwOnError();
+
+  if (!merchant.active) {
+    return c.json({ message: 'Merchant is inactive, transaction not created.' }, 200);
+  }
+
+  const account_id = card.account_id;
+  const category_id = merchant.category_id;
+  const amount = parseToNumber(data.amount);
+
+  // TODO: guardar la transaccion en una tabla de shorcuts_transactions.
+  // En caso de tener category_id y account_id asignados, crear la transaccion en la tabla principal de transacciones.
+
   // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
-  await supabase.from('api_tokens').select().eq('user_id', userId).throwOnError();
-  return c.json({ message: `Preload data for user ${userId}` });
+
+  return c.json({ amount, account_id, category_id }, 201);
 });
 
 Deno.serve(app.fetch);

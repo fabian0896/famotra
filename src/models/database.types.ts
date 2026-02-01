@@ -193,38 +193,82 @@ export type Database = {
           },
         ]
       }
+      shorcuts_merchants: {
+        Row: {
+          active: boolean
+          category_id: string | null
+          created_at: string
+          last_used_at: string | null
+          name: string
+          token: string
+          user_id: string | null
+        }
+        Insert: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          last_used_at?: string | null
+          name: string
+          token: string
+          user_id?: string | null
+        }
+        Update: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          last_used_at?: string | null
+          name?: string
+          token?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shorcuts_merchants_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           account_id: string
-          category_id: string
+          amount: number
           created_at: string
           frequency: number
           icon: string
           id: string
           name: string
           start_day: string
+          status: Database["public"]["Enums"]["subscription_state"]
+          subscription_type: Database["public"]["Enums"]["subscription_type"]
           user_id: string
         }
         Insert: {
           account_id: string
-          category_id: string
+          amount?: number
           created_at?: string
           frequency: number
           icon: string
           id?: string
           name: string
-          start_day: string
+          start_day?: string
+          status?: Database["public"]["Enums"]["subscription_state"]
+          subscription_type?: Database["public"]["Enums"]["subscription_type"]
           user_id?: string
         }
         Update: {
           account_id?: string
-          category_id?: string
+          amount?: number
           created_at?: string
           frequency?: number
           icon?: string
           id?: string
           name?: string
           start_day?: string
+          status?: Database["public"]["Enums"]["subscription_state"]
+          subscription_type?: Database["public"]["Enums"]["subscription_type"]
           user_id?: string
         }
         Relationships: [
@@ -233,13 +277,6 @@ export type Database = {
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "subscriptions_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
             referencedColumns: ["id"]
           },
         ]
@@ -314,6 +351,8 @@ export type Database = {
     }
     Enums: {
       category_type: "income" | "expense"
+      subscription_state: "active" | "inactive"
+      subscription_type: "custom" | "preselect"
       transaction_type: "income" | "expense" | "transfer"
     }
     CompositeTypes: {
@@ -443,6 +482,8 @@ export const Constants = {
   public: {
     Enums: {
       category_type: ["income", "expense"],
+      subscription_state: ["active", "inactive"],
+      subscription_type: ["custom", "preselect"],
       transaction_type: ["income", "expense", "transfer"],
     },
   },
