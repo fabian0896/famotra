@@ -9,17 +9,13 @@ export function Settingspage() {
       <Tabs defaultValue="profile">
         <TabsList className="mb-4">
           <TabsTrigger value="profile">Perfil</TabsTrigger>
-          <TabsTrigger value="shortcuts">Atajos</TabsTrigger>
           <TabsTrigger value="others">Otros</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
           <p>Perfil page</p>
         </TabsContent>
-        <TabsContent value="shortcuts">
-          <p>Holiwiii</p>
-        </TabsContent>
         <TabsContent value="others">
-          <p>Contenido de otros</p>
+          <p>Holiwiii</p>
         </TabsContent>
       </Tabs>
     </div>
