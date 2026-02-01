@@ -85,7 +85,7 @@ app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddlewa
   const category_id = merchant.category_id ?? null;
   const amount = parseToNumber(data.amount) * -1;
 
-  await supabase
+  const { data: transaction } = await supabase
     .from('transactions')
     .insert({
       amount: amount,
@@ -97,10 +97,20 @@ app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddlewa
       transaction_type: 'expense',
       user_id: token.user_id,
     })
+    .select('id')
+    .single()
     .throwOnError();
 
   // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
-  return c.json({ message: 'Transaction created successfully.' }, 201);
+  return c.json(
+    {
+      message: 'Transaction created successfully.',
+      id: transaction.id,
+      category_id: category_id,
+      account_id: account_id,
+    },
+    201
+  );
 });
 
 Deno.serve(app.fetch);
