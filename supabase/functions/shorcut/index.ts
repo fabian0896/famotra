@@ -92,8 +92,6 @@ app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddlewa
 
   // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
 
-  console.log({ amount, account_id, category_id, user_id: token.user_id });
-
   return c.json({ amount, account_id, category_id }, 201);
 });
 
