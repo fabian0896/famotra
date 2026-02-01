@@ -46,7 +46,8 @@ export class Transactions {
           custom_bank_name, 
           custom_bank_icon, 
           bank:bank_list (id, logo, name)
-        )
+        ),
+        card:shorcut_cards!card_id (name)
         `
       )
       .order('date', { ascending: false })

@@ -1,3 +1,4 @@
+import { AlertTriangleIcon } from 'lucide-react';
 import { ACOUNTS_ICONS } from '../constants/accounts-icons';
 import type { Account } from '../models/accounts.models';
 import type React from 'react';
@@ -8,7 +9,11 @@ export function AccountIcon({
   account,
   className,
   ...props
-}: { account: Account | TransactionAccount } & React.ComponentProps<'div'>) {
+}: { account: Account | TransactionAccount | null } & React.ComponentProps<'div'>) {
+  if (!account) {
+    return <AlertTriangleIcon className="text-amber-600" size={22} />;
+  }
+
   if (account.bank) {
     return (
       <div className={cn('overflow-hidden', className)} {...props}>

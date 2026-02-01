@@ -153,6 +153,7 @@ export type Database = {
           account_id: string | null
           active: boolean
           created_at: string
+          id: string
           last_used_at: string
           name: string
           token: string
@@ -162,6 +163,7 @@ export type Database = {
           account_id?: string | null
           active?: boolean
           created_at?: string
+          id?: string
           last_used_at?: string
           name: string
           token: string
@@ -171,6 +173,7 @@ export type Database = {
           account_id?: string | null
           active?: boolean
           created_at?: string
+          id?: string
           last_used_at?: string
           name?: string
           token?: string
@@ -198,6 +201,7 @@ export type Database = {
           active: boolean
           category_id: string | null
           created_at: string
+          id: string
           last_used_at: string
           name: string
           token: string
@@ -207,6 +211,7 @@ export type Database = {
           active?: boolean
           category_id?: string | null
           created_at?: string
+          id?: string
           last_used_at?: string
           name: string
           token: string
@@ -216,6 +221,7 @@ export type Database = {
           active?: boolean
           category_id?: string | null
           created_at?: string
+          id?: string
           last_used_at?: string
           name?: string
           token?: string
@@ -290,38 +296,44 @@ export type Database = {
       }
       transactions: {
         Row: {
-          account_id: string
+          account_id: string | null
           amount: number
+          card_id: string | null
           category_id: string | null
           created_at: string
           date: string
           description: string
           destination_account_id: string | null
           id: string
+          merchant_id: string | null
           transaction_type: Database["public"]["Enums"]["transaction_type"]
           user_id: string | null
         }
         Insert: {
-          account_id: string
+          account_id?: string | null
           amount?: number
+          card_id?: string | null
           category_id?: string | null
           created_at?: string
-          date: string
+          date?: string
           description: string
           destination_account_id?: string | null
           id?: string
+          merchant_id?: string | null
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
           user_id?: string | null
         }
         Update: {
-          account_id?: string
+          account_id?: string | null
           amount?: number
+          card_id?: string | null
           category_id?: string | null
           created_at?: string
           date?: string
           description?: string
           destination_account_id?: string | null
           id?: string
+          merchant_id?: string | null
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
           user_id?: string | null
         }
@@ -331,6 +343,13 @@ export type Database = {
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "shorcut_cards"
             referencedColumns: ["id"]
           },
           {

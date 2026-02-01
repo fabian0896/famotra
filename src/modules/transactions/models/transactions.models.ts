@@ -17,7 +17,8 @@ export type Transaction = Tables<'transactions'> & {
     name: string;
     icon: string;
   } | null;
-  account: TransactionAccount;
+  card: { name: string } | null;
+  account: TransactionAccount | null;
   destination: TransactionAccount | null;
 };
 export type TransactionsInsert = TablesInsert<'transactions'>;

@@ -81,20 +81,26 @@ app.post('/automatic', zValidator('json', CreateTransactionSchema), authMiddlewa
     return c.json({ message: 'Merchant is inactive, transaction not created.' }, 200);
   }
 
-  const account_id = card.account_id;
-  const category_id = merchant.category_id;
-  const amount = parseToNumber(data.amount);
+  const account_id = card.account_id ?? null;
+  const category_id = merchant.category_id ?? null;
+  const amount = parseToNumber(data.amount) * -1;
 
-  // TODO: sino existe la categoria se podría responder con algo para que la la persona lo seleccione.
-
-  // TODO: guardar la transaccion en una tabla de shorcuts_transactions.
-  // En caso de tener category_id y account_id asignados, crear la transaccion en la tabla principal de transacciones.
+  await supabase
+    .from('transactions')
+    .insert({
+      amount: amount,
+      description: merchant.name,
+      account_id: account_id,
+      category_id: category_id,
+      card_id: card.id,
+      merchant_id: merchant.id,
+      transaction_type: 'expense',
+      user_id: token.user_id,
+    })
+    .throwOnError();
 
   // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
-
-  console.log({ amount, account_id, category_id });
-
-  return c.json({ amount, account_id, category_id }, 201);
+  return c.json({ message: 'Transaction created successfully.' }, 201);
 });
 
 Deno.serve(app.fetch);
