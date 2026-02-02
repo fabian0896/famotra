@@ -12,11 +12,11 @@ export class TokenService {
     return data;
   }
 
-  static async create(data: Omit<InsertToken, 'token'>) {
-    const token = `fmt_${nanoid(32)}`;
+  static async create(data: Omit<InsertToken, 'id'>) {
+    const id = `fmt_${nanoid(32)}`;
     const { data: result } = await supabase
       .from('api_tokens')
-      .insert({ ...data, token })
+      .insert({ ...data, id })
       .select()
       .single()
       .throwOnError();
