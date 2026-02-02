@@ -147,7 +147,7 @@ function IncomeExpense({ transaction }: { transaction: Transaction }) {
             >
               {transaction.description}
             </Link>
-            <p className="text-sm text-muted-foreground">Sin categoría vinculada</p>
+            <p className="text-sm text-muted-foreground">Sin categoría</p>
           </div>
         )}
       </div>
