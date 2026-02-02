@@ -59,4 +59,9 @@ export class Categories {
       .throwOnError();
     return category;
   }
+
+  static async categoryResume() {
+    const { data } = await supabase.rpc('get_transactions_by_category').throwOnError();
+    return data;
+  }
 }

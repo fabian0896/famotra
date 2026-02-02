@@ -360,6 +360,13 @@ export type Database = {
             referencedRelation: 'accounts';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'transactions_merchant_id_fkey';
+            columns: ['merchant_id'];
+            isOneToOne: false;
+            referencedRelation: 'shorcuts_merchants';
+            referencedColumns: ['id'];
+          },
         ];
       };
     };
@@ -367,7 +374,23 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_transactions_by_category: {
+        Args: {
+          p_month?: number;
+          p_type?: Database['public']['Enums']['category_type'];
+          p_year?: number;
+        };
+        Returns: {
+          average_amount: number;
+          category_icon: string;
+          category_id: string;
+          category_name: string;
+          category_type: Database['public']['Enums']['category_type'];
+          percentage: number;
+          total_amount: number;
+          transaction_count: number;
+        }[];
+      };
     };
     Enums: {
       category_type: 'income' | 'expense';
