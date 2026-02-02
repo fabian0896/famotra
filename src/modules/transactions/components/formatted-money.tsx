@@ -1,5 +1,6 @@
 import { cva } from 'class-variance-authority';
 import { NumericFormat } from 'react-number-format';
+import { cn } from '@/lib/utils';
 
 const moneyClx = cva('text-base font-medium', {
   variants: {
@@ -25,7 +26,7 @@ export function FormattedMoney({
   value = neutral ? Math.abs(value) : value;
   return (
     <NumericFormat
-      className={moneyClx({ isNegative, neutral, className })}
+      className={cn(moneyClx({ isNegative, neutral }), className)}
       value={value}
       displayType="text"
       thousandSeparator="."

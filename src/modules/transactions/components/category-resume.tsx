@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { useMemo } from 'react';
 import { FormattedMoney } from './formatted-money';
 import type React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,6 +12,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function CategoryResume({ ...props }: React.ComponentProps<typeof Card>) {
   const { data } = useSuspenseQuery(cagoryResumeQueryOptions());
+
+  const total = useMemo(() => {
+    return data.reduce((t, c) => t + c.total_amount, 0);
+  }, [data]);
+
   return (
     <Card {...props}>
       <CardContent>
@@ -31,6 +37,10 @@ export function CategoryResume({ ...props }: React.ComponentProps<typeof Card>) 
             <TabsTrigger value="income">Ingresos</TabsTrigger>
           </TabsList>
         </Tabs>
+        <div className="mt-6">
+          <FormattedMoney className="text-2xl text-center font-bold mb-1 block" value={total} />
+          <p className="text-sm text-muted-foreground text-center">Total gastado este mes</p>
+        </div>
         <div className="space-y-8 mt-8">
           {data.map((category) => (
             <div key={category.category_id}>
