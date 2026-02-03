@@ -19,6 +19,10 @@ import { Route as AuthenticatedDashboardShortcutsRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardCategoriesRouteImport } from './routes/_authenticated/dashboard.categories'
 import { Route as AuthenticatedDashboardAccountsRouteImport } from './routes/_authenticated/dashboard.accounts'
+import { Route as AuthenticatedDashboardAdminUsersRouteImport } from './routes/_authenticated/dashboard.admin/users'
+import { Route as AuthenticatedDashboardAdminPageRouteImport } from './routes/_authenticated/dashboard.admin/page'
+import { Route as AuthenticatedDashboardAdminMerchantsRouteImport } from './routes/_authenticated/dashboard.admin/merchants'
+import { Route as AuthenticatedDashboardAdminBanksRouteImport } from './routes/_authenticated/dashboard.admin/banks'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -75,6 +79,30 @@ const AuthenticatedDashboardAccountsRoute =
     path: '/accounts',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardAdminUsersRoute =
+  AuthenticatedDashboardAdminUsersRouteImport.update({
+    id: '/admin/users',
+    path: '/admin/users',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAdminPageRoute =
+  AuthenticatedDashboardAdminPageRouteImport.update({
+    id: '/admin/page',
+    path: '/admin/page',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAdminMerchantsRoute =
+  AuthenticatedDashboardAdminMerchantsRouteImport.update({
+    id: '/admin/merchants',
+    path: '/admin/merchants',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAdminBanksRoute =
+  AuthenticatedDashboardAdminBanksRouteImport.update({
+    id: '/admin/banks',
+    path: '/admin/banks',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -86,6 +114,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
+  '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
+  '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -96,6 +128,10 @@ export interface FileRoutesByTo {
   '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
+  '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
+  '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,6 +145,10 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/_authenticated/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
+  '/_authenticated/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
+  '/_authenticated/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
+  '/_authenticated/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -122,6 +162,10 @@ export interface FileRouteTypes {
     | '/dashboard/shortcuts'
     | '/dashboard/transactions'
     | '/dashboard/'
+    | '/dashboard/admin/banks'
+    | '/dashboard/admin/merchants'
+    | '/dashboard/admin/page'
+    | '/dashboard/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -132,6 +176,10 @@ export interface FileRouteTypes {
     | '/dashboard/shortcuts'
     | '/dashboard/transactions'
     | '/dashboard'
+    | '/dashboard/admin/banks'
+    | '/dashboard/admin/merchants'
+    | '/dashboard/admin/page'
+    | '/dashboard/admin/users'
   id:
     | '__root__'
     | '/'
@@ -144,6 +192,10 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/shortcuts'
     | '/_authenticated/dashboard/transactions'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/admin/banks'
+    | '/_authenticated/dashboard/admin/merchants'
+    | '/_authenticated/dashboard/admin/page'
+    | '/_authenticated/dashboard/admin/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,6 +276,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAccountsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/admin/users': {
+      id: '/_authenticated/dashboard/admin/users'
+      path: '/admin/users'
+      fullPath: '/dashboard/admin/users'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/admin/page': {
+      id: '/_authenticated/dashboard/admin/page'
+      path: '/admin/page'
+      fullPath: '/dashboard/admin/page'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminPageRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/admin/merchants': {
+      id: '/_authenticated/dashboard/admin/merchants'
+      path: '/admin/merchants'
+      fullPath: '/dashboard/admin/merchants'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminMerchantsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/admin/banks': {
+      id: '/_authenticated/dashboard/admin/banks'
+      path: '/admin/banks'
+      fullPath: '/dashboard/admin/banks'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminBanksRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
@@ -234,6 +314,10 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardShortcutsRoute: typeof AuthenticatedDashboardShortcutsRoute
   AuthenticatedDashboardTransactionsRoute: typeof AuthenticatedDashboardTransactionsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardAdminBanksRoute: typeof AuthenticatedDashboardAdminBanksRoute
+  AuthenticatedDashboardAdminMerchantsRoute: typeof AuthenticatedDashboardAdminMerchantsRoute
+  AuthenticatedDashboardAdminPageRoute: typeof AuthenticatedDashboardAdminPageRoute
+  AuthenticatedDashboardAdminUsersRoute: typeof AuthenticatedDashboardAdminUsersRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -246,6 +330,13 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardTransactionsRoute:
       AuthenticatedDashboardTransactionsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardAdminBanksRoute:
+      AuthenticatedDashboardAdminBanksRoute,
+    AuthenticatedDashboardAdminMerchantsRoute:
+      AuthenticatedDashboardAdminMerchantsRoute,
+    AuthenticatedDashboardAdminPageRoute: AuthenticatedDashboardAdminPageRoute,
+    AuthenticatedDashboardAdminUsersRoute:
+      AuthenticatedDashboardAdminUsersRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =

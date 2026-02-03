@@ -1,3 +1,4 @@
+import type { Enums } from '@/models/database.types';
 import type { User as U } from '@supabase/supabase-js';
 
 export interface LoginOptions {
@@ -14,3 +15,5 @@ export interface SignUpOptions {
 export interface User extends U {
   user_metadata: { name: string };
 }
+
+export type UserRole = Enums<'user_role'>;

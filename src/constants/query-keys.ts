@@ -9,4 +9,5 @@ export const QueryKeys = {
   TOKENS: 'tokens',
   SHORTCUTS_CARDS: 'shortcuts-cards',
   SHORTCUTS_MERCHANTS: 'shortcuts-merchants',
+  USERS_LIST: 'users-list',
 } as const;

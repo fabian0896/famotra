@@ -375,6 +375,36 @@ export type Database = {
           },
         ]
       }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          id: string
+          name?: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -397,12 +427,18 @@ export type Database = {
           transaction_count: number
         }[]
       }
+      get_user_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       category_type: "income" | "expense"
       subscription_state: "active" | "inactive"
       subscription_type: "custom" | "preselect"
       transaction_type: "income" | "expense" | "transfer"
+      user_role: "user" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -534,6 +570,7 @@ export const Constants = {
       subscription_state: ["active", "inactive"],
       subscription_type: ["custom", "preselect"],
       transaction_type: ["income", "expense", "transfer"],
+      user_role: ["user", "admin"],
     },
   },
 } as const

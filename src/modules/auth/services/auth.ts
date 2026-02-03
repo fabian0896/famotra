@@ -1,4 +1,4 @@
-import type { LoginOptions, SignUpOptions, User } from '@/modules/auth/models/auth.model';
+import type { LoginOptions, SignUpOptions } from '@/modules/auth/models/auth.model';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Auth {
@@ -17,7 +17,14 @@ export class Auth {
   static async getUser() {
     const { data, error } = await supabase.auth.getUser();
     if (error) return null;
-    return data.user as User;
+    const user = data.user;
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select()
+      .eq('id', user.id)
+      .single()
+      .throwOnError();
+    return { user, profile };
   }
 
   static async signUp(options: SignUpOptions) {

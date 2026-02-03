@@ -1,19 +1,22 @@
-'use client';
-
 import * as React from 'react';
 import {
   ArrowLeftRight,
   CircleDollarSign,
   Home,
+  LandmarkIcon,
   LayoutDashboard,
   LifeBuoy,
   Send,
   Settings2,
   SmartphoneIcon,
+  StoreIcon,
+  UsersIcon,
   Wallet,
 } from 'lucide-react';
 
 import { Link, linkOptions } from '@tanstack/react-router';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { NavAdmin } from './nav-admin';
 import { NavMain } from '@/components/navbar/nav-main';
 import { NavSecondary } from '@/components/navbar/nav-secondary';
 import { NavUser } from '@/components/navbar/nav-user';
@@ -26,6 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { authQueryOptions } from '@/modules/auth/query-options/auth';
 
 const data = {
   navMain: [
@@ -75,7 +79,27 @@ const data = {
   ],
 };
 
+const adminMenu = [
+  linkOptions({
+    label: 'Usuarios',
+    to: '/dashboard/admin/users',
+    activeOptions: { exact: true },
+    icon: UsersIcon,
+  }),
+  linkOptions({
+    label: 'Bancos',
+    to: '/dashboard/admin/banks',
+    icon: LandmarkIcon,
+  }),
+  linkOptions({
+    label: 'Comercios',
+    to: '/dashboard/admin/merchants',
+    icon: StoreIcon,
+  }),
+];
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: auth } = useSuspenseQuery(authQueryOptions);
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -97,6 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        {auth?.profile.role === 'admin' ? <NavAdmin items={adminMenu} /> : null}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
