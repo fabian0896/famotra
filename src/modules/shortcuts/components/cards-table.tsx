@@ -65,9 +65,10 @@ function CardRow({ card }: { card: ShortcutCard }) {
       toast.error(message);
     },
     onSettled: () => {
-      const queryKey = shortcutsCardsQueryOptions.queryKey;
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
-      return queryClient.invalidateQueries({ queryKey });
+      return queryClient.invalidateQueries({
+        queryKey: shortcutsCardsQueryOptions.queryKey,
+      });
     },
   });
 

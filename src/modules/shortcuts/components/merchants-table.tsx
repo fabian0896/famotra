@@ -79,8 +79,9 @@ function MerchantRow({ merchant }: { merchant: ShortcutMerchant }) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
-      const queryKey = shortcutsMerchantsQueryOptions.queryKey;
-      return queryClient.invalidateQueries({ queryKey });
+      return queryClient.invalidateQueries({
+        queryKey: shortcutsMerchantsQueryOptions.queryKey,
+      });
     },
   });
 
