@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import React, { useMemo } from 'react';
-import { FormattedMoney } from './formatted-money';
+import { FormattedMoney } from '../../../components/formatted-money';
 import { Card, CardContent } from '@/components/ui/card';
 import { cagoryResumeQueryOptions } from '@/modules/categories/query-options/categories';
 import { Progress } from '@/components/ui/progress';
@@ -51,7 +51,9 @@ export function CategoryResume({ ...props }: React.ComponentProps<typeof Card>) 
                         {category.category_icon}
                       </div>
                       <div>
-                        <p className="text-sm text-foreground mb-0.5">{category.category_name}</p>
+                        <p className="text-sm text-foreground mb-0.5 line-clamp-1">
+                          {category.category_name}
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           {category.transaction_count}{' '}
                           {category.transaction_count === 1 ? 'transaccion' : 'transacciones'}

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { MoreVertical } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { NumericFormat } from 'react-number-format';
 import { CreateEditAccountDialog } from './create-edit-account';
 import { DeleteAccountDialog } from './delete-account-dialog';
 import { AccountIcon } from './account-icon';
@@ -18,6 +17,7 @@ import {
 import { Accounts } from '@/modules/accounts/services/accounts';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { QueryKeys } from '@/constants/query-keys';
+import { FormattedMoney } from '@/components/formatted-money';
 
 export function AccountCard({ account }: { account: Account }) {
   const [editOpen, setEditOpen] = useState(false);
@@ -63,14 +63,7 @@ export function AccountCard({ account }: { account: Account }) {
           </div>
 
           <div className="flex items-center">
-            <NumericFormat
-              value={account.balance}
-              className="text-lg font-semibold text-foreground"
-              prefix="$ "
-              thousandSeparator="."
-              decimalSeparator=","
-              displayType="text"
-            />
+            <FormattedMoney className="text-lg font-semibold" value={account.balance} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">

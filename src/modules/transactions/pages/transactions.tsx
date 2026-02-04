@@ -51,7 +51,7 @@ export function TransactionsPage() {
           ))}
         </TransactionList>
       </div>
-      <div className="w-[300px]">
+      <div className="w-[300px] xl:w-[350px]">
         <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
           <CategoryResume />
         </Suspense>

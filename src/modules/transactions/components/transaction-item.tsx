@@ -14,8 +14,8 @@ import { Link } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
 import { transactionsQueryOptions } from '../query-options/transactions';
 import { CreateEditTransactionDialog } from './add-transaction-dialog';
-import { FormattedMoney } from './formatted-money';
 import type { Transaction } from '../models/transactions.models';
+import { FormattedMoney } from '@/components/formatted-money';
 import { formatError } from '@/lib/format-error';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { Card } from '@/components/ui/card';
@@ -194,7 +194,9 @@ function Transfer({ transaction }: { transaction: Transaction }) {
           <p className="text-foreground font-medium mb-0.6 line-clamp-1">
             {transaction.account.name}
           </p>
-          <p className="text-sm text-muted-foreground">{transaction.account.bank?.name}</p>
+          <p className="text-sm text-muted-foreground line-clamp-1">
+            {transaction.account.bank?.name}
+          </p>
         </div>
       </div>
       <div className="flex-1 flex justify-center">
@@ -212,7 +214,7 @@ function Transfer({ transaction }: { transaction: Transaction }) {
           <p className="text-foreground font-medium mb-0.6 line-clamp-1 text-right">
             {transaction.destination.name}
           </p>
-          <p className="text-sm text-muted-foreground text-right">
+          <p className="text-sm text-muted-foreground text-right line-clamp-1">
             {transaction.destination.bank?.name || transaction.destination.custom_bank_name}
           </p>
         </div>
