@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase-client.ts';
 import { errorHandle } from '@/middlewares/error-handle.ts';
 import {
   CategoryTypeSchema,
+  CreateTransactionManualSchema,
   CreateTransactionSchema,
   UpdateTransactionSchema,
 } from '@/schemas/schemas.ts';
@@ -105,7 +106,6 @@ app.post('/transaction', zValidator('json', CreateTransactionSchema), authMiddle
     .single()
     .throwOnError();
 
-  // TODO: toca crear un trigger para que cuando se asignen uno de los valores (categoria, cuenta) se agregue a las transacciones de forma automatica.
   return c.json(
     {
       message: 'Transaction created successfully.',
@@ -123,8 +123,8 @@ app.patch('transaction', zValidator('json', UpdateTransactionSchema), authMiddle
   const { data: transaction } = await supabase
     .from('transactions')
     .update({
-      category_id: data.category_id,
-      account_id: data.account_id,
+      category_id: data.category_id || null,
+      account_id: data.account_id || null,
     })
     .eq('id', data.id)
     .select()
@@ -142,35 +142,32 @@ app.patch('transaction', zValidator('json', UpdateTransactionSchema), authMiddle
   );
 });
 
-interface CreateTransaction {
-  amount: number;
-  category_id: string;
-  account_id: string;
-  description?: string;
-  type: 'expense' | 'income' | 'transfer';
-}
+app.post(
+  '/manual',
+  zValidator('json', CreateTransactionManualSchema),
+  authMiddleware,
+  async (c) => {
+    const token = c.var.token;
+    const data = c.req.valid('json');
 
-app.post('/manual', authMiddleware, async (c) => {
-  const token = c.var.token;
-  const data = await c.req.json<CreateTransaction>();
+    const amount = data.type === 'expense' ? data.amount * -1 : data.amount;
 
-  const amount = data.type === 'expense' ? data.amount * -1 : data.amount;
+    const { data: transaction } = await supabase
+      .from('transactions')
+      .insert({
+        user_id: token.user_id,
+        description: data.description || 'Shorcut transaction',
+        category_id: data.category_id,
+        account_id: data.account_id,
+        amount: amount,
+        transaction_type: data.type,
+      })
+      .select('id')
+      .single()
+      .throwOnError();
 
-  const { data: transaction } = await supabase
-    .from('transactions')
-    .insert({
-      user_id: token.user_id,
-      description: data.description || 'Shorcut transaction',
-      category_id: data.category_id,
-      account_id: data.account_id,
-      amount: amount,
-      transaction_type: data.type,
-    })
-    .select('id')
-    .single()
-    .throwOnError();
-
-  return c.json({ id: transaction.id });
-});
+    return c.json({ id: transaction.id });
+  }
+);
 
 Deno.serve(app.fetch);

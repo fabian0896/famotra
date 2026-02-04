@@ -9,7 +9,7 @@ export function CategoriesPage() {
   const { data: categories } = useSuspenseQuery(categoriesQueryOptions);
 
   return (
-    <div className="container mx-auto">
+    <div className="max-w-7xl mx-auto">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
         Categorías
       </h1>

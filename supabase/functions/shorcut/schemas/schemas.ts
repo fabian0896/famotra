@@ -10,6 +10,14 @@ export const CreateTransactionSchema = z.object({
   card: z.string(),
 });
 
+export const CreateTransactionManualSchema = z.object({
+  amount: z.number(),
+  category_id: z.uuid(),
+  account_id: z.uuid(),
+  description: z.string().optional(),
+  type: z.union([z.literal('expense'), z.literal('income'), z.literal('transfer')]),
+});
+
 export const UpdateTransactionSchema = z.object({
   id: uuid(),
   category_id: uuid().optional(),
