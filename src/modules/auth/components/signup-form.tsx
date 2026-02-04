@@ -27,12 +27,14 @@ export function SignupForm({ className, ...props }: React.ComponentProps<'div'>)
 
   const signup = useMutation({
     mutationFn: Auth.signUp,
-    onSuccess: async () => {
+    onSuccess: async (response) => {
       const queryKey = authQueryOptions.queryKey;
       await queryClient.invalidateQueries({ queryKey });
-      toast.success('Registro Exitoso', {
-        description: 'Valida tu correo para poder ingresar a la plataforma',
-      });
+      if (!response.session) {
+        toast.success('Registro Exitoso', {
+          description: 'Valida tu correo para poder ingresar a la plataforma',
+        });
+      }
       router.navigate({ to: '/dashboard' });
     },
     onError: () => {
