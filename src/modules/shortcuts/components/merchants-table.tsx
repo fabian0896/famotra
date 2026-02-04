@@ -34,6 +34,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
+import { QueryKeys } from '@/constants/query-keys';
 
 function MerchantAvatar({ name }: { name: string }) {
   const src = useMemo(() => {
@@ -77,6 +78,7 @@ function MerchantRow({ merchant }: { merchant: ShortcutMerchant }) {
       toast.error(message);
     },
     onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       const queryKey = shortcutsMerchantsQueryOptions.queryKey;
       return queryClient.invalidateQueries({ queryKey });
     },

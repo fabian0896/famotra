@@ -34,6 +34,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
+import { QueryKeys } from '@/constants/query-keys';
 
 function AccountSelect(props: React.ComponentProps<typeof Select>) {
   const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
@@ -65,6 +66,7 @@ function CardRow({ card }: { card: ShortcutCard }) {
     },
     onSettled: () => {
       const queryKey = shortcutsCardsQueryOptions.queryKey;
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       return queryClient.invalidateQueries({ queryKey });
     },
   });
