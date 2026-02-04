@@ -142,4 +142,35 @@ app.patch('transaction', zValidator('json', UpdateTransactionSchema), authMiddle
   );
 });
 
+interface CreateTransaction {
+  amount: number;
+  category_id: string;
+  account_id: string;
+  description?: string;
+  type: 'expense' | 'income' | 'transfer';
+}
+
+app.post('/manual', authMiddleware, async (c) => {
+  const token = c.var.token;
+  const data = await c.req.json<CreateTransaction>();
+
+  const amount = data.type === 'expense' ? data.amount * -1 : data.amount;
+
+  const { data: transaction } = await supabase
+    .from('transactions')
+    .insert({
+      user_id: token.user_id,
+      description: data.description || 'Shorcut transaction',
+      category_id: data.category_id,
+      account_id: data.account_id,
+      amount: amount,
+      transaction_type: data.type,
+    })
+    .select('id')
+    .single()
+    .throwOnError();
+
+  return c.json({ id: transaction.id });
+});
+
 Deno.serve(app.fetch);
