@@ -6,7 +6,6 @@ import { CreateEditAccountDialog } from './create-edit-account';
 import { DeleteAccountDialog } from './delete-account-dialog';
 import { AccountIcon } from './account-icon';
 import type { Account } from '../models/accounts.models';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -18,6 +17,13 @@ import { Accounts } from '@/modules/accounts/services/accounts';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { QueryKeys } from '@/constants/query-keys';
 import { FormattedMoney } from '@/components/formatted-money';
+import { cn } from '@/lib/utils';
+
+function getBalanceAccent(balance: number) {
+  if (balance > 0) return 'bg-emerald-500';
+  if (balance < 0) return 'bg-red-500';
+  return 'bg-muted-foreground/40';
+}
 
 export function AccountCard({ account }: { account: Account }) {
   const [editOpen, setEditOpen] = useState(false);
@@ -42,52 +48,74 @@ export function AccountCard({ account }: { account: Account }) {
   const handleOpenEdit = () => {
     setEditOpen(true);
   };
+
   return (
     <>
       <CreateEditAccountDialog isOpen={editOpen} onOpenChange={setEditOpen} account={account} />
-      <Card className="relative overflow-hidden transition-all duration-200 hover:shadow-md py-2">
-        {/* Color accent bar */}
-        <div className="absolute left-0 top-0 h-full w-1" />
+      <div
+        className={cn(
+          'group relative rounded-xl border bg-card',
+          'transition-all duration-200',
+          'hover:shadow-md hover:border-border/80'
+        )}
+      >
+        {/* Balance accent bar */}
+        <div
+          className={cn(
+            'absolute left-0 top-3 bottom-3 w-[3px] rounded-full',
+            getBalanceAccent(account.balance)
+          )}
+        />
 
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-3">
-            {/* Icon with bank color */}
-            <AccountIcon className="h-10 w-10 rounded-full overflow-hidden" account={account} />
+        {/* Action menu */}
+        <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon-sm" className="h-7 w-7">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleOpenEdit}>Editar</DropdownMenuItem>
+              <DeleteAccountDialog
+                onConfirm={() => remove.mutate({ id: account.id })}
+                account={account}
+              >
+                <DropdownMenuItem
+                  onSelect={(e) => e.preventDefault()}
+                  className="text-destructive focus:text-destructive"
+                >
+                  Eliminar
+                </DropdownMenuItem>
+              </DeleteAccountDialog>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
-            <div className="flex flex-col">
-              <span className="font-medium text-foreground">{account.name}</span>
-              <span className="text-sm text-muted-foreground capitalize">
-                {account.bank?.name ?? account.custom_bank_name ?? 'Sin banco'}
-              </span>
-            </div>
+        <div className="flex flex-col items-center px-5 pt-6 pb-5">
+          {/* Account icon */}
+          <AccountIcon
+            className="h-14 w-14 rounded-full overflow-hidden ring-2 ring-border/50"
+            account={account}
+          />
+
+          {/* Account info */}
+          <div className="mt-4 text-center w-full">
+            <p className="font-medium text-foreground text-sm truncate">{account.name}</p>
+            <p className="text-xs text-muted-foreground mt-0.5 capitalize truncate">
+              {account.bank?.name ?? account.custom_bank_name ?? 'Sin banco'}
+            </p>
           </div>
 
-          <div className="flex items-center">
-            <FormattedMoney className="text-lg font-semibold" value={account.balance} />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem onClick={handleOpenEdit}>Editar</DropdownMenuItem>
-                <DeleteAccountDialog
-                  onConfirm={() => remove.mutate({ id: account.id })}
-                  account={account}
-                >
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    Eliminar
-                  </DropdownMenuItem>
-                </DeleteAccountDialog>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {/* Balance */}
+          <div className="mt-4 pt-4 border-t border-border/50 w-full text-center">
+            <FormattedMoney
+              className="text-xl font-semibold tracking-tight"
+              value={account.balance}
+            />
           </div>
         </div>
-      </Card>
+      </div>
     </>
   );
 }
