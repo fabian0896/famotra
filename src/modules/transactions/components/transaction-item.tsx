@@ -1,12 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { ArrowRight, Edit2, MoreVertical, Trash2 } from 'lucide-react';
+import {
+  AlertTriangleIcon,
+  ArrowRight,
+  BookCheckIcon,
+  Edit2,
+  MoreVertical,
+  Trash2,
+} from 'lucide-react';
+import { cva } from 'class-variance-authority';
+import { Link } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
 import { transactionsQueryOptions } from '../query-options/transactions';
 import { CreateEditTransactionDialog } from './add-transaction-dialog';
-import { FormattedMoney } from './formatted-money';
 import type { Transaction } from '../models/transactions.models';
+import { FormattedMoney } from '@/components/formatted-money';
 import { formatError } from '@/lib/format-error';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { Card } from '@/components/ui/card';
@@ -18,8 +27,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { cn } from '@/lib/utils';
 import { AccountIcon } from '@/modules/accounts/components/account-icon';
+import { cn } from '@/lib/utils';
+
+const cardClx = cva('flex flex-row items-center gap-4 p-3 w-full', {
+  variants: {
+    pending: {
+      true: 'bg-amber-50/10 border-amber-600',
+    },
+  },
+});
 
 export function TransactionItem({
   transaction,
@@ -41,38 +58,48 @@ export function TransactionItem({
     },
   });
 
+  const pending =
+    transaction.transaction_type !== 'transfer' &&
+    (!transaction.category_id || !transaction.account_id);
+
   return (
     <li className={cn('block', className)} {...props}>
-      <Card className="flex flex-row items-center gap-4 p-3 w-full">
+      <Card className={cardClx({ pending, className })}>
         {transaction.transaction_type === 'transfer' ? (
           <Transfer transaction={transaction} />
         ) : (
           <IncomeExpense transaction={transaction} />
         )}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <MoreVertical className="text-muted-foreground" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
-              <Edit2 />
-              Editar
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={remove.isPending}
-              onClick={(event) => {
-                event.preventDefault();
-                remove.mutate({ id: transaction.id });
-              }}
-              variant="destructive"
-            >
-              {remove.isPending ? <Spinner /> : <Trash2 />}
-              Eliminar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {pending ? (
+          <Button onClick={() => setEditDialogOpen(true)} size="icon" variant="ghost">
+            <BookCheckIcon className="text-amber-500" />
+          </Button>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="ghost">
+                <MoreVertical className="text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
+                <Edit2 />
+                Editar
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={remove.isPending}
+                onClick={(event) => {
+                  event.preventDefault();
+                  remove.mutate({ id: transaction.id });
+                }}
+                variant="destructive"
+              >
+                {remove.isPending ? <Spinner /> : <Trash2 />}
+                Eliminar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </Card>
       <CreateEditTransactionDialog
         isOpen={editDialogOpen}
@@ -83,29 +110,68 @@ export function TransactionItem({
   );
 }
 
+function TransactionIcon({ transaction }: { transaction: Transaction }) {
+  if (!transaction.category) {
+    return (
+      <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+        <AlertTriangleIcon strokeWidth={2.5} size={20} className="text-amber-600" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
+      {transaction.category.icon}
+    </div>
+  );
+}
+
 function IncomeExpense({ transaction }: { transaction: Transaction }) {
-  if (!transaction.category) throw new Error('The IncomeExpense component needs a category');
   return (
     <div className="flex flex-row items-center gap-4 w-full">
       <div className="flex gap-4 items-center flex-1">
-        <div className="text-xs leading-none flex items-center justify-center bg-primary/20 w-10 h-10 rounded-full">
-          {transaction.category.icon}
-        </div>
-        <div className="flex-1">
-          <p className="text-foreground font-medium mb-0.6 line-clamp-1">
-            {transaction.description}
-          </p>
-          <p className="text-sm text-muted-foreground">{transaction.category.name}</p>
-        </div>
+        <TransactionIcon transaction={transaction} />
+        {transaction.category ? (
+          <div className="flex-1">
+            <p className="text-foreground font-medium mb-0.6 line-clamp-1">
+              {transaction.description}
+            </p>
+            <p className="text-sm text-muted-foreground">{transaction.category.name}</p>
+          </div>
+        ) : (
+          <div className="flex-1">
+            <Link
+              to="/dashboard/shortcuts"
+              search={{ tab: 'merchants' }}
+              className="font-medium mb-0.6 line-clamp-1 text-amber-500 underline decoration-dotted"
+            >
+              {transaction.description}
+            </Link>
+            <p className="text-sm text-muted-foreground">Sin categoría</p>
+          </div>
+        )}
       </div>
       <div className="flex-1 flex justify-center items-center gap-2">
         <AccountIcon account={transaction.account} className="w-6 h-6 rounded-full" />
-        <div>
-          <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
-          <p className="text-xs text-muted-foreground">
-            {transaction.account.bank?.name || transaction.account.custom_bank_name}
-          </p>
-        </div>
+        {transaction.account ? (
+          <div>
+            <p className="text-sm text-foreground font-base">{transaction.account.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {transaction.account.bank?.name || transaction.account.custom_bank_name}
+            </p>
+          </div>
+        ) : (
+          <div>
+            <Link
+              to="/dashboard/shortcuts"
+              search={{ tab: 'cards' }}
+              className="text-sm text-amber-500 font-base underline decoration-dotted"
+            >
+              {transaction.card?.name || 'No registra'}
+            </Link>
+            <p className="text-xs text-muted-foreground">Sin cuenta vinculada</p>
+          </div>
+        )}
       </div>
       <div className="flex-1 flex justify-end">
         <FormattedMoney value={transaction.amount} />
@@ -115,7 +181,9 @@ function IncomeExpense({ transaction }: { transaction: Transaction }) {
 }
 
 function Transfer({ transaction }: { transaction: Transaction }) {
-  if (!transaction.destination) throw new Error('Transfer componente needs a destination');
+  if (!transaction.destination || !transaction.account) {
+    throw new Error('Transfer componente needs a destination and an account');
+  }
   return (
     <div className="flex flex-row items-center gap-4 rounded-lg w-full">
       <div className="flex gap-4 items-center flex-1">
@@ -126,7 +194,9 @@ function Transfer({ transaction }: { transaction: Transaction }) {
           <p className="text-foreground font-medium mb-0.6 line-clamp-1">
             {transaction.account.name}
           </p>
-          <p className="text-sm text-muted-foreground">{transaction.account.bank?.name}</p>
+          <p className="text-sm text-muted-foreground line-clamp-1">
+            {transaction.account.bank?.name}
+          </p>
         </div>
       </div>
       <div className="flex-1 flex justify-center">
@@ -144,7 +214,7 @@ function Transfer({ transaction }: { transaction: Transaction }) {
           <p className="text-foreground font-medium mb-0.6 line-clamp-1 text-right">
             {transaction.destination.name}
           </p>
-          <p className="text-sm text-muted-foreground text-right">
+          <p className="text-sm text-muted-foreground text-right line-clamp-1">
             {transaction.destination.bank?.name || transaction.destination.custom_bank_name}
           </p>
         </div>

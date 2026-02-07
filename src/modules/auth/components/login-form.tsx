@@ -89,7 +89,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
               <form.AppField
                 name="password"
                 children={(field) => (
-                  <field.TextField label="Contraseña" id="password" type="password" />
+                  <field.TextField label="Contraseña" id="password" type="password">
+                    <FieldDescription className="text-right">
+                      <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+                    </FieldDescription>
+                  </field.TextField>
                 )}
               />
               <Field>

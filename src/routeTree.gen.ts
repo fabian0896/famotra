@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -20,10 +22,24 @@ import { Route as AuthenticatedDashboardShortcutsRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardCategoriesRouteImport } from './routes/_authenticated/dashboard.categories'
 import { Route as AuthenticatedDashboardAccountsRouteImport } from './routes/_authenticated/dashboard.accounts'
+import { Route as AuthenticatedDashboardAdminUsersRouteImport } from './routes/_authenticated/dashboard.admin/users'
+import { Route as AuthenticatedDashboardAdminPageRouteImport } from './routes/_authenticated/dashboard.admin/page'
+import { Route as AuthenticatedDashboardAdminMerchantsRouteImport } from './routes/_authenticated/dashboard.admin/merchants'
+import { Route as AuthenticatedDashboardAdminBanksRouteImport } from './routes/_authenticated/dashboard.admin/banks'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -82,10 +98,36 @@ const AuthenticatedDashboardAccountsRoute =
     path: '/accounts',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardAdminUsersRoute =
+  AuthenticatedDashboardAdminUsersRouteImport.update({
+    id: '/admin/users',
+    path: '/admin/users',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAdminPageRoute =
+  AuthenticatedDashboardAdminPageRouteImport.update({
+    id: '/admin/page',
+    path: '/admin/page',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAdminMerchantsRoute =
+  AuthenticatedDashboardAdminMerchantsRouteImport.update({
+    id: '/admin/merchants',
+    path: '/admin/merchants',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardAdminBanksRoute =
+  AuthenticatedDashboardAdminBanksRouteImport.update({
+    id: '/admin/banks',
+    path: '/admin/banks',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
   '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
@@ -94,10 +136,16 @@ export interface FileRoutesByFullPath {
   '/dashboard/subscriptions': typeof AuthenticatedDashboardSubscriptionsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
+  '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
+  '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
   '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
@@ -105,12 +153,18 @@ export interface FileRoutesByTo {
   '/dashboard/subscriptions': typeof AuthenticatedDashboardSubscriptionsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
+  '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
+  '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
   '/_authenticated/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
@@ -119,12 +173,18 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/subscriptions': typeof AuthenticatedDashboardSubscriptionsRoute
   '/_authenticated/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
+  '/_authenticated/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
+  '/_authenticated/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
+  '/_authenticated/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/forgot-password'
     | '/register'
+    | '/reset-password'
     | '/dashboard'
     | '/dashboard/accounts'
     | '/dashboard/categories'
@@ -133,10 +193,16 @@ export interface FileRouteTypes {
     | '/dashboard/subscriptions'
     | '/dashboard/transactions'
     | '/dashboard/'
+    | '/dashboard/admin/banks'
+    | '/dashboard/admin/merchants'
+    | '/dashboard/admin/page'
+    | '/dashboard/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forgot-password'
     | '/register'
+    | '/reset-password'
     | '/dashboard/accounts'
     | '/dashboard/categories'
     | '/dashboard/settings'
@@ -144,11 +210,17 @@ export interface FileRouteTypes {
     | '/dashboard/subscriptions'
     | '/dashboard/transactions'
     | '/dashboard'
+    | '/dashboard/admin/banks'
+    | '/dashboard/admin/merchants'
+    | '/dashboard/admin/page'
+    | '/dashboard/admin/users'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/forgot-password'
     | '/register'
+    | '/reset-password'
     | '/_authenticated/dashboard'
     | '/_authenticated/dashboard/accounts'
     | '/_authenticated/dashboard/categories'
@@ -157,21 +229,41 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/subscriptions'
     | '/_authenticated/dashboard/transactions'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/admin/banks'
+    | '/_authenticated/dashboard/admin/merchants'
+    | '/_authenticated/dashboard/admin/page'
+    | '/_authenticated/dashboard/admin/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -244,6 +336,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAccountsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/admin/users': {
+      id: '/_authenticated/dashboard/admin/users'
+      path: '/admin/users'
+      fullPath: '/dashboard/admin/users'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/admin/page': {
+      id: '/_authenticated/dashboard/admin/page'
+      path: '/admin/page'
+      fullPath: '/dashboard/admin/page'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminPageRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/admin/merchants': {
+      id: '/_authenticated/dashboard/admin/merchants'
+      path: '/admin/merchants'
+      fullPath: '/dashboard/admin/merchants'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminMerchantsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/admin/banks': {
+      id: '/_authenticated/dashboard/admin/banks'
+      path: '/admin/banks'
+      fullPath: '/dashboard/admin/banks'
+      preLoaderRoute: typeof AuthenticatedDashboardAdminBanksRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
@@ -255,6 +375,10 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardSubscriptionsRoute: typeof AuthenticatedDashboardSubscriptionsRoute
   AuthenticatedDashboardTransactionsRoute: typeof AuthenticatedDashboardTransactionsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardAdminBanksRoute: typeof AuthenticatedDashboardAdminBanksRoute
+  AuthenticatedDashboardAdminMerchantsRoute: typeof AuthenticatedDashboardAdminMerchantsRoute
+  AuthenticatedDashboardAdminPageRoute: typeof AuthenticatedDashboardAdminPageRoute
+  AuthenticatedDashboardAdminUsersRoute: typeof AuthenticatedDashboardAdminUsersRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -269,6 +393,13 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardTransactionsRoute:
       AuthenticatedDashboardTransactionsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardAdminBanksRoute:
+      AuthenticatedDashboardAdminBanksRoute,
+    AuthenticatedDashboardAdminMerchantsRoute:
+      AuthenticatedDashboardAdminMerchantsRoute,
+    AuthenticatedDashboardAdminPageRoute: AuthenticatedDashboardAdminPageRoute,
+    AuthenticatedDashboardAdminUsersRoute:
+      AuthenticatedDashboardAdminUsersRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =
@@ -291,7 +422,9 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

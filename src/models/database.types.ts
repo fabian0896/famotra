@@ -153,6 +153,7 @@ export type Database = {
           account_id: string | null
           active: boolean
           created_at: string
+          id: string
           last_used_at: string
           name: string
           token: string
@@ -162,6 +163,7 @@ export type Database = {
           account_id?: string | null
           active?: boolean
           created_at?: string
+          id?: string
           last_used_at?: string
           name: string
           token: string
@@ -171,6 +173,7 @@ export type Database = {
           account_id?: string | null
           active?: boolean
           created_at?: string
+          id?: string
           last_used_at?: string
           name?: string
           token?: string
@@ -186,6 +189,54 @@ export type Database = {
           },
           {
             foreignKeyName: "shorcut_cards_token_fkey"
+            columns: ["token"]
+            isOneToOne: false
+            referencedRelation: "api_tokens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shorcuts_merchants: {
+        Row: {
+          active: boolean
+          category_id: string | null
+          created_at: string
+          id: string
+          last_used_at: string
+          name: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          last_used_at?: string
+          name: string
+          token: string
+          user_id?: string
+        }
+        Update: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          last_used_at?: string
+          name?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shorcuts_merchants_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shorcuts_merchants_token_fkey"
             columns: ["token"]
             isOneToOne: false
             referencedRelation: "api_tokens"
@@ -245,38 +296,44 @@ export type Database = {
       }
       transactions: {
         Row: {
-          account_id: string
+          account_id: string | null
           amount: number
+          card_id: string | null
           category_id: string | null
           created_at: string
           date: string
           description: string
           destination_account_id: string | null
           id: string
+          merchant_id: string | null
           transaction_type: Database["public"]["Enums"]["transaction_type"]
           user_id: string | null
         }
         Insert: {
-          account_id: string
+          account_id?: string | null
           amount?: number
+          card_id?: string | null
           category_id?: string | null
           created_at?: string
-          date: string
+          date?: string
           description: string
           destination_account_id?: string | null
           id?: string
+          merchant_id?: string | null
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
           user_id?: string | null
         }
         Update: {
-          account_id?: string
+          account_id?: string | null
           amount?: number
+          card_id?: string | null
           category_id?: string | null
           created_at?: string
           date?: string
           description?: string
           destination_account_id?: string | null
           id?: string
+          merchant_id?: string | null
           transaction_type?: Database["public"]["Enums"]["transaction_type"]
           user_id?: string | null
         }
@@ -286,6 +343,13 @@ export type Database = {
             columns: ["account_id"]
             isOneToOne: false
             referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "shorcut_cards"
             referencedColumns: ["id"]
           },
           {
@@ -302,20 +366,79 @@ export type Database = {
             referencedRelation: "accounts"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "transactions_merchant_id_fkey"
+            columns: ["merchant_id"]
+            isOneToOne: false
+            referencedRelation: "shorcuts_merchants"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      user_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          id: string
+          name?: string
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_transactions_by_category: {
+        Args: {
+          p_month?: number
+          p_type?: Database["public"]["Enums"]["category_type"]
+          p_year?: number
+        }
+        Returns: {
+          average_amount: number
+          category_icon: string
+          category_id: string
+          category_name: string
+          category_type: Database["public"]["Enums"]["category_type"]
+          percentage: number
+          total_amount: number
+          transaction_count: number
+        }[]
+      }
+      get_user_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       category_type: "income" | "expense"
       subscription_state: "active" | "inactive"
       subscription_type: "custom" | "preselect"
       transaction_type: "income" | "expense" | "transfer"
+      user_role: "user" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -447,6 +570,7 @@ export const Constants = {
       subscription_state: ["active", "inactive"],
       subscription_type: ["custom", "preselect"],
       transaction_type: ["income", "expense", "transfer"],
+      user_role: ["user", "admin"],
     },
   },
 } as const

@@ -47,19 +47,28 @@ export function CategoryItem({ category }: { category: Category }) {
   };
 
   return (
-    <li>
+    <li className="block h-full w-full">
       <CreateEditCategoryDialog isOpen={editOpen} onOpenChange={setEditOpen} category={category} />
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
-          <button className="flex flex-col justify-center items-center gap-1.5 group">
-            <div className="bg-primary/20 rounded-full w-16 h-16 text-2xl flex items-center justify-center">
+          <button className="w-full h-full group grow border border-border bg-card rounded-xl p-4 transition-all hover:border-primary hover:bg-primary/10">
+            <div className="bg-primary/20 rounded-full w-16 h-16 text-2xl flex items-center justify-center mx-auto mb-4">
               <span className="group-hover:scale-110 group-hover:rotate-12 transition-all">
                 {category.icon}
               </span>
             </div>
-            <span className="text-muted-foreground text-center font-medium text-sm lowercase first-letter:capitalize group-hover:text-foreground">
-              {category.name}
-            </span>
+            <div className="flex flex-col items-center justify-center">
+              <p
+                title={category.name}
+                className="text-foreground text-center font-medium text-base group-hover:text-foreground line-clamp-1 mb-0.5"
+              >
+                {category.name}
+              </p>
+              <p className="text-sm text-muted-foreground flex items-center gap-1.5 text-center">
+                <span className="h-1.5 w-1.5 bg-green-600 rounded-full"></span>
+                Activa
+              </p>
+            </div>
           </button>
         </SheetTrigger>
         <SheetContent>
@@ -67,7 +76,9 @@ export function CategoryItem({ category }: { category: Category }) {
             <div className="w-22 h-22 rounded-full bg-primary-foreground flex items-center justify-center text-4xl border border-primary">
               {category.icon}
             </div>
-            <SheetTitle className="text-4xl font-semibold mt-1">{category.name}</SheetTitle>
+            <SheetTitle className="text-4xl font-semibold mt-1 text-center">
+              {category.name}
+            </SheetTitle>
             <SheetDescription>
               <Badge>{CATEGORY_TYPES[category.type]}</Badge>
             </SheetDescription>

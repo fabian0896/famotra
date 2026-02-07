@@ -2,7 +2,11 @@ import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 import { useFieldContext } from '@/hooks/form';
 
-export function TextField({ label, ...props }: { label: string } & React.ComponentProps<'input'>) {
+export function TextField({
+  label,
+  children,
+  ...props
+}: { label: string } & React.ComponentProps<'input'>) {
   const field = useFieldContext<string>();
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
   const fieldId = props.id ?? field.name;
@@ -17,6 +21,7 @@ export function TextField({ label, ...props }: { label: string } & React.Compone
         onBlur={field.handleBlur}
         {...props}
       />
+      {children}
       <FieldError errors={field.state.meta.errors} />
     </Field>
   );

@@ -8,17 +8,10 @@ export const categoriesQueryOptions = queryOptions({
   staleTime: Infinity,
 });
 
-export const categorySearchQueryOptions = (search: string) => {
+export const cagoryResumeQueryOptions = () => {
   return queryOptions({
-    queryKey: [QueryKeys.CATEGORIES, 'search', search],
-    queryFn: () => Categories.search(search),
-  });
-};
-
-export const cagoryQueryOptions = (categoryId?: string) => {
-  return queryOptions({
-    queryKey: [QueryKeys.CATEGORIES, categoryId],
-    queryFn: () => Categories.getById(categoryId!),
-    enabled: !!categoryId,
+    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES_RESUME],
+    queryFn: () => Categories.categoryResume(),
+    staleTime: Infinity,
   });
 };
