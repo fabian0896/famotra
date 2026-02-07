@@ -60,7 +60,7 @@ export function CategoryItem({ category }: { category: Category }) {
             <div className="flex flex-col items-center justify-center">
               <p
                 title={category.name}
-                className="text-foreground text-center font-medium text-base lowercase first-letter:capitalize group-hover:text-foreground line-clamp-1 mb-0.5"
+                className="text-foreground text-center font-medium text-base group-hover:text-foreground line-clamp-1 mb-0.5"
               >
                 {category.name}
               </p>

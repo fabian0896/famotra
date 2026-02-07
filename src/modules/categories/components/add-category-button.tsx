@@ -4,7 +4,7 @@ import { DialogTrigger } from '@/components/ui/dialog';
 export function AddCategotyButton() {
   return (
     <DialogTrigger asChild>
-      <button className="border border-border border-dashed rounded-xl flex items-center justify-center flex-col group transition-all hover:border-primary hover:bg-primary/10">
+      <button className="border border-border border-dashed rounded-xl flex items-center justify-center flex-col group transition-all hover:border-primary hover:bg-primary/10 min-h-40">
         <LucidePlus
           className="text-muted-foreground mb-4 group-hover:text-primary"
           size={30}

@@ -26,7 +26,7 @@ export function EmojiField({ className, ...props }: React.ComponentProps<'button
   const emoji = field.state.value;
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover modal={true} open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button
           type="button"
