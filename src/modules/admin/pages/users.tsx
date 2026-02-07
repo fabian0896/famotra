@@ -1,8 +1,16 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { usersQueryOptions } from '../query-options/admin-query-options';
+import { Suspense, useCallback, useState } from 'react';
+import { UserTableSkeleton, UsersTable } from '../components/users-table';
+import { UsersSearch } from '../components/users-search';
+
+const PAGE_SIZE = 10;
 
 export function UsersPage() {
-  const { data: users } = useSuspenseQuery(usersQueryOptions);
+  const [search, setSearch] = useState('');
+
+  const handleSearch = useCallback((value: string) => {
+    setSearch(value);
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto">
       <header className="mb-8">
@@ -11,10 +19,11 @@ export function UsersPage() {
           Revisa y controla todos los usuarios registrados en el sistema
         </p>
       </header>
-      <div>
-        {users.map((user) => (
-          <div key={user.id}>{user.name}</div>
-        ))}
+      <div className="space-y-4">
+        <UsersSearch onSearch={handleSearch} />
+        <Suspense fallback={<UserTableSkeleton />}>
+          <UsersTable pageSize={PAGE_SIZE} search={search} />
+        </Suspense>
       </div>
     </div>
   );

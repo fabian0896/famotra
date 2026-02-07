@@ -5,7 +5,7 @@ import { usersQueryOptions } from '@/modules/admin/query-options/admin-query-opt
 export const Route = createFileRoute('/_authenticated/dashboard/admin/users')({
   beforeLoad: async ({ context }) => {
     const queryClient = context.queryClient;
-    await queryClient.ensureQueryData(usersQueryOptions);
+    await queryClient.ensureQueryData(usersQueryOptions());
   },
   component: UsersPage,
 });
