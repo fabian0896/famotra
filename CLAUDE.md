@@ -20,6 +20,7 @@ npm run deploy       # Deploy Supabase edge functions to production
 ```
 
 To add new Shadcn UI components:
+
 ```bash
 pnpx shadcn@latest add <component-name>
 ```
@@ -44,6 +45,7 @@ pnpx shadcn@latest add <component-name>
 ### Module Structure
 
 Feature code lives in `src/modules/` with each module following this pattern:
+
 ```
 modules/<feature>/
 ├── components/      # Feature-specific UI components
