@@ -27,6 +27,18 @@ export class Auth {
     return { user, profile };
   }
 
+  static async forgotPassword({ email }: { email: string }) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/reset-password`,
+    });
+    if (error) throw error;
+  }
+
+  static async resetPassword({ password }: { password: string }) {
+    const { error } = await supabase.auth.updateUser({ password });
+    if (error) throw error;
+  }
+
   static async signUp(options: SignUpOptions) {
     const { name, ...credentials } = options;
     const emailRedirectTo = `${location.origin}/dashboard`;
