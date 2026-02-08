@@ -15,7 +15,7 @@ export function TransactionsPage() {
     data: transactions,
     hasNextPage,
     fetchNextPage,
-  } = useSuspenseInfiniteQuery(transactionsQueryOptions);
+  } = useSuspenseInfiniteQuery(transactionsQueryOptions());
 
   return (
     <div className="flex gap-6 max-w-7xl mx-auto">

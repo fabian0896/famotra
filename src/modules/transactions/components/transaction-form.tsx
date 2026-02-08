@@ -4,10 +4,10 @@ import { formatISO } from 'date-fns';
 import React from 'react';
 import { Link } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
-import { transactionsQueryOptions } from '../query-options/transactions';
 import { addTransactionsSchema } from '../models/schemas';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
 import type { CategoryTypes } from '@/modules/categories/models/categories.models';
+import { QueryKeys } from '@/constants/query-keys';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { formatError } from '@/lib/format-error';
 import { useAppForm } from '@/hooks/form';
@@ -40,7 +40,7 @@ export function TransactionForm({
       toast.error(message);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
     },
   });

@@ -5,11 +5,10 @@ import React from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowRight } from 'lucide-react';
 import { addTransferSchema } from '../models/schemas';
-import { transactionsQueryOptions } from '../query-options/transactions';
 import { Transactions } from '../services/transactions';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
+import { QueryKeys } from '@/constants/query-keys';
 import { useAppForm } from '@/hooks/form';
-import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { formatError } from '@/lib/format-error';
 import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -36,8 +35,8 @@ export function TransferForm({
       toast.error(message);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
-      queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.ACCOUNTS] });
     },
   });
 

@@ -1,4 +1,5 @@
 import type { TransactionTypes, TransactionsInsert } from '../models/transactions.models';
+import type { TransactionFilters } from '../models/transaction-filters';
 import { supabase } from '@/integrations/supabase/client';
 
 export class Transactions {
@@ -24,32 +25,58 @@ export class Transactions {
     return transaction;
   }
 
-  static async get({ page = 1, pageSize = 25 }: { page?: number; pageSize?: number }) {
+  static async get({
+    page = 1,
+    pageSize = 25,
+    filters,
+  }: {
+    page?: number;
+    pageSize?: number;
+    filters?: TransactionFilters;
+  }) {
     const from = (page - 1) * pageSize;
     const to = from + pageSize - 1;
-    const { data: transactions } = await supabase
-      .from('transactions')
-      .select(
-        `
-        *, 
+    let query = supabase.from('transactions').select(
+      `
+        *,
         category:categories (id, name, icon),
         account:accounts!account_id (
-          id, 
-          name, 
-          custom_bank_name, 
-          custom_bank_icon, 
+          id,
+          name,
+          custom_bank_name,
+          custom_bank_icon,
           bank:bank_list (id, logo, name)
         ),
         destination:accounts!destination_account_id (
-          id, 
-          name, 
-          custom_bank_name, 
-          custom_bank_icon, 
+          id,
+          name,
+          custom_bank_name,
+          custom_bank_icon,
           bank:bank_list (id, logo, name)
         ),
         card:shorcut_cards!card_id (name)
         `
-      )
+    );
+
+    if (filters?.dateFrom) {
+      query = query.gte('date', filters.dateFrom);
+    }
+    if (filters?.dateTo) {
+      query = query.lte('date', filters.dateTo);
+    }
+    if (filters?.categoryId) {
+      query = query.eq('category_id', filters.categoryId);
+    }
+    if (filters?.accountId) {
+      query = query.or(
+        `account_id.eq.${filters.accountId},destination_account_id.eq.${filters.accountId}`
+      );
+    }
+    if (filters?.transactionType) {
+      query = query.eq('transaction_type', filters.transactionType);
+    }
+
+    const { data: transactions } = await query
       .order('date', { ascending: false })
       .order('created_at', { ascending: false })
       .range(from, to)

@@ -12,9 +12,9 @@ import {
 import { cva } from 'class-variance-authority';
 import { Link } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
-import { transactionsQueryOptions } from '../query-options/transactions';
 import { CreateEditTransactionDialog } from './add-transaction-dialog';
 import type { Transaction } from '../models/transactions.models';
+import { QueryKeys } from '@/constants/query-keys';
 import { FormattedMoney } from '@/components/formatted-money';
 import { formatError } from '@/lib/format-error';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
@@ -54,7 +54,7 @@ export function TransactionItem({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
-      return queryClient.invalidateQueries({ queryKey: transactionsQueryOptions.queryKey });
+      return queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
     },
   });
 

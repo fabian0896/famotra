@@ -6,7 +6,7 @@ export const Route = createFileRoute('/_authenticated/dashboard/transactions')({
   beforeLoad: () => ({ breadcrumb: 'Transacciones' }),
   loader: async ({ context }) => {
     const queryClient = context.queryClient;
-    await queryClient.ensureInfiniteQueryData(transactionsQueryOptions);
+    await queryClient.ensureInfiniteQueryData(transactionsQueryOptions());
   },
   component: TransactionsPage,
 });
