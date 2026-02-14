@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -6,6 +6,7 @@ import { CATEGORY_TYPES } from '../models/categories.models';
 import { CreateEditCategoryDialog } from './create-edit-category';
 import { DeleteCategoryDialog } from './delete-category-dialog';
 import type { Category } from '../models/categories.models';
+import type { Transaction } from '@/modules/transactions/models/transactions.models';
 import { Categories } from '@/modules/categories/services/categories';
 import { categoriesQueryOptions } from '@/modules/categories/query-options/categories';
 import {
@@ -20,6 +21,50 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { Separator } from '@/components/ui/separator';
+import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
+import { TransactionGroup } from '@/modules/transactions/components/transaction-group';
+import {
+  EmpltyTransactionList,
+  TransactionList,
+} from '@/modules/transactions/components/transactions-list';
+
+function CategoryHistoryItem({ transaction }: { transaction: Transaction }) {
+  return (
+    <div>
+      <p>{transaction.description}</p>
+      <p>{transaction.amount}</p>
+    </div>
+  );
+}
+
+function CategoryHistory({ categoryId }: { categoryId: string }) {
+  const {
+    data: transactions,
+    hasNextPage,
+    fetchNextPage,
+  } = useSuspenseInfiniteQuery(transactionsQueryOptions({ categoryId }));
+
+  return (
+    <TransactionList
+      empty={<EmpltyTransactionList className="px-2!" cta={false} />}
+      dataLength={transactions.length}
+      next={fetchNextPage}
+      hasMore={hasNextPage}
+      loader={<p className="text-xs text-muted-foreground text-center">Cargando...</p>}
+      endMessage={
+        <p className="text-xs text-muted-foreground text-center">No hay más transacciones</p>
+      }
+    >
+      {transactions.map((group) => (
+        <TransactionGroup date={group.date} key={group.date}>
+          {group.transactions?.map((transaction) => (
+            <CategoryHistoryItem key={transaction.id} transaction={transaction} />
+          ))}
+        </TransactionGroup>
+      ))}
+    </TransactionList>
+  );
+}
 
 export function CategoryItem({ category }: { category: Category }) {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -100,6 +145,7 @@ export function CategoryItem({ category }: { category: Category }) {
           <Separator className="my-2" />
           <div className="px-4">
             <h6 className="font-medium text-foreground text-sm">Transacciones recientes</h6>
+            <CategoryHistory categoryId={category.id} />
           </div>
         </SheetContent>
       </Sheet>

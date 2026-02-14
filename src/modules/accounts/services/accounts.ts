@@ -6,6 +6,7 @@ export class Accounts {
     const { data: accounts } = await supabase
       .from('accounts')
       .select('*, bank:bank_list(id,name,logo)')
+      .order('balance', { ascending: false })
       .throwOnError();
     const total = accounts.reduce((t, a) => t + a.balance, 0);
     return { accounts, total };
