@@ -6,23 +6,17 @@ import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
+import { Field, FieldGroup } from '@/components/ui/field';
 import { useAppForm } from '@/hooks/form';
 import { Auth } from '@/modules/auth/services/auth';
 import { authQueryOptions } from '@/modules/auth/query-options/auth';
 import { InputGroupAddon, InputGroupButton } from '@/components/ui/input-group';
 
-const signupSchema = z
-  .object({
-    name: z.string(),
-    email: z.email(),
-    password: z.string().min(8),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Las contraseñas no coinciden',
-    path: ['confirmPassword'],
-  });
+const signupSchema = z.object({
+  name: z.string(),
+  email: z.email(),
+  password: z.string().min(8),
+});
 
 export function SignupForm() {
   const router = useRouter();
@@ -52,7 +46,6 @@ export function SignupForm() {
       name: '',
       email: '',
       password: '',
-      confirmPassword: '',
     },
     validators: {
       onSubmit: signupSchema,
@@ -112,20 +105,7 @@ export function SignupForm() {
               </field.TextField>
             )}
           />
-          <Field>
-            <form.AppField
-              name="confirmPassword"
-              children={(field) => (
-                <field.TextField label="Confirmar contraseña" type="password">
-                  <InputGroupAddon align="inline-start">
-                    <LockIcon className="size-5" />
-                  </InputGroupAddon>
-                </field.TextField>
-              )}
-            />
-            <FieldDescription>Debe tener al menos 8 caracteres.</FieldDescription>
-          </Field>
-          <Field>
+          <Field className="pt-2">
             <form.AppForm>
               <form.SubmitButton>Crear Cuenta</form.SubmitButton>
             </form.AppForm>

@@ -48,7 +48,7 @@ export function ForgotPasswordForm() {
       }}
     >
       <FieldGroup>
-        <div className="space-y-4">
+        <div className="space-y-6">
           <form.AppField
             name="email"
             children={(field) => (
