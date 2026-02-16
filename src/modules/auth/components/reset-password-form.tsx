@@ -2,11 +2,12 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
-import { cn } from '@/lib/utils';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react';
+import { useState } from 'react';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
 import { Auth } from '@/modules/auth/services/auth';
 import { useAppForm } from '@/hooks/form';
+import { InputGroupAddon, InputGroupButton } from '@/components/ui/input-group';
 
 const resetPasswordSchema = z
   .object({
@@ -18,8 +19,10 @@ const resetPasswordSchema = z
     path: ['confirmPassword'],
   });
 
-export function ResetPasswordForm({ className, ...props }: React.ComponentProps<'div'>) {
+export function ResetPasswordForm() {
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const resetPassword = useMutation({
     mutationFn: ({ password }: { password: string }) => Auth.resetPassword({ password }),
@@ -46,49 +49,54 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
   });
 
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Nueva contraseña</CardTitle>
-          <CardDescription>Ingresa tu nueva contraseña</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              form.handleSubmit();
-            }}
-          >
-            <FieldGroup>
-              <form.AppField
-                name="password"
-                children={(field) => (
-                  <field.TextField id="password" type="password" label="Contraseña" />
-                )}
-              />
-              <Field>
-                <form.AppField
-                  name="confirmPassword"
-                  children={(field) => (
-                    <field.TextField
-                      id="confirm-password"
-                      type="password"
-                      label="Confirmar contraseña"
-                    />
-                  )}
-                />
-                <FieldDescription>Debe tener al menos 8 caracteres.</FieldDescription>
-              </Field>
-              <Field>
-                <form.AppForm>
-                  <form.SubmitButton>Cambiar contraseña</form.SubmitButton>
-                </form.AppForm>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+    >
+      <FieldGroup>
+        <div className="space-y-4">
+          <form.AppField
+            name="password"
+            children={(field) => (
+              <field.TextField label="Contraseña" type={showPassword ? 'text' : 'password'}>
+                <InputGroupAddon align="inline-start">
+                  <LockIcon className="size-5" />
+                </InputGroupAddon>
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? (
+                      <EyeIcon className="size-5" />
+                    ) : (
+                      <EyeOffIcon className="size-5" />
+                    )}
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </field.TextField>
+            )}
+          />
+          <Field>
+            <form.AppField
+              name="confirmPassword"
+              children={(field) => (
+                <field.TextField label="Confirmar contraseña" type="password">
+                  <InputGroupAddon align="inline-start">
+                    <LockIcon className="size-5" />
+                  </InputGroupAddon>
+                </field.TextField>
+              )}
+            />
+            <FieldDescription>Debe tener al menos 8 caracteres.</FieldDescription>
+          </Field>
+          <Field>
+            <form.AppForm>
+              <form.SubmitButton>Cambiar contraseña</form.SubmitButton>
+            </form.AppForm>
+          </Field>
+        </div>
+      </FieldGroup>
+    </form>
   );
 }

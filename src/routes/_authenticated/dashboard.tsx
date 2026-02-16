@@ -11,12 +11,14 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { DashboardLayout } from '@/components/dashboard-layout';
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   component: Dashboard,
 });
 
 function Dashboard() {
+  return <DashboardLayout />;
   const matches = useMatches();
 
   const matchesWithCrumbs = matches
