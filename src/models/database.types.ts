@@ -410,6 +410,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_balance_summary:
+        | {
+            Args: {
+              p_account_id?: string
+              p_date_from?: string
+              p_date_to?: string
+            }
+            Returns: {
+              balance: number
+              expenses: number
+              income: number
+            }[]
+          }
+        | {
+            Args: {
+              p_account_id?: string
+              p_date_from?: string
+              p_date_to?: string
+              p_user_id: string
+            }
+            Returns: {
+              balance: number
+              expenses: number
+              income: number
+            }[]
+          }
       get_transactions_by_category: {
         Args: {
           p_month?: number

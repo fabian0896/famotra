@@ -1,5 +1,6 @@
+import { Suspense } from 'react';
 import { ArrowRightLeftIcon, MinusIcon, PlusIcon } from 'lucide-react';
-import { ResumeCard } from '../components/resume-card';
+import { ResumeCard, ResumeCardSkeleton } from '../components/resume-card';
 import { QuickActionButton, QuickActions } from '../components/quick-actions';
 import { RecentTransactions } from '../components/recent-transactions';
 import { Content, Header } from '@/components/dashboard-layout';
@@ -10,7 +11,9 @@ export function HomePage() {
       <Header title="Famotra" />
 
       <Content className="space-y-5">
-        <ResumeCard />
+        <Suspense fallback={<ResumeCardSkeleton />}>
+          <ResumeCard />
+        </Suspense>
 
         <QuickActions>
           <QuickActionButton label="Ingreso" variant="income">

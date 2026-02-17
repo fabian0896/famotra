@@ -10,4 +10,5 @@ export const QueryKeys = {
   SHORTCUTS_CARDS: 'shortcuts-cards',
   SHORTCUTS_MERCHANTS: 'shortcuts-merchants',
   USERS_LIST: 'users-list',
+  BALANCE_SUMMARY: 'balance-summary',
 } as const;

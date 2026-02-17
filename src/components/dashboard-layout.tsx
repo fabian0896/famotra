@@ -6,7 +6,7 @@ const navItems = [
   { to: '/dashboard', icon: HomeIcon, label: 'Home' },
   { to: '/dashboard/categories', icon: LayoutDashboardIcon, label: 'Categorias' },
   { to: '/dashboard/accounts', icon: WalletIcon, label: 'Cuentas' },
-  { to: '/dashboard/settings', icon: MenuIcon, label: 'Más' },
+  { to: '/dashboard/settings', icon: MenuIcon, label: 'Menu' },
 ] as const;
 
 function NavItem({
@@ -22,7 +22,10 @@ function NavItem({
   const isActive = matchRoute({ to, fuzzy: to !== '/dashboard' });
 
   return (
-    <Link to={to} className="w-[52px] flex gap-1 items-center justify-center flex-col">
+    <Link
+      to={to}
+      className="w-[52px] flex gap-1 items-center justify-center flex-col rounded-lg px-2 py-1"
+    >
       <Icon className={cn('size-[22px]', isActive ? 'text-primary' : 'text-muted-foreground')} />
       <span
         className={cn(
@@ -40,7 +43,7 @@ function AddButton() {
   return (
     <Link
       to="/dashboard/transactions"
-      className="size-14 grid place-items-center bg-linear-to-br from-primary to-primary/60 rounded-full shadow-2xl shadow-primary/60"
+      className="size-16 grid place-items-center bg-linear-to-br from-primary to-primary/60 rounded-full shadow-2xl shadow-primary/60"
     >
       <PlusIcon className="text-primary-foreground size-[26px] stroke-3" />
     </Link>
@@ -76,14 +79,16 @@ export function BottomNav() {
   const [left, right] = [navItems.slice(0, 2), navItems.slice(2)];
 
   return (
-    <footer className="bg-card fixed bottom-0 inset-x-0 border-t border-border flex justify-between items-center px-4 py-2">
-      {left.map((item) => (
-        <NavItem key={item.to} {...item} />
-      ))}
-      <AddButton />
-      {right.map((item) => (
-        <NavItem key={item.to} {...item} />
-      ))}
+    <footer className="fixed bottom-0 inset-x-0 pb-4 px-4">
+      <div className="bg-card border border-border rounded-full flex justify-between items-center px-4 h-[58px]">
+        {left.map((item) => (
+          <NavItem key={item.to} {...item} />
+        ))}
+        <AddButton />
+        {right.map((item) => (
+          <NavItem key={item.to} {...item} />
+        ))}
+      </div>
     </footer>
   );
 }
