@@ -3,6 +3,7 @@ import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { tv } from 'tailwind-variants';
 import { ArrowRightIcon } from 'lucide-react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import type { Transaction } from '@/modules/transactions/models/transactions.models';
 import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
 import { FormattedMoneyTransaction } from '@/components/formatted-money';
@@ -71,7 +72,7 @@ export function RecentTransactionsSkeleton({ className }: React.ComponentProps<'
   return (
     <div className={className}>
       <div className="flex justify-between items-center">
-        <Skeleton className="h-7 w-52" />
+        <Skeleton className="h-7 w-[93px]" />
         <Skeleton className="h-5 w-20" />
       </div>
       <ul className="rounded-2xl bg-card mt-4">
@@ -91,6 +92,7 @@ export function RecentTransactionsSkeleton({ className }: React.ComponentProps<'
 }
 
 export function RecentTransactions({ className }: React.ComponentProps<'div'>) {
+  const [parent] = useAutoAnimate();
   const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ page: 1, pageSize: 10 }));
   return (
     <div className={className}>
@@ -98,7 +100,7 @@ export function RecentTransactions({ className }: React.ComponentProps<'div'>) {
         <h6 className="text-xl font-bold text-foreground">Recientes</h6>
         <button className="text-sm font-medium text-primary hover:underline">Ver todas</button>
       </div>
-      <ul className="rounded-2xl bg-card mt-4">
+      <ul ref={parent} className="rounded-2xl bg-card mt-4">
         {data.map((transaction) => (
           <TransactionResumeItem key={transaction.id} transaction={transaction} />
         ))}
