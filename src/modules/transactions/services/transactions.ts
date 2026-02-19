@@ -58,11 +58,11 @@ export class Transactions {
         `
     );
 
-    if (filters?.dateFrom) {
-      query = query.gte('date', filters.dateFrom);
+    if (filters?.from) {
+      query = query.gte('date', filters.from);
     }
-    if (filters?.dateTo) {
-      query = query.lte('date', filters.dateTo);
+    if (filters?.to) {
+      query = query.lte('date', filters.to);
     }
     if (filters?.categoryId) {
       query = query.eq('category_id', filters.categoryId);
