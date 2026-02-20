@@ -1,6 +1,4 @@
 import { ArrowRightIcon, ArrowRightLeftIcon, Edit2Icon, Trash2Icon } from 'lucide-react';
-import { es } from 'date-fns/locale';
-import { format } from 'date-fns';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { sileo } from 'sileo';
@@ -33,6 +31,7 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { QueryKeys } from '@/constants/query-keys';
 import { formatError } from '@/lib/format-error';
+import { LocalDateFormat } from '@/components/local-date-format';
 
 function DeleteConfirmationDialog({
   onConfirm,
@@ -71,16 +70,20 @@ function TransferDetails({ transaction }: { transaction: Transaction }) {
     <div className="bg-muted p-3 rounded-2xl flex gap-3 items-center">
       <div className="flex-1 flex flex-col justify-center items-center gap-1.5">
         <p className="text-[12px] text-muted-foreground font-medium">Origen</p>
-        <div className="size-10 rounded-2xl bg-secondary overflow-hidden">
-          <img src={transaction.account?.bank?.logo} className="w-full h-full object-cover" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground text-center">
-            {transaction.account?.name}
-          </p>
-          <p className="text-[12px] text-muted-foreground font-medium text-center">
-            {transaction.account?.bank?.name}
-          </p>
+        <AccountIcon account={transaction.account} className="size-10 rounded-2xl bg-secondary" />
+        <div className="flex flex-col gap-0.5">
+          <AccountName
+            account={transaction.account}
+            as="p"
+            part="account"
+            className="text-sm font-semibold text-foreground text-center"
+          />
+          <AccountName
+            account={transaction.account}
+            as="p"
+            part="bank"
+            className="text-[12px] text-muted-foreground font-medium text-center"
+          />
         </div>
       </div>
       <div className="size-8 rounded-full bg-primary grid place-items-center">
@@ -88,16 +91,23 @@ function TransferDetails({ transaction }: { transaction: Transaction }) {
       </div>
       <div className="flex-1 flex flex-col justify-center items-center gap-1.5">
         <p className="text-[12px] text-muted-foreground font-medium">Destino</p>
-        <div className="size-10 rounded-2xl bg-secondary overflow-hidden">
-          <img src={transaction.destination?.bank?.logo} className="w-full h-full object-cover" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground text-center">
-            {transaction.destination?.name}
-          </p>
-          <p className="text-[12px] text-muted-foreground font-medium text-center">
-            {transaction.destination?.bank?.name}
-          </p>
+        <AccountIcon
+          account={transaction.destination}
+          className="size-10 rounded-2xl bg-secondary"
+        />
+        <div className="flex flex-col gap-0.5">
+          <AccountName
+            account={transaction.destination}
+            as="p"
+            part="account"
+            className="text-sm font-semibold text-foreground text-center"
+          />
+          <AccountName
+            account={transaction.destination}
+            as="p"
+            part="bank"
+            className="text-[12px] text-muted-foreground font-medium text-center"
+          />
         </div>
       </div>
     </div>
@@ -132,9 +142,6 @@ export function TransactionDetail({
     },
   });
 
-  const localDate = `${transaction.date}T12:00:00`;
-  const date = format(localDate, 'MMMM d, yyyy', { locale: es });
-
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
@@ -164,16 +171,16 @@ export function TransactionDetail({
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <p className="text-sm text-muted-foreground font-medium">Fecha</p>
-              <p className="text-sm text-foreground font-semibold first-letter:uppercase lowercase">
-                {date}
-              </p>
+              <LocalDateFormat className="text-sm text-foreground font-semibold first-letter:uppercase lowercase">
+                {transaction.date}
+              </LocalDateFormat>
             </div>
             {transaction.transaction_type !== 'transfer' && (
               <div className="flex justify-between items-center">
                 <p className="text-sm text-muted-foreground font-medium">Cuenta</p>
                 <div className="text-sm text-foreground font-semibold flex items-center gap-2">
                   <AccountIcon className="size-5 rounded" account={transaction.account} />
-                  <AccountName account={transaction.account} />
+                  <AccountName as="p" account={transaction.account} />
                 </div>
               </div>
             )}
@@ -190,6 +197,12 @@ export function TransactionDetail({
                 </span>
               )}
             </div>
+            {transaction.card && (
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-muted-foreground font-medium">Tarjeta</p>
+                <p className="text-sm text-foreground font-semibold">{transaction.card.name}</p>
+              </div>
+            )}
             <div className="flex justify-between items-center">
               <p className="text-sm text-muted-foreground font-medium">Notas</p>
               <p className="text-sm text-foreground font-semibold">{transaction.description}</p>

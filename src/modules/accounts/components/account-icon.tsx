@@ -1,6 +1,7 @@
 import { AlertTriangleIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import { ACOUNTS_ICONS } from '../constants/accounts-icons';
+import type { ElementType } from 'react';
 import type { Account } from '../models/accounts.models';
 import type React from 'react';
 import type { TransactionAccount } from '@/modules/transactions/models/transactions.models';
@@ -46,10 +47,22 @@ export function AccountIcon({
   );
 }
 
-export function AccountName({ account }: { account: Account | TransactionAccount | null }) {
+export function AccountName<T extends ElementType = 'span'>({
+  account,
+  as,
+  part = 'full',
+  ...props
+}: {
+  part?: 'full' | 'bank' | 'account';
+  account: Account | TransactionAccount | null;
+  as?: T;
+} & React.ComponentProps<T>) {
+  const Tag = as ?? 'span';
   const name = useMemo(() => {
     if (!account) return 'Unknown Account';
-    return [account.bank?.name, account.name].filter(Boolean).join(' - ');
-  }, [account]);
-  return <span>{name}</span>;
+    if (part === 'bank') return account.bank?.name ?? 'Custom';
+    if (part === 'account') return account.name;
+    return [account.name, account.bank?.name].filter(Boolean).join(' - ');
+  }, [account, part]);
+  return <Tag {...props}>{name}</Tag>;
 }

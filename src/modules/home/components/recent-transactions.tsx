@@ -1,6 +1,4 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { es } from 'date-fns/locale';
-import { format } from 'date-fns';
 import { tv } from 'tailwind-variants';
 import { ArrowRightIcon } from 'lucide-react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -10,41 +8,21 @@ import { FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionDetail } from '@/modules/transactions/components/transaction-detail';
 import { CategoryIcon } from '@/modules/categories/components/category-icon';
+import { LocalDateFormat } from '@/components/local-date-format';
 
-const item = tv({
-  slots: {
-    description: 'text-sm font-semibold text-foreground mb-0.5 line-clamp-1',
-    amount: 'text-sm font-bold',
-  },
+const description = tv({
+  base: 'text-sm font-semibold text-foreground mb-0.5 line-clamp-1',
   variants: {
-    type: {
-      income: {
-        amount: 'text-green-400',
-      },
-      expense: {
-        amount: 'text-red-400',
-      },
-      transfer: {
-        amount: 'text-blue-400',
-      },
-    },
     pending: {
-      true: {
-        description: 'text-amber-500',
-      },
+      true: 'text-amber-500',
     },
   },
 });
 
 function TransactionResumeItem({ transaction }: { transaction: Transaction }) {
-  const localDate = `${transaction.date}T12:00:00`;
-  const date = format(localDate, "d 'de' MMMM", { locale: es });
-
   const pending =
     transaction.transaction_type !== 'transfer' &&
     (!transaction.account_id || !transaction.category_id);
-
-  const clx = item({ type: transaction.transaction_type, pending });
 
   return (
     <TransactionDetail transaction={transaction}>
@@ -52,8 +30,13 @@ function TransactionResumeItem({ transaction }: { transaction: Transaction }) {
         <button className="p-3.5 flex gap-3.5 items-center w-full text-left transition-all active:bg-muted rounded-2xl overflow-hidden">
           <CategoryIcon className="size-11 rounded-xl text-sm" transaction={transaction} />
           <div className="flex-1">
-            <p className={clx.description()}>{transaction.description}</p>
-            <p className="text-xs text-muted-foreground font-normal">{date}</p>
+            <p className={description({ pending })}>{transaction.description}</p>
+            <LocalDateFormat
+              formatStr="d 'de' MMMM"
+              className="text-xs text-muted-foreground font-normal"
+            >
+              {transaction.date}
+            </LocalDateFormat>
           </div>
           <div>
             <FormattedMoneyTransaction
