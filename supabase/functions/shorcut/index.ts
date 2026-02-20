@@ -158,7 +158,7 @@ app.post(
       .insert({
         user_id: token.user_id,
         description: data.description || 'Shorcut transaction',
-        category_id: data.category_id,
+        category_id: data.category_id || null,
         account_id: data.account_id,
         amount: amount,
         transaction_type: data.type,
