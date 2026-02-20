@@ -16,7 +16,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
-import { AccountIcon } from '@/modules/accounts/components/account-icon';
+import { AccountIcon, AccountName } from '@/modules/accounts/components/account-icon';
 import { CategoryIcon } from '@/modules/categories/components/category-icon';
 import {
   AlertDialog,
@@ -172,10 +172,8 @@ export function TransactionDetail({
               <div className="flex justify-between items-center">
                 <p className="text-sm text-muted-foreground font-medium">Cuenta</p>
                 <div className="text-sm text-foreground font-semibold flex items-center gap-2">
-                  <AccountIcon className="w-5 rounded" account={transaction.account} />
-                  <p>
-                    {transaction.account?.bank?.name} - {transaction.account?.name}
-                  </p>
+                  <AccountIcon className="size-5 rounded" account={transaction.account} />
+                  <AccountName account={transaction.account} />
                 </div>
               </div>
             )}

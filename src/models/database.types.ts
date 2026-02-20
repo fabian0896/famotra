@@ -23,7 +23,7 @@ export type Database = {
           custom_bank_name: string | null
           id: string
           name: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           balance?: number
@@ -33,7 +33,7 @@ export type Database = {
           custom_bank_name?: string | null
           id?: string
           name: string
-          user_id?: string | null
+          user_id?: string
         }
         Update: {
           balance?: number
@@ -43,7 +43,7 @@ export type Database = {
           custom_bank_name?: string | null
           id?: string
           name?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {

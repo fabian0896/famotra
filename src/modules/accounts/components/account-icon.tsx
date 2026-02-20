@@ -1,4 +1,5 @@
 import { AlertTriangleIcon } from 'lucide-react';
+import { useMemo } from 'react';
 import { ACOUNTS_ICONS } from '../constants/accounts-icons';
 import type { Account } from '../models/accounts.models';
 import type React from 'react';
@@ -43,4 +44,12 @@ export function AccountIcon({
       <Icon className="w-[60%] h-[60%]" />
     </div>
   );
+}
+
+export function AccountName({ account }: { account: Account | TransactionAccount | null }) {
+  const name = useMemo(() => {
+    if (!account) return 'Unknown Account';
+    return [account.bank?.name, account.name].filter(Boolean).join(' - ');
+  }, [account]);
+  return <span>{name}</span>;
 }
