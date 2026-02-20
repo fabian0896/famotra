@@ -12,10 +12,11 @@ export const CreateTransactionSchema = z.object({
 
 export const CreateTransactionManualSchema = z.object({
   amount: z.number(),
-  category_id: z.uuid(),
+  category_id: z.string().optional(),
   account_id: z.uuid(),
   description: z.string().optional(),
   type: z.union([z.literal('expense'), z.literal('income'), z.literal('transfer')]),
+  destination_account_id: z.string().optional(),
 });
 
 export const UpdateTransactionSchema = z.object({
