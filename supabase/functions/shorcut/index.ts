@@ -152,6 +152,7 @@ app.post(
 
     const amount = data.type === 'expense' ? data.amount * -1 : data.amount;
 
+    const destination_account_id = data.destination_account_id || null;
     const { data: transaction } = await supabase
       .from('transactions')
       .insert({
@@ -161,6 +162,7 @@ app.post(
         account_id: data.account_id,
         amount: amount,
         transaction_type: data.type,
+        destination_account_id,
       })
       .select('id')
       .single()
