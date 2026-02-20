@@ -117,10 +117,7 @@ export function TransactionDetail({
   const remove = useMutation({
     mutationFn: Transactions.remove,
     onSuccess: () => {
-      sileo.success({
-        title: 'Transacción eliminada',
-        description: 'La transacción ha sido eliminada correctamente.',
-      });
+      sileo.success({ title: 'Transacción eliminada correctamente' });
       setIsOpen(false);
     },
     onError: (error) => {
