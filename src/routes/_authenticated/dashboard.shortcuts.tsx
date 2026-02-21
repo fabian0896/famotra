@@ -11,7 +11,6 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute('/_authenticated/dashboard/shortcuts')({
   validateSearch: searchSchema,
-  beforeLoad: () => ({ breadcrumb: 'Atajos' }),
   loader: async ({ context }) => {
     const queryClient = context.queryClient;
     await Promise.all([

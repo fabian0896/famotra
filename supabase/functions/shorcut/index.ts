@@ -117,30 +117,36 @@ app.post('/transaction', zValidator('json', CreateTransactionSchema), authMiddle
   );
 });
 
-app.patch('transaction', zValidator('json', UpdateTransactionSchema), authMiddleware, async (c) => {
-  const data = c.req.valid('json');
+app.patch(
+  '/transaction',
+  zValidator('json', UpdateTransactionSchema),
+  authMiddleware,
+  async (c) => {
+    const data = c.req.valid('json');
 
-  const { data: transaction } = await supabase
-    .from('transactions')
-    .update({
-      category_id: data.category_id || null,
-      account_id: data.account_id || null,
-    })
-    .eq('id', data.id)
-    .select()
-    .single()
-    .throwOnError();
+    console.log({ data });
+    const { data: transaction } = await supabase
+      .from('transactions')
+      .update({
+        category_id: data.category_id || null,
+        account_id: data.account_id || null,
+      })
+      .eq('id', data.id)
+      .select()
+      .single()
+      .throwOnError();
 
-  return c.json(
-    {
-      message: 'Transaction created successfully.',
-      id: transaction.id,
-      category_id: transaction.category_id,
-      account_id: transaction.account_id,
-    },
-    200
-  );
-});
+    return c.json(
+      {
+        message: 'Transaction created successfully.',
+        id: transaction.id,
+        category_id: transaction.category_id,
+        account_id: transaction.account_id,
+      },
+      200
+    );
+  }
+);
 
 app.post(
   '/manual',
@@ -152,6 +158,7 @@ app.post(
 
     const amount = data.type === 'expense' ? data.amount * -1 : data.amount;
 
+    console.log({ data });
     const { data: transaction } = await supabase
       .from('transactions')
       .insert({

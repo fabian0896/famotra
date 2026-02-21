@@ -34,7 +34,7 @@ export function CategoryIcon({
     <div
       {...props}
       className={cn(
-        'bg-amber-600/15 text-amber-400 [&_svg]:size-[36%] grid place-items-center',
+        'bg-amber-600/15 text-amber-400 [&_svg]:size-[40%] grid place-items-center',
         className
       )}
     >

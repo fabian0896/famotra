@@ -1,3 +1,4 @@
+import type { DateRange } from '@/hooks/use-date-range';
 import type {
   Category,
   CategoryDelete,
@@ -60,8 +61,20 @@ export class Categories {
     return category;
   }
 
-  static async categoryResume() {
-    const { data } = await supabase.rpc('get_transactions_by_category').throwOnError();
+  static async categoryResume({
+    type = 'expense',
+    range,
+  }: {
+    type: CategoryTypes;
+    range: DateRange;
+  }) {
+    const { data } = await supabase
+      .rpc('get_categories_resume', {
+        p_type: type,
+        p_start_date: range.start,
+        p_end_date: range.end,
+      })
+      .throwOnError();
     return data;
   }
 }

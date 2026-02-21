@@ -1,43 +1,43 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { categoriesQueryOptions } from '../query-options/categories';
-import { CategoryItem } from '../components/category-item';
-import { CreateEditCategoryDialog } from '../components/create-edit-category';
-import { CategoryList } from '../components/category-list';
-import { AddCategotyButton } from '../components/add-category-button';
+import { Suspense, useState } from 'react';
+import { CategoryList, CategoryListSkeleton } from '../components/category-list';
+import type { CategoryTypes } from '../models/categories.models';
+import type { DateRange } from '@/hooks/use-date-range';
+import { Content, Header } from '@/components/dashboard-layout';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DateSelector } from '@/components/date-selector';
+import { getDateRange } from '@/hooks/use-date-range';
 
 export function CategoriesPage() {
-  const { data: categories } = useSuspenseQuery(categoriesQueryOptions);
+  const [date, setDate] = useState(() => new Date());
+  const [rangeDate, setRangeDate] = useState<DateRange>(() => getDateRange());
+  const [type, setType] = useState<CategoryTypes>('expense');
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-        Categorías
-      </h1>
-      <div className="flex flex-col gap-10 mt-8">
-        <CategoryList
-          title="Categorías de Ingresos"
-          description="Gestiona tus categorías de ingresos aquí."
-        >
-          {categories.income.map((category) => (
-            <CategoryItem key={category.id} category={category} />
-          ))}
-          <CreateEditCategoryDialog type="income">
-            <AddCategotyButton />
-          </CreateEditCategoryDialog>
-        </CategoryList>
+    <>
+      <Header title="Categorías"></Header>
 
-        <CategoryList
-          title="Categorías de Gastos"
-          description="Gestiona tus categorías de gastos aquí."
-        >
-          {categories.expense.map((category) => (
-            <CategoryItem key={category.id} category={category} />
-          ))}
-          <CreateEditCategoryDialog type="expense">
-            <AddCategotyButton />
-          </CreateEditCategoryDialog>
-        </CategoryList>
-      </div>
-    </div>
+      <Content>
+        <DateSelector
+          className="mb-4"
+          value={date}
+          onValueChange={({ value, range }) => {
+            console.log({ range });
+            setDate(value);
+            setRangeDate(range);
+          }}
+        />
+
+        <Tabs value={type} onValueChange={(value) => setType(value as CategoryTypes)}>
+          <TabsList className="mt-2 mb-4">
+            <TabsTrigger value="expense">Gastos</TabsTrigger>
+            <TabsTrigger value="income">Ingresos</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <Suspense fallback={<CategoryListSkeleton />}>
+          <CategoryList range={rangeDate} type={type} />
+        </Suspense>
+      </Content>
+    </>
   );
 }

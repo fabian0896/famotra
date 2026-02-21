@@ -410,37 +410,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_balance_summary:
-        | {
-            Args: {
-              p_account_id?: string
-              p_date_from?: string
-              p_date_to?: string
-            }
-            Returns: {
-              balance: number
-              expenses: number
-              income: number
-            }[]
-          }
-        | {
-            Args: {
-              p_account_id?: string
-              p_date_from?: string
-              p_date_to?: string
-              p_user_id: string
-            }
-            Returns: {
-              balance: number
-              expenses: number
-              income: number
-            }[]
-          }
-      get_transactions_by_category: {
+      get_balance_summary: {
         Args: {
-          p_month?: number
+          p_account_id?: string
+          p_date_from?: string
+          p_date_to?: string
+        }
+        Returns: {
+          balance: number
+          expenses: number
+          income: number
+        }[]
+      }
+      get_categories_resume: {
+        Args: {
+          p_end_date?: string
+          p_start_date?: string
           p_type?: Database["public"]["Enums"]["category_type"]
-          p_year?: number
         }
         Returns: {
           average_amount: number

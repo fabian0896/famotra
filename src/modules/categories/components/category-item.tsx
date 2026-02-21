@@ -1,154 +1,25 @@
-import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { CATEGORY_TYPES } from '../models/categories.models';
-import { CreateEditCategoryDialog } from './create-edit-category';
-import { DeleteCategoryDialog } from './delete-category-dialog';
-import type { Category } from '../models/categories.models';
-import type { Transaction } from '@/modules/transactions/models/transactions.models';
-import { Categories } from '@/modules/categories/services/categories';
-import { categoriesQueryOptions } from '@/modules/categories/query-options/categories';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { Separator } from '@/components/ui/separator';
-import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
-import { TransactionGroup } from '@/modules/transactions/components/transaction-group';
-import {
-  EmpltyTransactionList,
-  TransactionList,
-} from '@/modules/transactions/components/transactions-list';
+import type { CategoryResume } from '../models/categories.models';
+import { FormattedMoney } from '@/components/formatted-money';
 
-function CategoryHistoryItem({ transaction }: { transaction: Transaction }) {
+export function CategoryItem({ category }: { category: CategoryResume }) {
   return (
-    <div>
-      <p>{transaction.description}</p>
-      <p>{transaction.amount}</p>
-    </div>
-  );
-}
-
-function CategoryHistory({ categoryId }: { categoryId: string }) {
-  const {
-    data: transactions,
-    hasNextPage,
-    fetchNextPage,
-  } = useSuspenseInfiniteQuery(transactionsQueryOptions({ categoryId }));
-
-  return (
-    <TransactionList
-      empty={<EmpltyTransactionList className="px-2!" cta={false} />}
-      dataLength={transactions.length}
-      next={fetchNextPage}
-      hasMore={hasNextPage}
-      loader={<p className="text-xs text-muted-foreground text-center">Cargando...</p>}
-      endMessage={
-        <p className="text-xs text-muted-foreground text-center">No hay más transacciones</p>
-      }
-    >
-      {transactions.map((group) => (
-        <TransactionGroup date={group.date} key={group.date}>
-          {group.transactions?.map((transaction) => (
-            <CategoryHistoryItem key={transaction.id} transaction={transaction} />
-          ))}
-        </TransactionGroup>
-      ))}
-    </TransactionList>
-  );
-}
-
-export function CategoryItem({ category }: { category: Category }) {
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
-  const queryClient = useQueryClient();
-
-  const remove = useMutation({
-    mutationFn: Categories.remove,
-    onSuccess: () => {
-      toast.info('Se eliminó la categoría correctamente');
-    },
-    onError: () => {
-      toast.error('Algo salió mal por favor intenta nuevamente');
-    },
-    onSettled: () => {
-      const queryKey = categoriesQueryOptions.queryKey;
-      queryClient.invalidateQueries({ queryKey });
-      setSheetOpen(false);
-    },
-  });
-
-  const handleOpenEdit = () => {
-    setSheetOpen(false);
-    setEditOpen(true);
-  };
-
-  return (
-    <li className="block h-full w-full">
-      <CreateEditCategoryDialog isOpen={editOpen} onOpenChange={setEditOpen} category={category} />
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetTrigger asChild>
-          <button className="w-full h-full group grow border border-border bg-card rounded-xl p-4 transition-all hover:border-primary hover:bg-primary/10">
-            <div className="bg-primary/20 rounded-full w-16 h-16 text-2xl flex items-center justify-center mx-auto mb-4">
-              <span className="group-hover:scale-110 group-hover:rotate-12 transition-all">
-                {category.icon}
-              </span>
-            </div>
-            <div className="flex flex-col items-center justify-center">
-              <p
-                title={category.name}
-                className="text-foreground text-center font-medium text-base group-hover:text-foreground line-clamp-1 mb-0.5"
-              >
-                {category.name}
-              </p>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5 text-center">
-                <span className="h-1.5 w-1.5 bg-green-600 rounded-full"></span>
-                Activa
-              </p>
-            </div>
-          </button>
-        </SheetTrigger>
-        <SheetContent>
-          <SheetHeader className="flex flex-col justify-center items-center">
-            <div className="w-22 h-22 rounded-full bg-primary-foreground flex items-center justify-center text-4xl border border-primary">
-              {category.icon}
-            </div>
-            <SheetTitle className="text-4xl font-semibold mt-1 text-center">
-              {category.name}
-            </SheetTitle>
-            <SheetDescription>
-              <Badge>{CATEGORY_TYPES[category.type]}</Badge>
-            </SheetDescription>
-          </SheetHeader>
-          <div className="flex gap-4 px-4">
-            <Button onClick={handleOpenEdit} className="flex-1" variant="outline">
-              Editar
-            </Button>
-            <DeleteCategoryDialog
-              onConfirm={() => remove.mutate({ id: category.id })}
-              category={category}
-            >
-              <Button disabled={remove.isPending} className="flex-1" variant="destructive">
-                {remove.isPending ? <Spinner /> : <Trash2 />}
-                Eliminar
-              </Button>
-            </DeleteCategoryDialog>
+    <li className="block h-full">
+      <button className="p-3.5 h-[76px] bg-card w-full rounded-2xl flex gap-3.5 items-center">
+        <div className="size-11 rounded-xl bg-primary/15 grid place-items-center text-base">
+          {category.category_icon}
+        </div>
+        <div className="flex-1 flex flex-col gap-1">
+          <div className="flex justify-between">
+            <p className="text-sm text-foreground font-semibold">{category.category_name}</p>
+            <p className="text-sm text-foreground font-bold text-right">
+              <FormattedMoney allowNegative={false} value={category.total_amount} />
+            </p>
           </div>
-          <Separator className="my-2" />
-          <div className="px-4">
-            <h6 className="font-medium text-foreground text-sm">Transacciones recientes</h6>
-            <CategoryHistory categoryId={category.id} />
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+            <div style={{ width: `${category.percentage}%` }} className="h-full bg-primary"></div>
           </div>
-        </SheetContent>
-      </Sheet>
+        </div>
+      </button>
     </li>
   );
 }

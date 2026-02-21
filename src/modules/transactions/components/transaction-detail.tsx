@@ -1,4 +1,10 @@
-import { ArrowRightIcon, ArrowRightLeftIcon, Edit2Icon, Trash2Icon } from 'lucide-react';
+import {
+  ArrowRightIcon,
+  ArrowRightLeftIcon,
+  Edit2Icon,
+  SettingsIcon,
+  Trash2Icon,
+} from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { sileo } from 'sileo';
@@ -178,10 +184,17 @@ export function TransactionDetail({
             {transaction.transaction_type !== 'transfer' && (
               <div className="flex justify-between items-center">
                 <p className="text-sm text-muted-foreground font-medium">Cuenta</p>
-                <div className="text-sm text-foreground font-semibold flex items-center gap-2">
-                  <AccountIcon className="size-5 rounded" account={transaction.account} />
-                  <AccountName as="p" account={transaction.account} />
-                </div>
+                {transaction.account ? (
+                  <div className="text-sm text-foreground font-semibold flex items-center gap-2">
+                    <AccountIcon className="size-5 rounded" account={transaction.account} />
+                    <AccountName as="p" account={transaction.account} />
+                  </div>
+                ) : (
+                  <span className="py-1 px-2.5 bg-amber-400/10 text-[12px] font-semibold text-amber-400 rounded-[6px] flex items-center">
+                    <SettingsIcon className="size-3.5 me-1.5" />
+                    Configurar cuenta
+                  </span>
+                )}
               </div>
             )}
             <div className="flex justify-between items-center">
@@ -191,9 +204,14 @@ export function TransactionDetail({
                   <ArrowRightLeftIcon className="size-3 stroke-3" />
                   Transferencia
                 </span>
-              ) : (
+              ) : transaction.category_id ? (
                 <span className="py-1 px-2.5 bg-primary/10 text-[12px] font-semibold text-primary rounded-[6px]">
                   {transaction.category?.icon} {transaction.category?.name || 'Sin categoría'}
+                </span>
+              ) : (
+                <span className="py-1 px-2.5 bg-amber-400/10 text-[12px] font-semibold text-amber-400 rounded-[6px] flex items-center">
+                  <SettingsIcon className="size-3.5 me-1.5" />
+                  Configurar categoría
                 </span>
               )}
             </div>
