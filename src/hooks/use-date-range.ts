@@ -26,12 +26,6 @@ export function getDateRange(
     end: formatISO(end, { representation: 'date' }),
   };
 }
-export const useDateRange = (date: Date = new Date()) => {
-  const { start, end } = getDateRange(date);
-  const month = format(date, 'MMMM', { locale: es });
-  const year = format(date, 'yyyy', { locale: es });
-  return { start, end, month, year };
-};
 
 function isDateRange(value: unknown): value is DateRange {
   if (!value) return false;
