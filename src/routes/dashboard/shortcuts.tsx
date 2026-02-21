@@ -9,7 +9,7 @@ const searchSchema = z.object({
   tab: z.string().optional(),
 });
 
-export const Route = createFileRoute('/_authenticated/dashboard/shortcuts')({
+export const Route = createFileRoute('/dashboard/shortcuts')({
   validateSearch: searchSchema,
   loader: async ({ context }) => {
     const queryClient = context.queryClient;

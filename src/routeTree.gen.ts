@@ -12,20 +12,19 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
-import { Route as AuthenticatedDashboardTransactionsRouteImport } from './routes/_authenticated/dashboard.transactions'
-import { Route as AuthenticatedDashboardShortcutsRouteImport } from './routes/_authenticated/dashboard.shortcuts'
-import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
-import { Route as AuthenticatedDashboardAccountsRouteImport } from './routes/_authenticated/dashboard.accounts'
-import { Route as AuthenticatedDashboardCategoriesIndexRouteImport } from './routes/_authenticated/dashboard.categories.index'
-import { Route as AuthenticatedDashboardCategoriesIdRouteImport } from './routes/_authenticated/dashboard.categories.$id'
-import { Route as AuthenticatedDashboardAdminUsersRouteImport } from './routes/_authenticated/dashboard.admin/users'
-import { Route as AuthenticatedDashboardAdminPageRouteImport } from './routes/_authenticated/dashboard.admin/page'
-import { Route as AuthenticatedDashboardAdminMerchantsRouteImport } from './routes/_authenticated/dashboard.admin/merchants'
-import { Route as AuthenticatedDashboardAdminBanksRouteImport } from './routes/_authenticated/dashboard.admin/banks'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardTransactionsRouteImport } from './routes/dashboard/transactions'
+import { Route as DashboardShortcutsRouteImport } from './routes/dashboard/shortcuts'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardAccountsRouteImport } from './routes/dashboard/accounts'
+import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
+import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
+import { Route as DashboardCategoriesIdRouteImport } from './routes/dashboard/categories/$id'
+import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard/admin/users'
+import { Route as DashboardAdminMerchantsRouteImport } from './routes/dashboard/admin/merchants'
+import { Route as DashboardAdminBanksRouteImport } from './routes/dashboard/admin/banks'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -42,8 +41,9 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -51,141 +51,126 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRoute,
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
-const AuthenticatedDashboardIndexRoute =
-  AuthenticatedDashboardIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardTransactionsRoute =
-  AuthenticatedDashboardTransactionsRouteImport.update({
-    id: '/transactions',
-    path: '/transactions',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardShortcutsRoute =
-  AuthenticatedDashboardShortcutsRouteImport.update({
-    id: '/shortcuts',
-    path: '/shortcuts',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardSettingsRoute =
-  AuthenticatedDashboardSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardAccountsRoute =
-  AuthenticatedDashboardAccountsRouteImport.update({
-    id: '/accounts',
-    path: '/accounts',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardCategoriesIndexRoute =
-  AuthenticatedDashboardCategoriesIndexRouteImport.update({
+const DashboardTransactionsRoute = DashboardTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardShortcutsRoute = DashboardShortcutsRouteImport.update({
+  id: '/shortcuts',
+  path: '/shortcuts',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAccountsRoute = DashboardAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCategoriesIndexRoute =
+  DashboardCategoriesIndexRouteImport.update({
     id: '/categories/',
     path: '/categories/',
-    getParentRoute: () => AuthenticatedDashboardRoute,
+    getParentRoute: () => DashboardRouteRoute,
   } as any)
-const AuthenticatedDashboardCategoriesIdRoute =
-  AuthenticatedDashboardCategoriesIdRouteImport.update({
-    id: '/categories/$id',
-    path: '/categories/$id',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardAdminUsersRoute =
-  AuthenticatedDashboardAdminUsersRouteImport.update({
-    id: '/admin/users',
-    path: '/admin/users',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardAdminPageRoute =
-  AuthenticatedDashboardAdminPageRouteImport.update({
-    id: '/admin/page',
-    path: '/admin/page',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardAdminMerchantsRoute =
-  AuthenticatedDashboardAdminMerchantsRouteImport.update({
-    id: '/admin/merchants',
-    path: '/admin/merchants',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
-const AuthenticatedDashboardAdminBanksRoute =
-  AuthenticatedDashboardAdminBanksRouteImport.update({
-    id: '/admin/banks',
-    path: '/admin/banks',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
+const DashboardCategoriesIdRoute = DashboardCategoriesIdRouteImport.update({
+  id: '/categories/$id',
+  path: '/categories/$id',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardAdminUsersRoute = DashboardAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => DashboardAdminRouteRoute,
+} as any)
+const DashboardAdminMerchantsRoute = DashboardAdminMerchantsRouteImport.update({
+  id: '/merchants',
+  path: '/merchants',
+  getParentRoute: () => DashboardAdminRouteRoute,
+} as any)
+const DashboardAdminBanksRoute = DashboardAdminBanksRouteImport.update({
+  id: '/banks',
+  path: '/banks',
+  getParentRoute: () => DashboardAdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
-  '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
-  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
-  '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
-  '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
-  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
-  '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
-  '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
-  '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
-  '/dashboard/categories/$id': typeof AuthenticatedDashboardCategoriesIdRoute
-  '/dashboard/categories': typeof AuthenticatedDashboardCategoriesIndexRoute
+  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/dashboard/accounts': typeof DashboardAccountsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/shortcuts': typeof DashboardShortcutsRoute
+  '/dashboard/transactions': typeof DashboardTransactionsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/admin/banks': typeof DashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
+  '/dashboard/admin/users': typeof DashboardAdminUsersRoute
+  '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
-  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
-  '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
-  '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
-  '/dashboard': typeof AuthenticatedDashboardIndexRoute
-  '/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
-  '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
-  '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
-  '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
-  '/dashboard/categories/$id': typeof AuthenticatedDashboardCategoriesIdRoute
-  '/dashboard/categories': typeof AuthenticatedDashboardCategoriesIndexRoute
+  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/dashboard/accounts': typeof DashboardAccountsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/shortcuts': typeof DashboardShortcutsRoute
+  '/dashboard/transactions': typeof DashboardTransactionsRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/admin/banks': typeof DashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
+  '/dashboard/admin/users': typeof DashboardAdminUsersRoute
+  '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
-  '/_authenticated/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
-  '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
-  '/_authenticated/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
-  '/_authenticated/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
-  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
-  '/_authenticated/dashboard/admin/banks': typeof AuthenticatedDashboardAdminBanksRoute
-  '/_authenticated/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
-  '/_authenticated/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
-  '/_authenticated/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
-  '/_authenticated/dashboard/categories/$id': typeof AuthenticatedDashboardCategoriesIdRoute
-  '/_authenticated/dashboard/categories/': typeof AuthenticatedDashboardCategoriesIndexRoute
+  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/dashboard/accounts': typeof DashboardAccountsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/shortcuts': typeof DashboardShortcutsRoute
+  '/dashboard/transactions': typeof DashboardTransactionsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/admin/banks': typeof DashboardAdminBanksRoute
+  '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
+  '/dashboard/admin/users': typeof DashboardAdminUsersRoute
+  '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/forgot-password'
     | '/register'
     | '/reset-password'
-    | '/dashboard'
+    | '/dashboard/admin'
     | '/dashboard/accounts'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
@@ -193,7 +178,6 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/admin/banks'
     | '/dashboard/admin/merchants'
-    | '/dashboard/admin/page'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
     | '/dashboard/categories'
@@ -203,6 +187,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/register'
     | '/reset-password'
+    | '/dashboard/admin'
     | '/dashboard/accounts'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
@@ -210,34 +195,32 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/admin/banks'
     | '/dashboard/admin/merchants'
-    | '/dashboard/admin/page'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
     | '/dashboard/categories'
   id:
     | '__root__'
     | '/'
-    | '/_authenticated'
+    | '/dashboard'
     | '/forgot-password'
     | '/register'
     | '/reset-password'
-    | '/_authenticated/dashboard'
-    | '/_authenticated/dashboard/accounts'
-    | '/_authenticated/dashboard/settings'
-    | '/_authenticated/dashboard/shortcuts'
-    | '/_authenticated/dashboard/transactions'
-    | '/_authenticated/dashboard/'
-    | '/_authenticated/dashboard/admin/banks'
-    | '/_authenticated/dashboard/admin/merchants'
-    | '/_authenticated/dashboard/admin/page'
-    | '/_authenticated/dashboard/admin/users'
-    | '/_authenticated/dashboard/categories/$id'
-    | '/_authenticated/dashboard/categories/'
+    | '/dashboard/admin'
+    | '/dashboard/accounts'
+    | '/dashboard/settings'
+    | '/dashboard/shortcuts'
+    | '/dashboard/transactions'
+    | '/dashboard/'
+    | '/dashboard/admin/banks'
+    | '/dashboard/admin/merchants'
+    | '/dashboard/admin/users'
+    | '/dashboard/categories/$id'
+    | '/dashboard/categories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -266,11 +249,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthenticatedRouteImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -280,148 +263,130 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/dashboard/': {
-      id: '/_authenticated/dashboard/'
+    '/dashboard/': {
+      id: '/dashboard/'
       path: '/'
       fullPath: '/dashboard/'
-      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/transactions': {
-      id: '/_authenticated/dashboard/transactions'
+    '/dashboard/transactions': {
+      id: '/dashboard/transactions'
       path: '/transactions'
       fullPath: '/dashboard/transactions'
-      preLoaderRoute: typeof AuthenticatedDashboardTransactionsRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardTransactionsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/shortcuts': {
-      id: '/_authenticated/dashboard/shortcuts'
+    '/dashboard/shortcuts': {
+      id: '/dashboard/shortcuts'
       path: '/shortcuts'
       fullPath: '/dashboard/shortcuts'
-      preLoaderRoute: typeof AuthenticatedDashboardShortcutsRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardShortcutsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/settings': {
-      id: '/_authenticated/dashboard/settings'
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
       path: '/settings'
       fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/accounts': {
-      id: '/_authenticated/dashboard/accounts'
+    '/dashboard/accounts': {
+      id: '/dashboard/accounts'
       path: '/accounts'
       fullPath: '/dashboard/accounts'
-      preLoaderRoute: typeof AuthenticatedDashboardAccountsRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardAccountsRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/categories/': {
-      id: '/_authenticated/dashboard/categories/'
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/categories/': {
+      id: '/dashboard/categories/'
       path: '/categories'
       fullPath: '/dashboard/categories'
-      preLoaderRoute: typeof AuthenticatedDashboardCategoriesIndexRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardCategoriesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/categories/$id': {
-      id: '/_authenticated/dashboard/categories/$id'
+    '/dashboard/categories/$id': {
+      id: '/dashboard/categories/$id'
       path: '/categories/$id'
       fullPath: '/dashboard/categories/$id'
-      preLoaderRoute: typeof AuthenticatedDashboardCategoriesIdRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardCategoriesIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
     }
-    '/_authenticated/dashboard/admin/users': {
-      id: '/_authenticated/dashboard/admin/users'
-      path: '/admin/users'
+    '/dashboard/admin/users': {
+      id: '/dashboard/admin/users'
+      path: '/users'
       fullPath: '/dashboard/admin/users'
-      preLoaderRoute: typeof AuthenticatedDashboardAdminUsersRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardAdminUsersRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
     }
-    '/_authenticated/dashboard/admin/page': {
-      id: '/_authenticated/dashboard/admin/page'
-      path: '/admin/page'
-      fullPath: '/dashboard/admin/page'
-      preLoaderRoute: typeof AuthenticatedDashboardAdminPageRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
-    }
-    '/_authenticated/dashboard/admin/merchants': {
-      id: '/_authenticated/dashboard/admin/merchants'
-      path: '/admin/merchants'
+    '/dashboard/admin/merchants': {
+      id: '/dashboard/admin/merchants'
+      path: '/merchants'
       fullPath: '/dashboard/admin/merchants'
-      preLoaderRoute: typeof AuthenticatedDashboardAdminMerchantsRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardAdminMerchantsRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
     }
-    '/_authenticated/dashboard/admin/banks': {
-      id: '/_authenticated/dashboard/admin/banks'
-      path: '/admin/banks'
+    '/dashboard/admin/banks': {
+      id: '/dashboard/admin/banks'
+      path: '/banks'
       fullPath: '/dashboard/admin/banks'
-      preLoaderRoute: typeof AuthenticatedDashboardAdminBanksRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      preLoaderRoute: typeof DashboardAdminBanksRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
     }
   }
 }
 
-interface AuthenticatedDashboardRouteChildren {
-  AuthenticatedDashboardAccountsRoute: typeof AuthenticatedDashboardAccountsRoute
-  AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
-  AuthenticatedDashboardShortcutsRoute: typeof AuthenticatedDashboardShortcutsRoute
-  AuthenticatedDashboardTransactionsRoute: typeof AuthenticatedDashboardTransactionsRoute
-  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
-  AuthenticatedDashboardAdminBanksRoute: typeof AuthenticatedDashboardAdminBanksRoute
-  AuthenticatedDashboardAdminMerchantsRoute: typeof AuthenticatedDashboardAdminMerchantsRoute
-  AuthenticatedDashboardAdminPageRoute: typeof AuthenticatedDashboardAdminPageRoute
-  AuthenticatedDashboardAdminUsersRoute: typeof AuthenticatedDashboardAdminUsersRoute
-  AuthenticatedDashboardCategoriesIdRoute: typeof AuthenticatedDashboardCategoriesIdRoute
-  AuthenticatedDashboardCategoriesIndexRoute: typeof AuthenticatedDashboardCategoriesIndexRoute
+interface DashboardAdminRouteRouteChildren {
+  DashboardAdminBanksRoute: typeof DashboardAdminBanksRoute
+  DashboardAdminMerchantsRoute: typeof DashboardAdminMerchantsRoute
+  DashboardAdminUsersRoute: typeof DashboardAdminUsersRoute
 }
 
-const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
-  {
-    AuthenticatedDashboardAccountsRoute: AuthenticatedDashboardAccountsRoute,
-    AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
-    AuthenticatedDashboardShortcutsRoute: AuthenticatedDashboardShortcutsRoute,
-    AuthenticatedDashboardTransactionsRoute:
-      AuthenticatedDashboardTransactionsRoute,
-    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
-    AuthenticatedDashboardAdminBanksRoute:
-      AuthenticatedDashboardAdminBanksRoute,
-    AuthenticatedDashboardAdminMerchantsRoute:
-      AuthenticatedDashboardAdminMerchantsRoute,
-    AuthenticatedDashboardAdminPageRoute: AuthenticatedDashboardAdminPageRoute,
-    AuthenticatedDashboardAdminUsersRoute:
-      AuthenticatedDashboardAdminUsersRoute,
-    AuthenticatedDashboardCategoriesIdRoute:
-      AuthenticatedDashboardCategoriesIdRoute,
-    AuthenticatedDashboardCategoriesIndexRoute:
-      AuthenticatedDashboardCategoriesIndexRoute,
-  }
-
-const AuthenticatedDashboardRouteWithChildren =
-  AuthenticatedDashboardRoute._addFileChildren(
-    AuthenticatedDashboardRouteChildren,
-  )
-
-interface AuthenticatedRouteChildren {
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
+const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
+  DashboardAdminBanksRoute: DashboardAdminBanksRoute,
+  DashboardAdminMerchantsRoute: DashboardAdminMerchantsRoute,
+  DashboardAdminUsersRoute: DashboardAdminUsersRoute,
 }
 
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
+const DashboardAdminRouteRouteWithChildren =
+  DashboardAdminRouteRoute._addFileChildren(DashboardAdminRouteRouteChildren)
+
+interface DashboardRouteRouteChildren {
+  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
+  DashboardAccountsRoute: typeof DashboardAccountsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardShortcutsRoute: typeof DashboardShortcutsRoute
+  DashboardTransactionsRoute: typeof DashboardTransactionsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardCategoriesIdRoute: typeof DashboardCategoriesIdRoute
+  DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
 }
 
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
+  DashboardAccountsRoute: DashboardAccountsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardShortcutsRoute: DashboardShortcutsRoute,
+  DashboardTransactionsRoute: DashboardTransactionsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardCategoriesIdRoute: DashboardCategoriesIdRoute,
+  DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,

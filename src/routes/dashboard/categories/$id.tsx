@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { CategoryDetails } from '@/modules/categories/pages/category-details';
 
-export const Route = createFileRoute('/_authenticated/dashboard/categories/$id')({
+export const Route = createFileRoute('/dashboard/categories/$id')({
   component: Index,
 });
 
