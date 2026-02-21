@@ -12,7 +12,7 @@ export const categoriesQueryOptions = queryOptions({
 
 export const cagoryResumeQueryOptions = (options: { type: CategoryTypes; range: DateRange }) => {
   return queryOptions({
-    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES_RESUME, options],
+    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES, QueryKeys.CATEGORIES_RESUME, options],
     queryFn: () => Categories.categoryResume(options),
     staleTime: Infinity,
   });

@@ -1,6 +1,7 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { Link } from '@tanstack/react-router';
 import { cagoryResumeQueryOptions } from '../query-options/categories';
 import type { CategoryResume, CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/hooks/use-date-range';
@@ -10,7 +11,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 export function CategoryItem({ category }: { category: CategoryResume }) {
   return (
     <li className="block h-full">
-      <button className="p-3.5 h-[76px] bg-card w-full rounded-2xl flex gap-3.5 items-center">
+      <Link
+        to="/dashboard/categories/$id"
+        params={{ id: category.category_id }}
+        className="p-3.5 h-[76px] bg-card w-full rounded-2xl flex gap-3.5 items-center"
+      >
         <div className="size-11 rounded-xl bg-primary/15 grid place-items-center text-base">
           {category.category_icon}
         </div>
@@ -28,7 +33,7 @@ export function CategoryItem({ category }: { category: CategoryResume }) {
             ></div>
           </div>
         </div>
-      </button>
+      </Link>
     </li>
   );
 }

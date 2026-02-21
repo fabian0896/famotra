@@ -19,8 +19,9 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardTransactionsRouteImport } from './routes/_authenticated/dashboard.transactions'
 import { Route as AuthenticatedDashboardShortcutsRouteImport } from './routes/_authenticated/dashboard.shortcuts'
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
-import { Route as AuthenticatedDashboardCategoriesRouteImport } from './routes/_authenticated/dashboard.categories'
 import { Route as AuthenticatedDashboardAccountsRouteImport } from './routes/_authenticated/dashboard.accounts'
+import { Route as AuthenticatedDashboardCategoriesIndexRouteImport } from './routes/_authenticated/dashboard.categories.index'
+import { Route as AuthenticatedDashboardCategoriesIdRouteImport } from './routes/_authenticated/dashboard.categories.$id'
 import { Route as AuthenticatedDashboardAdminUsersRouteImport } from './routes/_authenticated/dashboard.admin/users'
 import { Route as AuthenticatedDashboardAdminPageRouteImport } from './routes/_authenticated/dashboard.admin/page'
 import { Route as AuthenticatedDashboardAdminMerchantsRouteImport } from './routes/_authenticated/dashboard.admin/merchants'
@@ -79,16 +80,22 @@ const AuthenticatedDashboardSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
-const AuthenticatedDashboardCategoriesRoute =
-  AuthenticatedDashboardCategoriesRouteImport.update({
-    id: '/categories',
-    path: '/categories',
-    getParentRoute: () => AuthenticatedDashboardRoute,
-  } as any)
 const AuthenticatedDashboardAccountsRoute =
   AuthenticatedDashboardAccountsRouteImport.update({
     id: '/accounts',
     path: '/accounts',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardCategoriesIndexRoute =
+  AuthenticatedDashboardCategoriesIndexRouteImport.update({
+    id: '/categories/',
+    path: '/categories/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardCategoriesIdRoute =
+  AuthenticatedDashboardCategoriesIdRouteImport.update({
+    id: '/categories/$id',
+    path: '/categories/$id',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedDashboardAdminUsersRoute =
@@ -123,7 +130,6 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
-  '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
@@ -132,6 +138,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
   '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
   '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
+  '/dashboard/categories/$id': typeof AuthenticatedDashboardCategoriesIdRoute
+  '/dashboard/categories': typeof AuthenticatedDashboardCategoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -139,7 +147,6 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
-  '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
@@ -148,6 +155,8 @@ export interface FileRoutesByTo {
   '/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
   '/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
   '/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
+  '/dashboard/categories/$id': typeof AuthenticatedDashboardCategoriesIdRoute
+  '/dashboard/categories': typeof AuthenticatedDashboardCategoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -158,7 +167,6 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/dashboard/accounts': typeof AuthenticatedDashboardAccountsRoute
-  '/_authenticated/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/shortcuts': typeof AuthenticatedDashboardShortcutsRoute
   '/_authenticated/dashboard/transactions': typeof AuthenticatedDashboardTransactionsRoute
@@ -167,6 +175,8 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/admin/merchants': typeof AuthenticatedDashboardAdminMerchantsRoute
   '/_authenticated/dashboard/admin/page': typeof AuthenticatedDashboardAdminPageRoute
   '/_authenticated/dashboard/admin/users': typeof AuthenticatedDashboardAdminUsersRoute
+  '/_authenticated/dashboard/categories/$id': typeof AuthenticatedDashboardCategoriesIdRoute
+  '/_authenticated/dashboard/categories/': typeof AuthenticatedDashboardCategoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -177,7 +187,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/dashboard'
     | '/dashboard/accounts'
-    | '/dashboard/categories'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
     | '/dashboard/transactions'
@@ -186,6 +195,8 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/page'
     | '/dashboard/admin/users'
+    | '/dashboard/categories/$id'
+    | '/dashboard/categories'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,7 +204,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/dashboard/accounts'
-    | '/dashboard/categories'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
     | '/dashboard/transactions'
@@ -202,6 +212,8 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/page'
     | '/dashboard/admin/users'
+    | '/dashboard/categories/$id'
+    | '/dashboard/categories'
   id:
     | '__root__'
     | '/'
@@ -211,7 +223,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/dashboard'
     | '/_authenticated/dashboard/accounts'
-    | '/_authenticated/dashboard/categories'
     | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/shortcuts'
     | '/_authenticated/dashboard/transactions'
@@ -220,6 +231,8 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/admin/merchants'
     | '/_authenticated/dashboard/admin/page'
     | '/_authenticated/dashboard/admin/users'
+    | '/_authenticated/dashboard/categories/$id'
+    | '/_authenticated/dashboard/categories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -302,18 +315,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
-    '/_authenticated/dashboard/categories': {
-      id: '/_authenticated/dashboard/categories'
-      path: '/categories'
-      fullPath: '/dashboard/categories'
-      preLoaderRoute: typeof AuthenticatedDashboardCategoriesRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
-    }
     '/_authenticated/dashboard/accounts': {
       id: '/_authenticated/dashboard/accounts'
       path: '/accounts'
       fullPath: '/dashboard/accounts'
       preLoaderRoute: typeof AuthenticatedDashboardAccountsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/categories/': {
+      id: '/_authenticated/dashboard/categories/'
+      path: '/categories'
+      fullPath: '/dashboard/categories'
+      preLoaderRoute: typeof AuthenticatedDashboardCategoriesIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/categories/$id': {
+      id: '/_authenticated/dashboard/categories/$id'
+      path: '/categories/$id'
+      fullPath: '/dashboard/categories/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardCategoriesIdRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/dashboard/admin/users': {
@@ -349,7 +369,6 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardAccountsRoute: typeof AuthenticatedDashboardAccountsRoute
-  AuthenticatedDashboardCategoriesRoute: typeof AuthenticatedDashboardCategoriesRoute
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardShortcutsRoute: typeof AuthenticatedDashboardShortcutsRoute
   AuthenticatedDashboardTransactionsRoute: typeof AuthenticatedDashboardTransactionsRoute
@@ -358,13 +377,13 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardAdminMerchantsRoute: typeof AuthenticatedDashboardAdminMerchantsRoute
   AuthenticatedDashboardAdminPageRoute: typeof AuthenticatedDashboardAdminPageRoute
   AuthenticatedDashboardAdminUsersRoute: typeof AuthenticatedDashboardAdminUsersRoute
+  AuthenticatedDashboardCategoriesIdRoute: typeof AuthenticatedDashboardCategoriesIdRoute
+  AuthenticatedDashboardCategoriesIndexRoute: typeof AuthenticatedDashboardCategoriesIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
     AuthenticatedDashboardAccountsRoute: AuthenticatedDashboardAccountsRoute,
-    AuthenticatedDashboardCategoriesRoute:
-      AuthenticatedDashboardCategoriesRoute,
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardShortcutsRoute: AuthenticatedDashboardShortcutsRoute,
     AuthenticatedDashboardTransactionsRoute:
@@ -377,6 +396,10 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardAdminPageRoute: AuthenticatedDashboardAdminPageRoute,
     AuthenticatedDashboardAdminUsersRoute:
       AuthenticatedDashboardAdminUsersRoute,
+    AuthenticatedDashboardCategoriesIdRoute:
+      AuthenticatedDashboardCategoriesIdRoute,
+    AuthenticatedDashboardCategoriesIndexRoute:
+      AuthenticatedDashboardCategoriesIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =

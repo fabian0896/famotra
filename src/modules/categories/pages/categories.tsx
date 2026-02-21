@@ -21,7 +21,6 @@ export function CategoriesPage() {
           className="mb-4"
           value={date}
           onValueChange={({ value, range }) => {
-            console.log({ range });
             setDate(value);
             setRangeDate(range);
           }}
