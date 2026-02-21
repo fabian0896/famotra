@@ -6,21 +6,24 @@ import {
   TrendingUpIcon,
 } from 'lucide-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { categoryByIdOption, categoryDetailsOptions } from '../query-options/categories';
 import { CategoryIcon } from './category-icon';
 import type { DateRange } from '@/hooks/use-date-range';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getContrastColor } from '@/lib/get-contrast-color';
 import { Button } from '@/components/ui/button';
 import { FormattedMoney } from '@/components/formatted-money';
 
-function Budget({ budget, color }: { budget: boolean; color: string }) {
+function Budget({ budget = false, categoryId }: { categoryId: string; budget?: boolean }) {
+  const { data: category } = useSuspenseQuery(categoryByIdOption({ id: categoryId }));
   if (budget) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center w-full">
           <p className="text-sm font-medium text-muted-foreground">Budget: $1,500.00</p>
           <p
-            style={{ '--color': color } as React.CSSProperties}
+            style={{ '--color': category.color } as React.CSSProperties}
             className="text-sm font-semibold text-(--color)"
           >
             83% used
@@ -28,7 +31,7 @@ function Budget({ budget, color }: { budget: boolean; color: string }) {
         </div>
         <div className="w-full h-2 rounded-full bg-muted overflow-hidden">
           <div
-            style={{ width: '50%', '--color': color } as React.CSSProperties}
+            style={{ width: '50%', '--color': category.color } as React.CSSProperties}
             className="h-full bg-(--color) rounded-full"
           ></div>
         </div>
@@ -38,25 +41,35 @@ function Budget({ budget, color }: { budget: boolean; color: string }) {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-center text-sm font-medium text-muted-foreground">
-        No budget set for this category
+        Sin presupuesto para esta categoría
       </p>
       <Button
         style={
           {
-            '--color': color,
-            '--text-color': getContrastColor(color),
+            '--color': category.color,
+            '--text-color': getContrastColor(category.color),
           } as React.CSSProperties
         }
         className="h-[38px] rounded-[12px] bg-(--color) text-(--text-color) shadow-none"
       >
         <PlusIcon />
-        Set Budget
+        Establecer presupuesto
       </Button>
     </div>
   );
 }
 
-function PercentChange({ value, color }: { value: number | null; color: string }) {
+function PercentChange({
+  categoryId,
+  range,
+  color,
+}: {
+  categoryId: string;
+  range: DateRange;
+  color: string;
+}) {
+  const { data: details } = useSuspenseQuery(categoryDetailsOptions({ id: categoryId, range }));
+  const value = details.percentage_change;
   if (!value) {
     return (
       <div className="text-muted-foreground text-sm font-semibold text-center flex items-center justify-center gap-1.5">
@@ -94,6 +107,24 @@ function PercentChange({ value, color }: { value: number | null; color: string }
   }
 }
 
+function PercentChangeSkeleton() {
+  return (
+    <div className="flex items-center justify-center gap-1.5">
+      <Skeleton className="size-3.5 rounded-full shrink-0" />
+      <Skeleton className="h-4 w-40" />
+    </div>
+  );
+}
+
+function BudgetSkeleton() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-4 w-48 mx-auto" />
+      <Skeleton className="h-[38px] w-full rounded-[12px]" />
+    </div>
+  );
+}
+
 export function CategoryDetailsCard({
   month,
   year,
@@ -117,9 +148,13 @@ export function CategoryDetailsCard({
         <FormattedMoney value={details.total_amount} />
       </h2>
       {category.type === 'income' ? (
-        <PercentChange color={category.color} value={details.percentage_change} />
+        <Suspense fallback={<PercentChangeSkeleton />}>
+          <PercentChange color={category.color} categoryId={categoryId} range={range} />
+        </Suspense>
       ) : (
-        <Budget color={category.color} budget={true} />
+        <Suspense fallback={<BudgetSkeleton />}>
+          <Budget categoryId={categoryId} />
+        </Suspense>
       )}
       <p className="text-sm font-medium text-muted-foreground text-center first-letter:uppercase">
         {month} {year}

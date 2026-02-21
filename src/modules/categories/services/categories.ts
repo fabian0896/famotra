@@ -1,3 +1,4 @@
+import { formatISO, isSameMonth, parseISO } from 'date-fns';
 import type { DateRange } from '@/hooks/use-date-range';
 import type {
   Category,
@@ -79,11 +80,19 @@ export class Categories {
   }
 
   static async categoryDetails({ id, range }: { id: string; range: DateRange }) {
+    const p_start_date = range.start;
+    let p_end_date = range.end;
+
+    const isCurrentMonth = isSameMonth(parseISO(range.start), new Date());
+    if (isCurrentMonth) {
+      p_end_date = formatISO(new Date(), { representation: 'date' });
+    }
+
     const { data } = await supabase
       .rpc('get_category_detail', {
         p_category_id: id,
-        p_start_date: range.start,
-        p_end_date: range.end,
+        p_start_date: p_start_date,
+        p_end_date: p_end_date,
       })
       .throwOnError();
     return data[0];

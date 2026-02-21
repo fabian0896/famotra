@@ -26,11 +26,11 @@ export function DateSelector({
 
   const handlePrev = () => {
     const prev = subMonths(parseISO(range.start), 1);
-    setRange(getDateRange(prev, { fullMonth: true }));
+    setRange(getDateRange(prev));
   };
   const handleNext = () => {
     const next = addMonths(parseISO(range.start), 1);
-    setRange(getDateRange(next, { fullMonth: true }));
+    setRange(getDateRange(next));
   };
 
   return (
