@@ -1,9 +1,9 @@
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { addMonths, subMonths } from 'date-fns';
+import { addMonths, parseISO, subMonths } from 'date-fns';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import type { DateRange } from '@/hooks/use-date-range';
 import { cn } from '@/lib/utils';
-import { getDateRange, useDateRange } from '@/hooks/use-date-range';
+import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
 
 export function DateSelector({
   value,
@@ -12,20 +12,26 @@ export function DateSelector({
   className,
   ...props
 }: {
-  value?: Date;
-  defaultValue?: Date;
-  onValueChange?: (event: { value: Date; range: DateRange }) => void;
+  value?: DateRange;
+  defaultValue?: DateRange;
+  onValueChange?: (event: { range: DateRange }) => void;
 } & React.ComponentProps<'div'>) {
-  const [date, setDate] = useControllableState({
+  const [range, setRange] = useControllableState({
     prop: value,
-    defaultProp: defaultValue ?? new Date(),
-    onChange: (val) => onValueChange?.({ value: val, range: getDateRange(val) }),
+    defaultProp: defaultValue ?? getDateRange(),
+    onChange: (val) => onValueChange?.({ range: val }),
   });
 
-  const { month, year } = useDateRange(date);
+  const { month, year } = useMonthYear(range);
 
-  const handlePrev = () => setDate(subMonths(date, 1));
-  const handleNext = () => setDate(addMonths(date, 1));
+  const handlePrev = () => {
+    const prev = subMonths(parseISO(range.start), 1);
+    setRange(getDateRange(prev, { fullMonth: true }));
+  };
+  const handleNext = () => {
+    const next = addMonths(parseISO(range.start), 1);
+    setRange(getDateRange(next, { fullMonth: true }));
+  };
 
   return (
     <div {...props} className={cn('flex justify-between items-center', className)}>

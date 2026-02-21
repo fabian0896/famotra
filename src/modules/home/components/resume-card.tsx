@@ -2,12 +2,13 @@ import { ArrowDownLeftIcon, ArrowUpRightIcon } from 'lucide-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { resumeQueryOptions } from '../query-options/home-query-options';
 import { cn } from '@/lib/utils';
-import { useDateRange } from '@/hooks/use-date-range';
+import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
 import { FormattedMoney } from '@/components/formatted-money';
 
 export function ResumeCard({ className, ...props }: React.ComponentProps<'div'>) {
-  const { month, year, start, end } = useDateRange();
-  const { data } = useSuspenseQuery(resumeQueryOptions({ start, end }));
+  const range = getDateRange();
+  const { month, year } = useMonthYear(range);
+  const { data } = useSuspenseQuery(resumeQueryOptions(range));
   return (
     <div
       className={cn(
@@ -18,7 +19,7 @@ export function ResumeCard({ className, ...props }: React.ComponentProps<'div'>)
     >
       <div className="flex justify-between items-center">
         <h6 className="text-white text-sm font-medium">Total balance</h6>
-        <p className="font-mono text-sm text-white/70 tracking-wider">
+        <p className="font-mono text-sm text-white/70 tracking-wider first-letter:uppercase">
           {month} {year}
         </p>
       </div>

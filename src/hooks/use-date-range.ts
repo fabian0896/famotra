@@ -1,4 +1,4 @@
-import { format, formatISO, parseISO, startOfMonth } from 'date-fns';
+import { endOfMonth, format, formatISO, isSameMonth, parseISO, startOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export type DateRange = {
@@ -6,9 +6,21 @@ export type DateRange = {
   end: string;
 };
 
-export function getDateRange(date: Date = new Date()): DateRange {
+interface GetDateRangeOptions {
+  fullMonth?: boolean;
+}
+
+export function getDateRange(options?: GetDateRangeOptions): DateRange;
+export function getDateRange(date: Date, options?: GetDateRangeOptions): DateRange;
+export function getDateRange(
+  dateOrOptions?: Date | GetDateRangeOptions,
+  options?: GetDateRangeOptions
+): DateRange {
+  const date = dateOrOptions instanceof Date ? dateOrOptions : new Date();
+  const opts = dateOrOptions instanceof Date ? options : dateOrOptions;
   const start = startOfMonth(date);
-  const end = date;
+  const isCurrentMonth = isSameMonth(date, new Date());
+  const end = opts?.fullMonth ? (isCurrentMonth ? new Date() : endOfMonth(date)) : date;
   return {
     start: formatISO(start, { representation: 'date' }),
     end: formatISO(end, { representation: 'date' }),

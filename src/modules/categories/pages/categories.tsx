@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { formatISO, parseISO } from 'date-fns';
 import { CategoryList, CategoryListSkeleton } from '../components/category-list';
 import type { CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/hooks/use-date-range';
@@ -14,10 +13,11 @@ export function CategoriesPage() {
   const navigate = useNavigate();
   const {
     type = 'expense',
-    date = formatISO(new Date(), { representation: 'date' }),
     start = getDateRange().start,
     end = getDateRange().end,
   } = useSearch({ from: '/dashboard/categories/' });
+
+  const range = { start, end };
 
   const handleChangeType = (t: CategoryTypes) => {
     navigate({
@@ -27,11 +27,11 @@ export function CategoriesPage() {
     });
   };
 
-  const handleChangeRange = ({ value, range }: { value: Date; range: DateRange }) => {
+  const handleChangeRange = (event: { range: DateRange }) => {
     navigate({
       to: '.',
       replace: true,
-      search: (prev) => ({ ...prev, ...range, date: formatISO(value) }),
+      search: (prev) => ({ ...prev, ...event.range }),
     });
   };
 
@@ -47,7 +47,7 @@ export function CategoriesPage() {
       </Header>
 
       <Content>
-        <DateSelector className="mb-4" value={parseISO(date)} onValueChange={handleChangeRange} />
+        <DateSelector className="mb-4" value={range} onValueChange={handleChangeRange} />
 
         <Tabs value={type} onValueChange={(value) => handleChangeType(value as CategoryTypes)}>
           <TabsList className="mt-2 mb-4">
