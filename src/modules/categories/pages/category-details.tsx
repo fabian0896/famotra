@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Edit2Icon, Trash2Icon } from 'lucide-react';
 import { useSearch } from '@tanstack/react-router';
+import { Suspense } from 'react';
 import { categoryByIdOption } from '../query-options/categories';
 import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
@@ -29,9 +30,13 @@ export function CategoryDetails({ id }: { id: string }) {
       </Header>
 
       <Content>
-        <CategoryDetailsCard categoryId={id} month={month} year={year} range={{ start, end }} />
+        <Suspense fallback={<p>Cargando...</p>}>
+          <CategoryDetailsCard categoryId={id} month={month} year={year} range={{ start, end }} />
+        </Suspense>
         <div className="mt-5">
-          <CategoryTransactions range={{ start, end }} categoryId={id} />
+          <Suspense fallback={<p>Cargando...</p>}>
+            <CategoryTransactions range={{ start, end }} categoryId={id} />
+          </Suspense>
         </div>
       </Content>
     </>
