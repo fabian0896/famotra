@@ -7,7 +7,7 @@ import { FormattedMoney } from '@/components/formatted-money';
 
 export function ResumeCard({ className, ...props }: React.ComponentProps<'div'>) {
   const { month, year, start, end } = useDateRange();
-  const { data } = useSuspenseQuery(resumeQueryOptions({ from: start, to: end }));
+  const { data } = useSuspenseQuery(resumeQueryOptions({ start, end }));
   return (
     <div
       className={cn(
