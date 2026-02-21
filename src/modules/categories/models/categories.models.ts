@@ -17,6 +17,7 @@ export const CATEGORY_TYPES: Record<CategoryTypes, string> = {
 export type CategoryResume = {
   average_amount: number;
   category_icon: string;
+  category_color: string;
   category_id: string;
   category_name: string;
   category_type: 'income' | 'expense';

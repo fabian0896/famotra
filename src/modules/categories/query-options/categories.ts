@@ -10,6 +10,14 @@ export const categoriesQueryOptions = queryOptions({
   staleTime: Infinity,
 });
 
+export const categoryByIdOption = ({ id }: { id: string }) => {
+  return queryOptions({
+    queryKey: [QueryKeys.CATEGORIES, { id }],
+    queryFn: () => Categories.getById(id),
+    staleTime: Infinity,
+  });
+};
+
 export const cagoryResumeQueryOptions = (options: { type: CategoryTypes; range: DateRange }) => {
   return queryOptions({
     queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES, QueryKeys.CATEGORIES_RESUME, options],

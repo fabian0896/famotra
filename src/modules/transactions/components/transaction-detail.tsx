@@ -155,7 +155,7 @@ export function TransactionDetail({
         <div className="px-6 py-8 flex flex-col gap-4">
           <div className="flex flex-col gap-3">
             <CategoryIcon className="size-14 rounded-2xl mx-auto" transaction={transaction} />
-            <DrawerTitle className="text-2xl font-bold text-foreground text-center">
+            <DrawerTitle className="text-xl font-bold text-foreground text-center">
               {transaction.transaction_type === 'transfer' ? (
                 <span>{`Transferencia a ${transaction.destination?.name}`}</span>
               ) : (

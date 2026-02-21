@@ -29,7 +29,7 @@ function TransactionResumeItem({ transaction }: { transaction: Transaction }) {
       <li className="block">
         <button className="p-3.5 flex gap-3.5 items-center w-full text-left transition-all active:bg-muted rounded-2xl overflow-hidden">
           <CategoryIcon className="size-11 rounded-xl text-sm" transaction={transaction} />
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col">
             <p className={description({ pending })}>{transaction.description}</p>
             <LocalDateFormat
               formatStr="d 'de' MMMM"

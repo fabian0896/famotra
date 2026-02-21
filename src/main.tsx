@@ -8,6 +8,8 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 import { routeTree } from './routeTree.gen';
 
 import './styles.css';
+import '@fontsource-variable/dm-sans/wght.css';
+
 import reportWebVitals from './reportWebVitals.ts';
 import { ThemeProvider } from './components/theme-provider.tsx';
 

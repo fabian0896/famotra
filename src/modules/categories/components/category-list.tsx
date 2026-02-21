@@ -16,7 +16,10 @@ export function CategoryItem({ category }: { category: CategoryResume }) {
         params={{ id: category.category_id }}
         className="p-3.5 h-[76px] bg-card w-full rounded-2xl flex gap-3.5 items-center"
       >
-        <div className="size-11 rounded-xl bg-primary/15 grid place-items-center text-base">
+        <div
+          style={{ '--color': category.category_color } as React.CSSProperties}
+          className="size-11 rounded-xl bg-(--color)/15 grid place-items-center text-base"
+        >
           {category.category_icon}
         </div>
         <div className="flex-1 flex flex-col gap-1">
@@ -28,8 +31,13 @@ export function CategoryItem({ category }: { category: CategoryResume }) {
           </div>
           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
             <div
-              style={{ width: `${category.percentage}%` }}
-              className="h-full bg-primary rounded-full"
+              style={
+                {
+                  width: `${category.percentage}%`,
+                  '--color': category.category_color,
+                } as React.CSSProperties
+              }
+              className="h-full bg-(--color) rounded-full"
             ></div>
           </div>
         </div>

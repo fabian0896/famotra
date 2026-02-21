@@ -102,6 +102,7 @@ export type Database = {
       }
       categories: {
         Row: {
+          color: string
           created_at: string
           icon: string
           id: string
@@ -110,6 +111,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          color: string
           created_at?: string
           icon?: string
           id?: string
@@ -118,6 +120,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          color?: string
           created_at?: string
           icon?: string
           id?: string
@@ -430,6 +433,7 @@ export type Database = {
         }
         Returns: {
           average_amount: number
+          category_color: string
           category_icon: string
           category_id: string
           category_name: string
