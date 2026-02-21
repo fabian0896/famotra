@@ -2,18 +2,19 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
-import { cagoryResumeQueryOptions } from '../query-options/categories';
+import { categoryResumeQueryOptions } from '../query-options/categories';
 import type { CategoryResume, CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/hooks/use-date-range';
 import { FormattedMoney, FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function CategoryItem({ category }: { category: CategoryResume }) {
+export function CategoryItem({ category, range }: { category: CategoryResume; range?: DateRange }) {
   return (
     <li className="block h-full">
       <Link
         to="/dashboard/categories/$id"
         params={{ id: category.category_id }}
+        search={{ start: range?.start, end: range?.end }}
         className="p-3.5 h-[76px] bg-card w-full rounded-2xl flex gap-3.5 items-center"
       >
         <div
@@ -47,7 +48,7 @@ export function CategoryItem({ category }: { category: CategoryResume }) {
 }
 
 export function CategoryList({ type, range }: { type: CategoryTypes; range: DateRange }) {
-  const { data: categories } = useSuspenseQuery(cagoryResumeQueryOptions({ type, range }));
+  const { data: categories } = useSuspenseQuery(categoryResumeQueryOptions({ type, range }));
   const [parent] = useAutoAnimate();
 
   const title = type === 'expense' ? 'Gasto total' : 'Ingreso total';
@@ -67,7 +68,7 @@ export function CategoryList({ type, range }: { type: CategoryTypes; range: Date
       </div>
       <ul ref={parent} className="block space-y-2">
         {categories.map((category) => (
-          <CategoryItem key={category.category_id} category={category} />
+          <CategoryItem range={range} key={category.category_id} category={category} />
         ))}
       </ul>
     </div>

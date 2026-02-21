@@ -18,10 +18,23 @@ export const categoryByIdOption = ({ id }: { id: string }) => {
   });
 };
 
-export const cagoryResumeQueryOptions = (options: { type: CategoryTypes; range: DateRange }) => {
+export const categoryResumeQueryOptions = (options: { type: CategoryTypes; range: DateRange }) => {
   return queryOptions({
     queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES, QueryKeys.CATEGORIES_RESUME, options],
     queryFn: () => Categories.categoryResume(options),
+    staleTime: Infinity,
+  });
+};
+
+export const categoryDetailsOptions = ({ id, range }: { id: string; range: DateRange }) => {
+  return queryOptions({
+    queryKey: [
+      QueryKeys.TRANSACTIONS,
+      QueryKeys.CATEGORIES,
+      QueryKeys.CATEGORIES_DETAILS,
+      { id, range },
+    ],
+    queryFn: () => Categories.categoryDetails({ id, range }),
     staleTime: Infinity,
   });
 };

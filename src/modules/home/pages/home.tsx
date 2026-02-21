@@ -8,7 +8,9 @@ import { Content, Header } from '@/components/dashboard-layout';
 export function HomePage() {
   return (
     <>
-      <Header title="Famotra" />
+      <Header>
+        <Header.Title>Famotra</Header.Title>
+      </Header>
 
       <Content className="space-y-5">
         <Suspense fallback={<ResumeCardSkeleton />}>

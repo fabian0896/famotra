@@ -1,4 +1,7 @@
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
+import { PlusIcon } from 'lucide-react';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { formatISO, parseISO } from 'date-fns';
 import { CategoryList, CategoryListSkeleton } from '../components/category-list';
 import type { CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/hooks/use-date-range';
@@ -8,25 +11,45 @@ import { DateSelector } from '@/components/date-selector';
 import { getDateRange } from '@/hooks/use-date-range';
 
 export function CategoriesPage() {
-  const [date, setDate] = useState(() => new Date());
-  const [rangeDate, setRangeDate] = useState<DateRange>(() => getDateRange());
-  const [type, setType] = useState<CategoryTypes>('expense');
+  const navigate = useNavigate();
+  const {
+    type = 'expense',
+    date = formatISO(new Date(), { representation: 'date' }),
+    start = getDateRange().start,
+    end = getDateRange().end,
+  } = useSearch({ from: '/dashboard/categories/' });
+
+  const handleChangeType = (t: CategoryTypes) => {
+    navigate({
+      to: '.',
+      search: (prev) => ({ ...prev, type: t }),
+      replace: true,
+    });
+  };
+
+  const handleChangeRange = ({ value, range }: { value: Date; range: DateRange }) => {
+    navigate({
+      to: '.',
+      replace: true,
+      search: (prev) => ({ ...prev, ...range, date: formatISO(value) }),
+    });
+  };
 
   return (
     <>
-      <Header title="Categorías"></Header>
+      <Header>
+        <Header.Title>Categorías</Header.Title>
+        <Header.Actions>
+          <Header.ActionButton>
+            <PlusIcon />
+          </Header.ActionButton>
+        </Header.Actions>
+      </Header>
 
       <Content>
-        <DateSelector
-          className="mb-4"
-          value={date}
-          onValueChange={({ value, range }) => {
-            setDate(value);
-            setRangeDate(range);
-          }}
-        />
+        <DateSelector className="mb-4" value={parseISO(date)} onValueChange={handleChangeRange} />
 
-        <Tabs value={type} onValueChange={(value) => setType(value as CategoryTypes)}>
+        <Tabs value={type} onValueChange={(value) => handleChangeType(value as CategoryTypes)}>
           <TabsList className="mt-2 mb-4">
             <TabsTrigger value="expense">Gastos</TabsTrigger>
             <TabsTrigger value="income">Ingresos</TabsTrigger>
@@ -34,7 +57,7 @@ export function CategoriesPage() {
         </Tabs>
 
         <Suspense fallback={<CategoryListSkeleton />}>
-          <CategoryList range={rangeDate} type={type} />
+          <CategoryList range={{ start, end }} type={type} />
         </Suspense>
       </Content>
     </>

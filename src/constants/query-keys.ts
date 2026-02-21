@@ -2,6 +2,7 @@ export const QueryKeys = {
   AUTH_STATE: 'auth-state',
   CATEGORIES: 'categories',
   CATEGORIES_RESUME: 'categories-resume',
+  CATEGORIES_DETAILS: 'categories-details',
   ACCOUNTS: 'accounts',
   BANKS: 'banks',
   TOTAL_BALANCES: 'total-balances',

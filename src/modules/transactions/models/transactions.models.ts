@@ -11,12 +11,14 @@ export type TransactionAccount = {
     name: string;
   } | null;
 };
+export type TransactionCategory = {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+};
 export type Transaction = Tables<'transactions'> & {
-  category: {
-    id: string;
-    name: string;
-    icon: string;
-  } | null;
+  category: TransactionCategory | null;
   card: { name: string } | null;
   account: TransactionAccount | null;
   destination: TransactionAccount | null;

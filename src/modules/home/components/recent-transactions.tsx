@@ -28,7 +28,11 @@ function TransactionResumeItem({ transaction }: { transaction: Transaction }) {
     <TransactionDetail transaction={transaction}>
       <li className="block">
         <button className="p-3.5 flex gap-3.5 items-center w-full text-left transition-all active:bg-muted rounded-2xl overflow-hidden">
-          <CategoryIcon className="size-11 rounded-xl text-sm" transaction={transaction} />
+          <CategoryIcon
+            className="size-11 rounded-xl text-sm"
+            transactionType={transaction.transaction_type}
+            category={transaction.category}
+          />
           <div className="flex-1 flex flex-col">
             <p className={description({ pending })}>{transaction.description}</p>
             <LocalDateFormat
@@ -76,7 +80,7 @@ export function RecentTransactionsSkeleton({ className }: React.ComponentProps<'
 
 export function RecentTransactions({ className }: React.ComponentProps<'div'>) {
   const [parent] = useAutoAnimate();
-  const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ page: 1, pageSize: 10 }));
+  const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ pageSize: 10 }));
   return (
     <div className={className}>
       <div className="flex justify-between items-center">
@@ -84,7 +88,7 @@ export function RecentTransactions({ className }: React.ComponentProps<'div'>) {
         <button className="text-sm font-medium text-primary hover:underline">Ver todas</button>
       </div>
       <ul ref={parent} className="rounded-2xl bg-card mt-4">
-        {data.map((transaction) => (
+        {data.transactions.map((transaction) => (
           <TransactionResumeItem key={transaction.id} transaction={transaction} />
         ))}
         <li className="py-3 flex justify-center">

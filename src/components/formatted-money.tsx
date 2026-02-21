@@ -31,15 +31,26 @@ const clx = tv({
   },
 });
 
+const TYPE = {
+  '+': 'income',
+  '-': 'expense',
+  '': 'transfer',
+} as const;
+
 export function FormattedMoneyTransaction({
   value,
   transactionType,
   className,
   ...props
-}: { value: number; transactionType: TransactionTypes } & React.ComponentProps<
+}: { value: number; transactionType?: TransactionTypes } & React.ComponentProps<
   typeof NumericFormat
 >) {
-  const signValue = transactionType === 'income' ? `+` : transactionType === 'expense' ? `-` : '';
+  const isNeutra = transactionType === 'transfer' || value === 0;
+  let signValue = value > 0 ? `+` : value < 0 ? `-` : '';
+  signValue = isNeutra ? '' : signValue;
+
+  const type = TYPE[signValue as keyof typeof TYPE];
+
   return (
     <NumericFormat
       value={Math.abs(value)}
@@ -48,7 +59,7 @@ export function FormattedMoneyTransaction({
       decimalSeparator=","
       allowNegative={false}
       prefix={`${signValue}$`}
-      className={cn(clx({ type: transactionType }), className)}
+      className={cn(clx({ type: type }), className)}
       {...props}
     />
   );

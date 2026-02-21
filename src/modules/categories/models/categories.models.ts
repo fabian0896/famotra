@@ -1,4 +1,4 @@
-import type { Enums, Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
+import type { Database, Enums, Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
 
 export type Category = Tables<'categories'>;
 
@@ -14,14 +14,8 @@ export const CATEGORY_TYPES: Record<CategoryTypes, string> = {
   expense: 'Gasto',
 };
 
-export type CategoryResume = {
-  average_amount: number;
-  category_icon: string;
-  category_color: string;
-  category_id: string;
-  category_name: string;
-  category_type: 'income' | 'expense';
-  percentage: number;
-  total_amount: number;
-  transaction_count: number;
-};
+export type CategoryResume =
+  Database['public']['Functions']['get_categories_resume']['Returns'][number];
+
+export type CategoryDetails =
+  Database['public']['Functions']['get_category_detail']['Returns'][number];

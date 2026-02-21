@@ -39,7 +39,7 @@ export class Transactions {
     let query = supabase.from('transactions').select(
       `
         *,
-        category:categories (id, name, icon),
+        category:categories (id, name, icon, color),
         account:accounts!account_id (
           id,
           name,
@@ -55,7 +55,8 @@ export class Transactions {
           bank:bank_list (id, logo, name)
         ),
         card:shorcut_cards!card_id (name)
-        `
+        `,
+      { count: 'exact' }
     );
 
     if (filters?.from) {
@@ -76,12 +77,12 @@ export class Transactions {
       query = query.eq('transaction_type', filters.transactionType);
     }
 
-    const { data: transactions } = await query
+    const { data: transactions, count } = await query
       .order('date', { ascending: false })
       .order('created_at', { ascending: false })
       .range(from, to)
       .throwOnError();
-    return transactions;
+    return { transactions, count };
   }
 
   static async remove({ id }: { id: string }) {

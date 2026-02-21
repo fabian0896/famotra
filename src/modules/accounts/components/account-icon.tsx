@@ -62,7 +62,7 @@ export function AccountName<T extends ElementType = 'span'>({
     if (!account) return 'Unknown Account';
     if (part === 'bank') return account.bank?.name ?? 'Custom';
     if (part === 'account') return account.name;
-    return [account.name, account.bank?.name].filter(Boolean).join(' - ');
+    return [account.name, account.bank?.name].filter(Boolean).join(' · ');
   }, [account, part]);
   return <Tag {...props}>{name}</Tag>;
 }

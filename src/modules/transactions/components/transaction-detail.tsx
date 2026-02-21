@@ -123,9 +123,11 @@ function TransferDetails({ transaction }: { transaction: Transaction }) {
 export function TransactionDetail({
   children,
   transaction,
+  onRemove,
 }: {
   children?: React.ReactNode;
   transaction: Transaction;
+  onRemove?: () => void;
 }) {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -135,6 +137,7 @@ export function TransactionDetail({
     onSuccess: () => {
       sileo.success({ title: 'Transacción eliminada correctamente' });
       setIsOpen(false);
+      onRemove?.();
     },
     onError: (error) => {
       const { message } = formatError(error);
@@ -154,7 +157,11 @@ export function TransactionDetail({
       <DrawerContent>
         <div className="px-6 py-8 flex flex-col gap-4">
           <div className="flex flex-col gap-3">
-            <CategoryIcon className="size-14 rounded-2xl mx-auto" transaction={transaction} />
+            <CategoryIcon
+              className="size-14 rounded-2xl mx-auto"
+              transactionType={transaction.transaction_type}
+              category={transaction.category}
+            />
             <DrawerTitle className="text-xl font-bold text-foreground text-center">
               {transaction.transaction_type === 'transfer' ? (
                 <span>{`Transferencia a ${transaction.destination?.name}`}</span>
@@ -205,7 +212,10 @@ export function TransactionDetail({
                   Transferencia
                 </span>
               ) : transaction.category_id ? (
-                <span className="py-1 px-2.5 bg-primary/10 text-[12px] font-semibold text-primary rounded-[6px]">
+                <span
+                  style={{ '--color': transaction.category?.color } as React.CSSProperties}
+                  className="py-1 px-2.5 bg-(--color)/10 text-[12px] font-semibold text-(--color) rounded-[6px]"
+                >
                   {transaction.category?.icon} {transaction.category?.name || 'Sin categoría'}
                 </span>
               ) : (

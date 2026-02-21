@@ -1,23 +1,21 @@
 import { AlertTriangleIcon, ArrowRightLeftIcon } from 'lucide-react';
-import type { Transaction } from '@/modules/transactions/models/transactions.models';
+import type {
+  TransactionCategory,
+  TransactionTypes,
+} from '@/modules/transactions/models/transactions.models';
+import type { Category } from '../models/categories.models';
 import { cn } from '@/lib/utils';
 
 export function CategoryIcon({
-  transaction,
+  category,
+  transactionType,
   className,
   ...props
-}: { transaction: Transaction } & React.ComponentProps<'div'>) {
-  if (transaction.category?.icon) {
-    return (
-      <div
-        {...props}
-        className={cn('text-primary bg-primary/15 grid place-items-center', className)}
-      >
-        {transaction.category.icon}
-      </div>
-    );
-  }
-  if (transaction.transaction_type === 'transfer') {
+}: {
+  category: TransactionCategory | Category | null;
+  transactionType?: TransactionTypes;
+} & React.ComponentProps<'div'>) {
+  if (transactionType === 'transfer') {
     return (
       <div
         {...props}
@@ -30,11 +28,22 @@ export function CategoryIcon({
       </div>
     );
   }
+  if (category?.icon) {
+    return (
+      <div
+        {...props}
+        style={{ '--color': category.color, ...(props.style ?? {}) } as React.CSSProperties}
+        className={cn('text-(--color) bg-(--color)/15 grid place-items-center', className)}
+      >
+        {category.icon}
+      </div>
+    );
+  }
   return (
     <div
       {...props}
       className={cn(
-        'bg-amber-600/15 text-amber-400 [&_svg]:size-[40%] grid place-items-center',
+        'bg-amber-600/15 border border-dashed border-amber-700 text-amber-400 [&_svg]:size-[40%] grid place-items-center',
         className
       )}
     >

@@ -1,5 +1,14 @@
-import { Link, Outlet, useMatchRoute } from '@tanstack/react-router';
-import { HomeIcon, LayoutDashboardIcon, MenuIcon, PlusIcon, WalletIcon } from 'lucide-react';
+import { Link, Outlet, useMatchRoute, useRouter } from '@tanstack/react-router';
+import {
+  ChevronLeftIcon,
+  HomeIcon,
+  LayoutDashboardIcon,
+  MenuIcon,
+  PlusIcon,
+  WalletIcon,
+} from 'lucide-react';
+import { tv } from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -8,6 +17,17 @@ const navItems = [
   { to: '/dashboard/accounts', icon: WalletIcon, label: 'Cuentas' },
   { to: '/dashboard/settings', icon: MenuIcon, label: 'Menu' },
 ] as const;
+
+function AddButton() {
+  return (
+    <Link
+      to="/dashboard/transactions"
+      className="size-16 grid place-items-center bg-linear-to-br from-primary to-primary/60 rounded-full shadow-2xl shadow-primary/60"
+    >
+      <PlusIcon className="text-primary-foreground size-[26px] stroke-3" />
+    </Link>
+  );
+}
 
 function NavItem({
   to,
@@ -39,31 +59,79 @@ function NavItem({
   );
 }
 
-function AddButton() {
+function HeaderRoot({ className, ...props }: React.ComponentProps<'header'>) {
   return (
-    <Link
-      to="/dashboard/transactions"
-      className="size-16 grid place-items-center bg-linear-to-br from-primary to-primary/60 rounded-full shadow-2xl shadow-primary/60"
-    >
-      <PlusIcon className="text-primary-foreground size-[26px] stroke-3" />
-    </Link>
+    <header
+      className={cn('px-6 py-4 flex justify-between items-center min-h-[76px]', className)}
+      {...props}
+    />
   );
 }
 
-export function Header({
-  title = 'Famotra',
-  action,
-}: {
-  title?: string;
-  action?: React.ReactNode;
-}) {
+function HeaderTitle({ className, ...props }: React.ComponentProps<'h1'>) {
   return (
-    <header className="px-6 py-5 flex justify-between items-center">
-      <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
-      {action ?? <button className="w-12 h-12 bg-card border border-border rounded-full"></button>}
-    </header>
+    <h1 className={cn('text-2xl font-semibold text-foreground flex-1', className)} {...props} />
   );
 }
+
+function HeaderActions({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      className={cn('flex items-center gap-2 order-last', className)}
+      data-position="actions"
+      {...props}
+    />
+  );
+}
+
+const actionButton = tv({
+  base: "border rounded-full grid place-items-center active:bg-muted transition-all [&_svg:not([class*='text-'])]:text-muted-foreground",
+  variants: {
+    variant: {
+      default: 'bg-card border-border',
+      destructive:
+        "bg-red-600/10 border-red-400 active:bg-red-300/10 [&_svg:not([class*='text-'])]:text-red-400",
+    },
+    size: {
+      base: "w-10 h-10 [&_svg:not([class*='size-'])]:size-5",
+      sm: "w-9 h-9 [&_svg:not([class*='size-'])]:size-[18px]",
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'base',
+  },
+});
+
+function HeaderActionButton({
+  variant,
+  size,
+  className,
+  ...props
+}: React.ComponentProps<'button'> & VariantProps<typeof actionButton>) {
+  return <button className={cn(actionButton({ variant, size }), className)} {...props} />;
+}
+
+function BackButton({ ...props }: React.ComponentProps<typeof HeaderActionButton>) {
+  const router = useRouter();
+  return (
+    <HeaderActionButton
+      onClick={() => router.history.back()}
+      className="me-3 order-first"
+      size="sm"
+      {...props}
+    >
+      <ChevronLeftIcon className="text-foreground size-5" />
+    </HeaderActionButton>
+  );
+}
+
+export const Header = Object.assign(HeaderRoot, {
+  Title: HeaderTitle,
+  Actions: HeaderActions,
+  ActionButton: HeaderActionButton,
+  BackButton: BackButton,
+});
 
 export function Content({
   children,

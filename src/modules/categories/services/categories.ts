@@ -77,4 +77,15 @@ export class Categories {
       .throwOnError();
     return data;
   }
+
+  static async categoryDetails({ id, range }: { id: string; range: DateRange }) {
+    const { data } = await supabase
+      .rpc('get_category_detail', {
+        p_category_id: id,
+        p_start_date: range.start,
+        p_end_date: range.end,
+      })
+      .throwOnError();
+    return data[0];
+  }
 }

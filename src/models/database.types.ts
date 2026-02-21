@@ -443,6 +443,19 @@ export type Database = {
           transaction_count: number
         }[]
       }
+      get_category_detail: {
+        Args: {
+          p_category_id: string
+          p_end_date: string
+          p_start_date: string
+        }
+        Returns: {
+          percentage_change: number
+          prev_total_amount: number
+          total_amount: number
+          transaction_count: number
+        }[]
+      }
       get_user_role: {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
