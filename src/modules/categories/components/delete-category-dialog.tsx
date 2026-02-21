@@ -1,3 +1,4 @@
+import { Trash2Icon } from 'lucide-react';
 import type { Category } from '../models/categories.models';
 import {
   AlertDialog,
@@ -7,6 +8,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
@@ -25,17 +27,20 @@ export function DeleteCategoryDialog({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Eliminar Categoría {category.name}</AlertDialogTitle>
+          <AlertDialogMedia className="bg-red-500/15">
+            <Trash2Icon className="text-destructive" />
+          </AlertDialogMedia>
+          <AlertDialogTitle>¿Eliminar {category.name}?</AlertDialogTitle>
           <AlertDialogDescription>
-            ¿Estás seguro que deseas eliminar la categoría{' '}
-            <span className="text-foreground font-semibold">{category.name}</span>? Esta acción
-            también eliminará todas las transacciones asociadas a esta categoría
+            Esta acción es permanente y eliminará todas las transacciones asociadas a{' '}
+            <span className="text-foreground font-semibold">{category.name}</span>.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} variant="destructive">
-            Eliminar categoría
+            <Trash2Icon />
+            Sí, eliminar
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

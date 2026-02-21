@@ -1,13 +1,17 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Edit2Icon, Trash2Icon } from 'lucide-react';
-import { useSearch } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Suspense } from 'react';
-import { categoryByIdOption } from '../query-options/categories';
+import { sileo } from 'sileo';
+import { categoriesQueryOptions, categoryByIdOption } from '../query-options/categories';
 import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
+import { DeleteCategoryDialog } from '../components/delete-category-dialog';
+import { Categories } from '../services/categories';
 import { Content, Header } from '@/components/dashboard-layout';
 import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
 import { Skeleton } from '@/components/ui/skeleton';
+import { QueryKeys } from '@/constants/query-keys';
 
 function CategoryTransactionsSkeleton() {
   return (
@@ -41,6 +45,24 @@ export function CategoryDetails({ id }: { id: string }) {
   });
   const { month, year } = useMonthYear({ start, end });
   const { data: category } = useSuspenseQuery(categoryByIdOption({ id }));
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const remove = useMutation({
+    mutationFn: Categories.remove,
+    onSuccess: () => {
+      sileo.info({ title: 'Categoría eliminada correctamente' });
+      navigate({ to: '/dashboard/categories' });
+    },
+    onError: () => {
+      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: categoriesQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+    },
+  });
+
   return (
     <>
       <Header>
@@ -50,9 +72,11 @@ export function CategoryDetails({ id }: { id: string }) {
           <Header.ActionButton size="sm">
             <Edit2Icon />
           </Header.ActionButton>
-          <Header.ActionButton size="sm" variant="destructive">
-            <Trash2Icon />
-          </Header.ActionButton>
+          <DeleteCategoryDialog category={category} onConfirm={() => remove.mutate({ id })}>
+            <Header.ActionButton size="sm" variant="destructive">
+              <Trash2Icon />
+            </Header.ActionButton>
+          </DeleteCategoryDialog>
         </Header.Actions>
       </Header>
 
