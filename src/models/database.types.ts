@@ -111,7 +111,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          color: string
+          color?: string
           created_at?: string
           icon?: string
           id?: string
