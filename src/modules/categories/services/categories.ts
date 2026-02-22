@@ -35,7 +35,7 @@ export class Categories {
   static async getById(categoryId: string) {
     const { data: category } = await supabase
       .from('categories')
-      .select()
+      .select('*, budget:budgets!category_id(amount)')
       .eq('id', categoryId)
       .single()
       .throwOnError();
@@ -47,8 +47,23 @@ export class Categories {
     return category;
   }
 
-  static async upsert(data: CategoryInsert) {
-    const { data: category } = await supabase.from('categories').upsert(data).throwOnError();
+  static async upsert({ budget, ...categoryData }: CategoryInsert & { budget?: number | null }) {
+    const { data: category } = await supabase
+      .from('categories')
+      .upsert(categoryData)
+      .select()
+      .single()
+      .throwOnError();
+
+    if (budget === 0) {
+      await supabase.from('budgets').delete().eq('category_id', category.id).throwOnError();
+    } else if (budget != null) {
+      await supabase
+        .from('budgets')
+        .upsert({ category_id: category.id, amount: budget }, { onConflict: 'category_id' })
+        .throwOnError();
+    }
+
     return category;
   }
 

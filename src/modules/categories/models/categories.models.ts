@@ -1,4 +1,13 @@
+import type { QueryData } from '@supabase/supabase-js';
 import type { Database, Enums, Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
+import { supabase } from '@/integrations/supabase/client';
+
+export const categoryWithBudgetQuery = supabase
+  .from('categories')
+  .select(`*, budget:budgets!category_id(amount)`)
+  .single();
+
+export type CategoryWithBudget = QueryData<typeof categoryWithBudgetQuery>;
 
 export type Category = Tables<'categories'>;
 

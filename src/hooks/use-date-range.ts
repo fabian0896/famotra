@@ -1,5 +1,6 @@
 import { endOfMonth, format, formatISO, parseISO, startOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { useMemo } from 'react';
 
 export type DateRange = {
   start: string;
@@ -26,9 +27,12 @@ function resolveDate(input: string | Date | DateRange | null | undefined): Date 
 }
 
 export function useMonthYear(date?: string | Date | DateRange | null) {
-  const resolved = resolveDate(date);
-  return {
-    month: format(resolved, 'MMMM', { locale: es }),
-    year: format(resolved, 'yyyy', { locale: es }),
-  };
+  const result = useMemo(() => {
+    const resolved = resolveDate(date);
+    return {
+      month: format(resolved, 'MMMM', { locale: es }),
+      year: format(resolved, 'yyyy', { locale: es }),
+    };
+  }, [date]);
+  return result;
 }

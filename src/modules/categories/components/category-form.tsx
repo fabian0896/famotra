@@ -5,14 +5,14 @@ import { useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Categories } from '../services/categories';
 import { addCategorySchema } from '../models/schemas';
-import type { CategoryInsert } from '../models/categories.models';
+import type { CategoryWithBudget } from '../models/categories.models';
 import { QueryKeys } from '@/constants/query-keys';
 import { useAppForm } from '@/hooks/form';
 import { Footer } from '@/components/dashboard-layout';
 import { generateColor } from '@/lib/color-utils';
 
-export function CategoryForm() {
-  const [color] = useState(() => generateColor());
+export function CategoryForm({ category }: { category?: CategoryWithBudget }) {
+  const [categoryColor] = useState(() => generateColor());
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -34,12 +34,13 @@ export function CategoryForm() {
 
   const form = useAppForm({
     defaultValues: {
-      id: undefined,
-      name: '',
-      icon: '',
-      type: 'expense',
-      color: color,
-    } as CategoryInsert,
+      id: category?.id || undefined,
+      name: category?.name || '',
+      icon: category?.icon || '',
+      type: category?.type || 'expense',
+      color: category?.color || categoryColor,
+      budget: category?.budget?.amount,
+    },
     validators: {
       onSubmit: addCategorySchema,
     },
@@ -57,8 +58,10 @@ export function CategoryForm() {
         form.handleSubmit();
       }}
     >
-      <form.Subscribe selector={({ values }) => ({ icon: values.icon, name: values.name })}>
-        {({ icon, name }) => (
+      <form.Subscribe
+        selector={({ values }) => ({ icon: values.icon, name: values.name, color: values.color })}
+      >
+        {({ icon, name, color }) => (
           <div className="py-4 flex flex-col gap-2.5">
             <div
               data-value={icon || undefined}
@@ -89,9 +92,9 @@ export function CategoryForm() {
           )}
         />
         <form.AppField
-          name="name"
+          name="budget"
           children={(field) => (
-            <field.InputCardField optional icon={<TargetIcon />} label="Presupuesto" />
+            <field.AmountCardField optional icon={<TargetIcon />} label="Presupuesto" />
           )}
         />
       </div>
@@ -99,7 +102,7 @@ export function CategoryForm() {
         <form.AppForm>
           <form.SubmitButton className="w-full">
             <CheckIcon />
-            Agregar
+            {category ? 'Editar' : 'Agregar'}
           </form.SubmitButton>
         </form.AppForm>
       </Footer>

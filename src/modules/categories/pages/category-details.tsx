@@ -1,12 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Edit2Icon, Trash2Icon } from 'lucide-react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { Suspense } from 'react';
 import { categoryByIdOption } from '../query-options/categories';
 import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
 import { DeleteCategoryDialog } from '../components/delete-category-dialog';
-import { CreateEditCategoryDialog } from '../components/create-edit-category';
 import { Content, Header, Page } from '@/components/dashboard-layout';
 import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -51,11 +50,11 @@ export function CategoryDetails({ id }: { id: string }) {
         <Header.BackButton />
         <Header.Title>{category.name}</Header.Title>
         <Header.Actions>
-          <CreateEditCategoryDialog category={category}>
+          <Link to="/dashboard/categories/$id/edit" params={{ id }}>
             <Header.ActionButton size="sm">
               <Edit2Icon />
             </Header.ActionButton>
-          </CreateEditCategoryDialog>
+          </Link>
           <DeleteCategoryDialog
             category={category}
             onDeleted={() => navigate({ to: '/dashboard/categories' })}
