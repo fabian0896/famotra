@@ -5,7 +5,7 @@ import { categoryByIdOption } from '@/modules/categories/query-options/categorie
 export const Route = createFileRoute('/dashboard/categories/$id_/edit')({
   beforeLoad: async ({ context, params }) => {
     const queryClient = context.queryClient;
-    await queryClient.ensureQueryData(categoryByIdOption({ id: params.id, queryClient }));
+    await queryClient.ensureQueryData(categoryByIdOption({ id: params.id }));
   },
   component: Index,
 });

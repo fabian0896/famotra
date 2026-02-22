@@ -1,6 +1,7 @@
 import {
   ArrowRightIcon,
   ArrowRightLeftIcon,
+  CircleCheckIcon,
   Edit2Icon,
   SettingsIcon,
   Trash2Icon,
@@ -38,6 +39,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { QueryKeys } from '@/constants/query-keys';
 import { formatError } from '@/lib/format-error';
 import { LocalDateFormat } from '@/components/local-date-format';
+import { useIsPending } from '@/hooks/use-is-pending';
 
 function DeleteConfirmationDialog({
   onConfirm,
@@ -131,6 +133,8 @@ export function TransactionDetail({
 }) {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
+
+  const isPending = useIsPending(transaction);
 
   const remove = useMutation({
     mutationFn: Transactions.remove,
@@ -238,10 +242,20 @@ export function TransactionDetail({
           </div>
           <Separator />
           <div className="flex gap-3">
-            <Button className="flex-1 h-12" variant="outline">
-              <Edit2Icon />
-              Editar
-            </Button>
+            {isPending ? (
+              <Button
+                className="flex-1 h-12 bg-amber-500/10! border-amber-600! text-amber-400"
+                variant="outline"
+              >
+                <CircleCheckIcon />
+                Completar
+              </Button>
+            ) : (
+              <Button className="flex-1 h-12" variant="outline">
+                <Edit2Icon />
+                Editar
+              </Button>
+            )}
             <DeleteConfirmationDialog onConfirm={() => remove.mutate({ id: transaction.id })}>
               <Button disabled={remove.isPending} className="flex-1 h-12" variant="destructive">
                 {remove.isPending ? <Spinner /> : <Trash2Icon />}
