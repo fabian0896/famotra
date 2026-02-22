@@ -8,6 +8,7 @@ import { DateField } from '@/components/form/date-field';
 import { BankField } from '@/components/form/bank-field';
 import { AccountsField } from '@/components/form/accounts-field';
 import { AccountIconField } from '@/components/form/account-icon-field';
+import { InputCardField } from '@/components/form/input-card-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -22,6 +23,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     BankField,
     AccountsField,
     AccountIconField,
+    InputCardField,
   },
   formComponents: {
     SubmitButton,

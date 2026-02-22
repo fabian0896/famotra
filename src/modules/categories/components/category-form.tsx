@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sileo } from 'sileo';
-import { PencilLine, TargetIcon } from 'lucide-react';
+import { PencilLineIcon, TargetIcon } from 'lucide-react';
 import { Categories } from '../services/categories';
 import { addCategorySchema } from '../models/schemas';
 import type { CategoryInsert } from '../models/categories.models';
@@ -70,25 +70,18 @@ export function CategoryForm() {
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        <div className="bg-card px-4.5 py-1.5 h-14 rounded-2xl flex gap-3 items-center">
-          <PencilLine className="size-5 text-muted-foreground" />
-          <div className="flex flex-col">
-            <label className="text-xs font-medium text-muted-foreground mb-0-5">
-              Category Name
-            </label>
-            <input className="text-foreground font-medium" value="Food & Dining" type="text" />
-          </div>
-        </div>
-
-        <div className="bg-card px-4.5 py-1.5 h-14 rounded-2xl flex gap-3 items-center">
-          <TargetIcon className="size-5 text-muted-foreground" />
-          <div className="flex flex-col">
-            <label className="text-xs font-medium text-muted-foreground mb-0-5">
-              Monthly Budget <span className="text-muted-foreground/60">(opcional)</span>
-            </label>
-            <input className="text-foreground font-medium" value="$500.00" type="text" />
-          </div>
-        </div>
+        <form.AppField
+          name="name"
+          children={(field) => (
+            <field.InputCardField icon={<PencilLineIcon />} label="Nombre de la categoría" />
+          )}
+        />
+        <form.AppField
+          name="name"
+          children={(field) => (
+            <field.InputCardField optional icon={<TargetIcon />} label="Presupuesto" />
+          )}
+        />
       </div>
       <Footer>
         <Button className="w-full">Crear categoría</Button>
