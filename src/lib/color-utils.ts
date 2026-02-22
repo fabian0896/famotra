@@ -26,3 +26,11 @@ export function getContrastColor(hsl: string): string {
   // Retornar negro o blanco según contraste
   return luminance > 0.2 ? '#000000' : '#ffffff';
 }
+
+export function generateColor(): string {
+  const hue = Math.floor(Math.random() * 360);
+  const saturation = Math.floor(Math.random() * 20) + 75; // 75-95% — vívidos sin llegar a neón
+  const lightness = Math.floor(Math.random() * 10) + 57; // 57-67% — luminosos sobre fondo oscuro
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}

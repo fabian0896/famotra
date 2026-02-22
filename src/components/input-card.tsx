@@ -12,7 +12,7 @@ function InputCardRoot({ className, onClick, ...props }: React.ComponentProps<'d
       className={cn(
         'bg-card px-4.5 py-1.5 h-14 rounded-2xl flex gap-3 items-center cursor-text',
         'transition-shadow',
-        'has-focus-visible:ring-2 has-focus-visible:ring-ring has-focus-visible:ring-offset-1',
+        'has-focus-visible:ring-2 has-focus-visible:ring-primary',
         'data-[invalid=true]:ring-2 data-[invalid=true]:ring-destructive data-[invalid=true]:ring-offset-1',
         className
       )}

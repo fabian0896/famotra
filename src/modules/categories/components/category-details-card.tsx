@@ -11,7 +11,7 @@ import { categoryByIdOption, categoryDetailsOptions } from '../query-options/cat
 import { CategoryIcon } from './category-icon';
 import type { DateRange } from '@/hooks/use-date-range';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getContrastColor } from '@/lib/get-contrast-color';
+import { getContrastColor } from '@/lib/color-utils';
 import { Button } from '@/components/ui/button';
 import { FormattedMoney } from '@/components/formatted-money';
 

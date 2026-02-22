@@ -173,7 +173,10 @@ export function Footer({ className, ...props }: React.ComponentProps<'footer'>) 
   return (
     <footer
       data-footer="custom"
-      className={cn('p-6 w-full fixed bottom-0 left-0 bg-background', className)}
+      className={cn(
+        'p-6 w-full fixed bottom-0 left-0 bg-linear-to-t from-background from-65%',
+        className
+      )}
       {...props}
     />
   );

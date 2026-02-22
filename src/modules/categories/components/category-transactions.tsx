@@ -11,7 +11,6 @@ import { LocalDateFormat } from '@/components/local-date-format';
 import { AccountIcon, AccountName } from '@/modules/accounts/components/account-icon';
 import { TransactionDetail } from '@/modules/transactions/components/transaction-detail';
 import { Button } from '@/components/ui/button';
-import { getContrastColor } from '@/lib/get-contrast-color';
 
 function TransactionItem({ transaction }: { transaction: Transaction }) {
   return (
@@ -62,13 +61,8 @@ export function EmptyList({ categoryId }: { categoryId: string }) {
         Los movimientos de esta categoría aparecerán aquí
       </p>
       <Button
-        style={
-          {
-            '--color': category.color,
-            '--text-color': getContrastColor(category.color),
-          } as React.CSSProperties
-        }
-        className="h-[38px] rounded-[12px] bg-(--color) text-(--text-color) shadow-none w-fit mx-auto"
+        style={{ '--color': category.color } as React.CSSProperties}
+        className="h-[38px] rounded-[12px] bg-transparent text-(--color) shadow-none w-fit mx-auto"
       >
         <PlusIcon />
         Agregar movimiento

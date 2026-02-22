@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sileo } from 'sileo';
 import { Categories } from '../services/categories';
 import { categoriesQueryOptions } from '../query-options/categories';
-import type { Category } from '../models/categories.models';
+import type { Category, CategoryResume } from '../models/categories.models';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,6 +20,16 @@ import {
 import { QueryKeys } from '@/constants/query-keys';
 import { Spinner } from '@/components/ui/spinner';
 
+function updateQueryData({ id }: { id: string }) {
+  return (data: CategoryResume[] | undefined) => {
+    if (!data) return data;
+    const idx = data.findIndex((c) => c.category_id === id);
+    if (idx === -1) return data;
+    const copy = [...data];
+    return copy.toSpliced(idx, 1);
+  };
+}
+
 export function DeleteCategoryDialog({
   category,
   children,
@@ -34,7 +44,11 @@ export function DeleteCategoryDialog({
 
   const remove = useMutation({
     mutationFn: Categories.remove,
-    onSuccess: () => {
+    onSuccess: (_resutl, { id }) => {
+      queryClient.setQueriesData<CategoryResume[]>(
+        { queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES, QueryKeys.CATEGORIES_RESUME] },
+        updateQueryData({ id })
+      );
       onDeleted();
       sileo.info({ title: 'Categoría eliminada correctamente' });
       setIsOpen(false);
@@ -42,10 +56,10 @@ export function DeleteCategoryDialog({
     onError: () => {
       sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
     },
-    onSettled: (_data, _error, { id }) => {
+    onSettled: async (_data, _error, { id }) => {
       queryClient.removeQueries({ queryKey: [QueryKeys.CATEGORIES, { id }] });
       queryClient.invalidateQueries({ queryKey: categoriesQueryOptions.queryKey });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+      await queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
     },
   });
 
