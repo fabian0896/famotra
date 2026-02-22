@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { CategoryList, CategoryListSkeleton } from '../components/category-list';
 import type { CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/hooks/use-date-range';
-import { Content, Header } from '@/components/dashboard-layout';
+import { Content, Header, Page } from '@/components/dashboard-layout';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DateSelector } from '@/components/date-selector';
 import { getDateRange } from '@/hooks/use-date-range';
@@ -36,7 +36,7 @@ export function CategoriesPage() {
   };
 
   return (
-    <>
+    <Page>
       <Header>
         <Header.Title>Categorías</Header.Title>
         <Header.Actions>
@@ -62,6 +62,6 @@ export function CategoriesPage() {
           <CategoryList range={{ start, end }} type={type} />
         </Suspense>
       </Content>
-    </>
+    </Page>
   );
 }

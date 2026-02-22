@@ -7,7 +7,7 @@ import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
 import { DeleteCategoryDialog } from '../components/delete-category-dialog';
 import { CreateEditCategoryDialog } from '../components/create-edit-category';
-import { Content, Header } from '@/components/dashboard-layout';
+import { Content, Header, Page } from '@/components/dashboard-layout';
 import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -46,7 +46,7 @@ export function CategoryDetails({ id }: { id: string }) {
   const navigate = useNavigate();
 
   return (
-    <>
+    <Page>
       <Header>
         <Header.BackButton />
         <Header.Title>{category.name}</Header.Title>
@@ -75,6 +75,6 @@ export function CategoryDetails({ id }: { id: string }) {
           </Suspense>
         </div>
       </Content>
-    </>
+    </Page>
   );
 }

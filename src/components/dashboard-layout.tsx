@@ -8,6 +8,7 @@ import {
   WalletIcon,
 } from 'lucide-react';
 import { tv } from 'tailwind-variants';
+import React from 'react';
 import type { VariantProps } from 'tailwind-variants';
 import { cn } from '@/lib/utils';
 
@@ -57,6 +58,10 @@ function NavItem({
       </span>
     </Link>
   );
+}
+
+export function Page({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }
 
 function HeaderRoot({ className, ...props }: React.ComponentProps<'header'>) {
@@ -150,7 +155,7 @@ export function BottomNav() {
   const [left, right] = [navItems.slice(0, 2), navItems.slice(2)];
 
   return (
-    <footer className="fixed bottom-0 inset-x-0 pb-4 px-4">
+    <footer className="fixed bottom-0 inset-x-0 pb-4 px-4 group-has-data-[footer=custom]/layout:hidden">
       <div className="bg-card border border-border rounded-full flex justify-between items-center px-4 h-[58px]">
         {left.map((item) => (
           <NavItem key={item.to} {...item} />
@@ -164,9 +169,19 @@ export function BottomNav() {
   );
 }
 
+export function Footer({ className, ...props }: React.ComponentProps<'footer'>) {
+  return (
+    <footer
+      data-footer="custom"
+      className={cn('p-6 w-full fixed bottom-0 left-0 bg-background', className)}
+      {...props}
+    />
+  );
+}
+
 export function DashboardLayout() {
   return (
-    <div className="min-h-screen pb-28">
+    <div className="min-h-screen pb-28 group/layout">
       <Outlet />
       <BottomNav />
     </div>

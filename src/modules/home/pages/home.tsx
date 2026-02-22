@@ -3,11 +3,11 @@ import { ArrowRightLeftIcon, MinusIcon, PlusIcon } from 'lucide-react';
 import { ResumeCard, ResumeCardSkeleton } from '../components/resume-card';
 import { QuickActionButton, QuickActions } from '../components/quick-actions';
 import { RecentTransactions, RecentTransactionsSkeleton } from '../components/recent-transactions';
-import { Content, Header } from '@/components/dashboard-layout';
+import { Content, Header, Page } from '@/components/dashboard-layout';
 
 export function HomePage() {
   return (
-    <>
+    <Page>
       <Header>
         <Header.Title>Famotra</Header.Title>
       </Header>
@@ -33,6 +33,6 @@ export function HomePage() {
           <RecentTransactions />
         </Suspense>
       </Content>
-    </>
+    </Page>
   );
 }
