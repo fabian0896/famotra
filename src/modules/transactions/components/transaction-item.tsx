@@ -203,7 +203,7 @@ function Transfer({ transaction }: { transaction: Transaction }) {
         <ArrowRight strokeWidth={2.5} className="text-red-400" />
       </div>
       <div className="flex flex-col justify-center items-center">
-        <FormattedMoney className="mb-1" neutral value={transaction.amount} />
+        <FormattedMoney className="mb-1" value={transaction.amount} />
         <p className="text-xs text-muted-foreground text-center">{transaction.description}</p>
       </div>
       <div className="flex-1 flex justify-center">

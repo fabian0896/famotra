@@ -10,7 +10,7 @@ export const Route = createFileRoute('/dashboard/categories/$id')({
   }),
   beforeLoad: async ({ context, params }) => {
     const queryClient = context.queryClient;
-    await queryClient.ensureQueryData(categoryByIdOption({ id: params.id, queryClient }));
+    await queryClient.ensureQueryData(categoryByIdOption({ id: params.id }));
   },
   component: Index,
 });

@@ -19,7 +19,7 @@ export function ResumeCard({ className, ...props }: React.ComponentProps<'div'>)
       {...props}
     >
       <div className="flex justify-between items-center">
-        <h6 className="text-white text-sm font-medium">Total balance</h6>
+        <h6 className="text-white text-sm font-medium">Balance total</h6>
         <p className="font-mono text-sm text-white/70 tracking-wider first-letter:uppercase">
           {month} {year}
         </p>
@@ -33,7 +33,7 @@ export function ResumeCard({ className, ...props }: React.ComponentProps<'div'>)
             <ArrowDownLeftIcon className="text-white size-3.5 stroke-3" />
           </div>
           <div className="flex-1">
-            <p className="text-xs font-medium text-white/70 mb-0.5">Income</p>
+            <p className="text-xs font-medium text-white/70 mb-0.5">Ingresos</p>
             <p className="text-sm font-bold text-white">
               <FormattedMoney value={data.income} />
             </p>
@@ -44,7 +44,7 @@ export function ResumeCard({ className, ...props }: React.ComponentProps<'div'>)
             <ArrowUpRightIcon className="text-white size-3.5 stroke-3" />
           </div>
           <div className="flex-1">
-            <p className="text-xs font-medium text-white/70 mb-0.5">Expenses</p>
+            <p className="text-xs font-medium text-white/70 mb-0.5">Gastos</p>
             <p className="text-sm font-bold text-white">
               <FormattedMoney allowNegative={false} value={data.expenses} />
             </p>
