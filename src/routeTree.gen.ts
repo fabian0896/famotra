@@ -21,6 +21,7 @@ import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settin
 import { Route as DashboardAccountsRouteImport } from './routes/dashboard/accounts'
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
 import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
+import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
 import { Route as DashboardCategoriesIdRouteImport } from './routes/dashboard/categories/$id'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard/admin/users'
 import { Route as DashboardAdminMerchantsRouteImport } from './routes/dashboard/admin/merchants'
@@ -87,6 +88,11 @@ const DashboardCategoriesIndexRoute =
     path: '/categories/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
+  id: '/categories/new',
+  path: '/categories/new',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 const DashboardCategoriesIdRoute = DashboardCategoriesIdRouteImport.update({
   id: '/categories/$id',
   path: '/categories/$id',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
 }
 export interface FileRoutesById {
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
 }
 export interface FileRouteTypes {
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
+    | '/dashboard/categories/new'
     | '/dashboard/categories'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
+    | '/dashboard/categories/new'
     | '/dashboard/categories'
   id:
     | '__root__'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
+    | '/dashboard/categories/new'
     | '/dashboard/categories/'
   fileRoutesById: FileRoutesById
 }
@@ -312,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCategoriesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/categories/new': {
+      id: '/dashboard/categories/new'
+      path: '/categories/new'
+      fullPath: '/dashboard/categories/new'
+      preLoaderRoute: typeof DashboardCategoriesNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/categories/$id': {
       id: '/dashboard/categories/$id'
       path: '/categories/$id'
@@ -366,6 +385,7 @@ interface DashboardRouteRouteChildren {
   DashboardTransactionsRoute: typeof DashboardTransactionsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardCategoriesIdRoute: typeof DashboardCategoriesIdRoute
+  DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
 }
 
@@ -377,6 +397,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardTransactionsRoute: DashboardTransactionsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardCategoriesIdRoute: DashboardCategoriesIdRoute,
+  DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
 }
 

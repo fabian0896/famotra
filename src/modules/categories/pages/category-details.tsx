@@ -1,17 +1,15 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Edit2Icon, Trash2Icon } from 'lucide-react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Suspense } from 'react';
-import { sileo } from 'sileo';
-import { categoriesQueryOptions, categoryByIdOption } from '../query-options/categories';
+import { categoryByIdOption } from '../query-options/categories';
 import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
 import { DeleteCategoryDialog } from '../components/delete-category-dialog';
-import { Categories } from '../services/categories';
+import { CreateEditCategoryDialog } from '../components/create-edit-category';
 import { Content, Header } from '@/components/dashboard-layout';
 import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
 import { Skeleton } from '@/components/ui/skeleton';
-import { QueryKeys } from '@/constants/query-keys';
 
 function CategoryTransactionsSkeleton() {
   return (
@@ -46,22 +44,6 @@ export function CategoryDetails({ id }: { id: string }) {
   const { month, year } = useMonthYear({ start, end });
   const { data: category } = useSuspenseQuery(categoryByIdOption({ id }));
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const remove = useMutation({
-    mutationFn: Categories.remove,
-    onSuccess: () => {
-      sileo.info({ title: 'Categoría eliminada correctamente' });
-      navigate({ to: '/dashboard/categories' });
-    },
-    onError: () => {
-      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: categoriesQueryOptions.queryKey });
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
-    },
-  });
 
   return (
     <>
@@ -69,10 +51,15 @@ export function CategoryDetails({ id }: { id: string }) {
         <Header.BackButton />
         <Header.Title>{category.name}</Header.Title>
         <Header.Actions>
-          <Header.ActionButton size="sm">
-            <Edit2Icon />
-          </Header.ActionButton>
-          <DeleteCategoryDialog category={category} onConfirm={() => remove.mutate({ id })}>
+          <CreateEditCategoryDialog category={category}>
+            <Header.ActionButton size="sm">
+              <Edit2Icon />
+            </Header.ActionButton>
+          </CreateEditCategoryDialog>
+          <DeleteCategoryDialog
+            category={category}
+            onDeleted={() => navigate({ to: '/dashboard/categories' })}
+          >
             <Header.ActionButton size="sm" variant="destructive">
               <Trash2Icon />
             </Header.ActionButton>

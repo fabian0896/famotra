@@ -62,7 +62,7 @@ function NavItem({
 function HeaderRoot({ className, ...props }: React.ComponentProps<'header'>) {
   return (
     <header
-      className={cn('px-6 py-4 flex justify-between items-center min-h-[76px]', className)}
+      className={cn('px-6 py-4 flex justify-between items-center gap-3 min-h-[76px]', className)}
       {...props}
     />
   );
@@ -70,7 +70,10 @@ function HeaderRoot({ className, ...props }: React.ComponentProps<'header'>) {
 
 function HeaderTitle({ className, ...props }: React.ComponentProps<'h1'>) {
   return (
-    <h1 className={cn('text-2xl font-semibold text-foreground flex-1', className)} {...props} />
+    <h1
+      className={cn('text-2xl font-semibold text-foreground flex-1 line-clamp-1', className)}
+      {...props}
+    />
   );
 }
 
@@ -117,7 +120,7 @@ function BackButton({ ...props }: React.ComponentProps<typeof HeaderActionButton
   return (
     <HeaderActionButton
       onClick={() => router.history.back()}
-      className="me-3 order-first"
+      className="order-first"
       size="sm"
       {...props}
     >

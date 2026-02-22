@@ -1,4 +1,9 @@
 import { Trash2Icon } from 'lucide-react';
+import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { sileo } from 'sileo';
+import { Categories } from '../services/categories';
+import { categoriesQueryOptions } from '../query-options/categories';
 import type { Category } from '../models/categories.models';
 import {
   AlertDialog,
@@ -12,18 +17,40 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { QueryKeys } from '@/constants/query-keys';
+import { Spinner } from '@/components/ui/spinner';
 
 export function DeleteCategoryDialog({
   category,
   children,
-  onConfirm,
+  onDeleted,
 }: {
   category: Category;
   children: React.ReactNode;
-  onConfirm: () => void;
+  onDeleted: () => void;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const remove = useMutation({
+    mutationFn: Categories.remove,
+    onSuccess: () => {
+      onDeleted();
+      sileo.info({ title: 'Categoría eliminada correctamente' });
+      setIsOpen(false);
+    },
+    onError: () => {
+      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
+    },
+    onSettled: (_data, _error, { id }) => {
+      queryClient.removeQueries({ queryKey: [QueryKeys.CATEGORIES, { id }] });
+      queryClient.invalidateQueries({ queryKey: categoriesQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+    },
+  });
+
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -38,8 +65,11 @@ export function DeleteCategoryDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} variant="destructive">
-            <Trash2Icon />
+          <AlertDialogAction
+            onClick={() => remove.mutate({ id: category.id })}
+            variant="destructive"
+          >
+            {remove.isPending ? <Spinner /> : <Trash2Icon />}
             Sí, eliminar
           </AlertDialogAction>
         </AlertDialogFooter>

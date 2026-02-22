@@ -12,11 +12,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { useAppForm } from '@/hooks/form';
 import { Categories } from '@/modules/categories/services/categories';
-import { categoriesQueryOptions } from '@/modules/categories/query-options/categories';
 import { Button } from '@/components/ui/button';
+import { QueryKeys } from '@/constants/query-keys';
 
 export function CreateEditCategoryDialog({
   isOpen,
@@ -43,8 +44,8 @@ export function CreateEditCategoryDialog({
       toast.error('Algo salio mál por favor intenta más tarde');
     },
     onSettled: () => {
-      const queryKey = categoriesQueryOptions.queryKey;
-      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.CATEGORIES] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
     },
   });
 
@@ -79,7 +80,7 @@ export function CreateEditCategoryDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      {children}
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <form
           onSubmit={(event) => {

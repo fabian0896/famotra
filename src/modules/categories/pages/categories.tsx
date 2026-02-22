@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { PlusIcon } from 'lucide-react';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { CategoryList, CategoryListSkeleton } from '../components/category-list';
 import type { CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/hooks/use-date-range';
@@ -40,9 +40,11 @@ export function CategoriesPage() {
       <Header>
         <Header.Title>Categorías</Header.Title>
         <Header.Actions>
-          <Header.ActionButton>
-            <PlusIcon />
-          </Header.ActionButton>
+          <Link to="/dashboard/categories/new">
+            <Header.ActionButton>
+              <PlusIcon />
+            </Header.ActionButton>
+          </Link>
         </Header.Actions>
       </Header>
 
