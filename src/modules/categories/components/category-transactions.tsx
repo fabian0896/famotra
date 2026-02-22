@@ -3,7 +3,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { PlusIcon, ReceiptIcon } from 'lucide-react';
 import { categoryByIdOption } from '../query-options/categories';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import type { Transaction } from '@/modules/transactions/models/transactions.models';
 import { FormattedMoneyTransaction } from '@/components/formatted-money';
 import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';

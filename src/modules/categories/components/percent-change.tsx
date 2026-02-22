@@ -1,7 +1,7 @@
 import { ScaleIcon, TrendingDownIcon, TrendingUpDownIcon, TrendingUpIcon } from 'lucide-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { categoryDetailsOptions } from '../query-options/categories';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function PercentChange({ categoryId, range }: { categoryId: string; range: DateRange }) {

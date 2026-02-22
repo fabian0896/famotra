@@ -1,4 +1,4 @@
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { supabase } from '@/integrations/supabase/client';
 
 export class HomeService {

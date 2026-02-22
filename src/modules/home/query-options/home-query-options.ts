@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 import { HomeService } from '../services/home.service';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { QueryKeys } from '@/constants/query-keys';
 
 export const resumeQueryOptions = (options: DateRange) => {

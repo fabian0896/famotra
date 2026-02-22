@@ -1,9 +1,10 @@
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { addMonths, parseISO, subMonths } from 'date-fns';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import type { DateRange } from '@/hooks/use-date-range';
+import { getDateRange } from '@/lib/date-utils';
+import type { DateRange } from '@/lib/date-utils';
 import { cn } from '@/lib/utils';
-import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
+import { useMonthYear } from '@/hooks/use-month-year';
 
 export function DateSelector({
   value,

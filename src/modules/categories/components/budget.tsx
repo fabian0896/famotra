@@ -2,7 +2,7 @@ import { PlusIcon } from 'lucide-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { categoryDetailsOptions } from '../query-options/categories';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { getContrastColor } from '@/lib/color-utils';
 import { Button } from '@/components/ui/button';
 import { FormattedMoney } from '@/components/formatted-money';

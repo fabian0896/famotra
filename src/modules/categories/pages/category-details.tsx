@@ -7,7 +7,8 @@ import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
 import { DeleteCategoryDialog } from '../components/delete-category-dialog';
 import { Content, Header, Page } from '@/components/dashboard-layout';
-import { getDateRange, useMonthYear } from '@/hooks/use-date-range';
+import { getDateRange } from '@/lib/date-utils';
+import { useMonthYear } from '@/hooks/use-month-year';
 import { Skeleton } from '@/components/ui/skeleton';
 
 function CategoryTransactionsSkeleton() {

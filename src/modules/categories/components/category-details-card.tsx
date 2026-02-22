@@ -4,7 +4,7 @@ import { categoryByIdOption, categoryDetailsOptions } from '../query-options/cat
 import { CategoryIcon } from './category-icon';
 import { Budget, BudgetSkeleton } from './budget';
 import { PercentChange, PercentChangeSkeleton } from './percent-change';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FormattedMoney } from '@/components/formatted-money';
 

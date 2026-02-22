@@ -1,5 +1,5 @@
 import { formatISO, isSameMonth, parseISO } from 'date-fns';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import type {
   Category,
   CategoryDelete,

@@ -5,7 +5,7 @@ import type {
   CategoryTypes,
   CategoryWithBudget,
 } from '../models/categories.models';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { QueryKeys } from '@/constants/query-keys';
 import { Categories } from '@/modules/categories/services/categories';
 

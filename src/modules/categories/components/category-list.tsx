@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { Link } from '@tanstack/react-router';
 import { categoryResumeQueryOptions } from '../query-options/categories';
 import type { CategoryResume, CategoryTypes } from '../models/categories.models';
-import type { DateRange } from '@/hooks/use-date-range';
+import type { DateRange } from '@/lib/date-utils';
 import { FormattedMoney, FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Skeleton } from '@/components/ui/skeleton';
 
