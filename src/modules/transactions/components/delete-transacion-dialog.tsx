@@ -34,16 +34,13 @@ export function DeleteTransactionDialog({
   const remove = useMutation({
     mutationFn: Transactions.remove,
     onSuccess: () => {
+      onRemoved?.();
       sileo.success({ title: 'Transacción eliminada correctamente' });
       setOpen(false);
-      onRemoved?.();
     },
     onError: (error) => {
       const { message } = formatError(error);
-      sileo.error({
-        title: 'Error al eliminar',
-        description: message,
-      });
+      sileo.error({ title: 'Error al eliminar', description: message });
     },
     onSettled: () => {
       return queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
