@@ -1,59 +1,65 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { Plus } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import { transactionsQueryOptions } from '../query-options/transactions';
-import { CreateEditTransactionDialog } from '@/modules/transactions/components/add-transaction-dialog';
-import { Button } from '@/components/ui/button';
-import {
-  EmpltyTransactionList,
-  TransactionList,
-} from '@/modules/transactions/components/transactions-list';
+import { Content, Header, Page } from '@/components/dashboard-layout';
+import { DateSelector } from '@/components/date-selector';
 
 export function TransactionsPage() {
-  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
-    transactionsQueryOptions({ pageSize: 20 })
-  );
+  const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ pageSize: 30 }));
 
   return (
-    <div className="flex gap-6 max-w-2xl mx-auto">
-      <div className="flex-1">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-            Transacciones
-          </h1>
-          {data.transactions.length ? (
-            <CreateEditTransactionDialog>
-              <Button type="button">
-                <Plus />
-                Nueva Transacción
-              </Button>
-            </CreateEditTransactionDialog>
-          ) : null}
+    <Page>
+      <Header>
+        <Header.Title>Transacciones</Header.Title>
+        <Header.Actions>
+          <Header.ActionButton>
+            <PlusIcon />
+          </Header.ActionButton>
+        </Header.Actions>
+      </Header>
+
+      <Content className="flex flex-col gap-4">
+        <DateSelector className="mt-4" />
+
+        <div className="space-x-2">
+          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
+            All
+          </span>
+          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
+            Type
+          </span>
+          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
+            Account
+          </span>
+          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
+            Category
+          </span>
         </div>
-        <TransactionList
-          empty={<EmpltyTransactionList />}
-          dataLength={data.transactions.length}
-          next={fetchNextPage}
-          hasMore={hasNextPage}
-          loader={<p className="text-xs text-muted-foreground text-center">Cargando...</p>}
-          endMessage={
-            <p className="text-xs text-muted-foreground text-center">No hay más transacciones</p>
-          }
-        >
-          <div></div>
-          {/* {transactions.map((group) => (
-            <TransactionGroup key={group.date} date={group.date}>
-              {group.transactions?.map((transaction) => (
-                <TransactionItem key={transaction.id} transaction={transaction} />
-              ))}
-            </TransactionGroup>
-          ))} */}
-        </TransactionList>
-      </div>
-      {/* <div className="w-[300px] xl:w-[350px]">
-        <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
-          <CategoryResume />
-        </Suspense>
-      </div> */}
-    </div>
+
+        <div className="bg-card rounded-2xl py-3 px-4 flex justify-between items-center">
+          <div>
+            <p className="text-sm font-bold text-green-400 text-center">+$3.000.000</p>
+            <p className="text-[11px] text-center font-medium text-muted-foreground">Income</p>
+          </div>
+          <div className="h-9 w-px bg-muted"></div>
+          <div>
+            <p className="text-sm font-bold text-red-400 text-center">-$1.000.000</p>
+            <p className="text-[11px] text-center font-medium text-muted-foreground">Expenses</p>
+          </div>
+          <div className="h-9 w-px bg-muted"></div>
+          <div>
+            <p className="text-sm font-bold text-blue-400 text-center">$1.500.000</p>
+            <p className="text-[11px] text-center font-medium text-muted-foreground">Balance</p>
+          </div>
+        </div>
+
+        <div>
+          <p>Aqui van las transacciones</p>
+          {data.transactions.map((t) => (
+            <div key={t.id}>{t.description}</div>
+          ))}
+        </div>
+      </Content>
+    </Page>
   );
 }

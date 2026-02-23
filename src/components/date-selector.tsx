@@ -1,8 +1,8 @@
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { addMonths, parseISO, subMonths } from 'date-fns';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { getDateRange } from '@/lib/date-utils';
 import type { DateRange } from '@/lib/date-utils';
+import { getDateRange } from '@/lib/date-utils';
 import { cn } from '@/lib/utils';
 import { useMonthYear } from '@/hooks/use-month-year';
 
@@ -49,7 +49,6 @@ export function DateSelector({
           className="text-[10px] font-bold text-primary flex items-center gap-1 uppercase"
         >
           Mensual
-          <ChevronDownIcon className="size-3.5 stroke-3" />
         </button>
         <p className="text-base font-semibold text-foreground first-letter:uppercase lowercase">
           {month} {year}

@@ -1,6 +1,7 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { ArrowRightIcon } from 'lucide-react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { Link } from '@tanstack/react-router';
 import { TransactionResumeItem } from './transaction-resume-item';
 import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -35,17 +36,25 @@ export function RecentTransactions({ className }: React.ComponentProps<'div'>) {
     <div className={className}>
       <div className="flex justify-between items-center">
         <h6 className="text-xl font-bold text-foreground">Recientes</h6>
-        <button className="text-sm font-medium text-primary hover:underline">Ver todas</button>
+        <Link
+          to="/dashboard/transactions"
+          className="text-sm font-medium text-primary hover:underline"
+        >
+          Ver todas
+        </Link>
       </div>
       <ul ref={parent} className="rounded-2xl bg-card mt-4 overflow-hidden">
         {data.transactions.map((transaction) => (
           <TransactionResumeItem key={transaction.id} transaction={transaction} />
         ))}
         <li className="py-3 flex justify-center">
-          <button className="text-sm font-medium text-primary hover:underline flex items-center">
+          <Link
+            to="/dashboard/transactions"
+            className="text-sm font-medium text-primary hover:underline flex items-center"
+          >
             Ver todas
             <ArrowRightIcon className="size-4 ms-1.5" />
-          </button>
+          </Link>
         </li>
       </ul>
     </div>
