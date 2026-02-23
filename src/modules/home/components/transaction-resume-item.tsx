@@ -1,13 +1,12 @@
-import { CircleCheckIcon, PencilIcon, Trash2Icon } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 import type { Transaction } from '@/modules/transactions/models/transactions.models';
 import { FormattedMoneyTransaction } from '@/components/formatted-money';
 import { LocalDateFormat } from '@/components/local-date-format';
 import { Swipeable } from '@/components/swipeable';
 import { CategoryIcon } from '@/modules/categories/components/category-icon';
-import { DeleteTransactionDialog } from '@/modules/transactions/components/delete-transacion-dialog';
 import { TransactionDetail } from '@/modules/transactions/components/transaction-detail';
 import { useIsPending } from '@/hooks/use-is-pending';
+import { TransactionsSwipeableActions } from '@/modules/transactions/components/transactions-swipeable-actions';
 
 const description = tv({
   base: 'text-sm font-semibold text-foreground mb-0.5 line-clamp-1',
@@ -25,7 +24,7 @@ export function TransactionResumeItem({ transaction }: { transaction: Transactio
     <Swipeable as="li">
       <TransactionDetail transaction={transaction}>
         <Swipeable.Item>
-          <button className="p-3.5 flex gap-3.5 items-center w-full text-left transition-all active:bg-muted rounded-2xl overflow-hidden bg-card">
+          <button className="p-3.5 flex gap-3.5 items-center w-full text-left transition-all active:bg-muted rounded-2xl overflow-hidden bg-card data-[dragging=true]:bg-muted data-[dragging=true]:rounded-r-none">
             <CategoryIcon
               className="size-11 rounded-xl text-sm"
               transactionType={transaction.transaction_type}
@@ -50,20 +49,7 @@ export function TransactionResumeItem({ transaction }: { transaction: Transactio
           </button>
         </Swipeable.Item>
       </TransactionDetail>
-      <Swipeable.Actions>
-        <Swipeable.Action
-          className={pending ? 'bg-amber-300 text-amber-800' : 'bg-primary text-primary-foreground'}
-        >
-          {pending ? <CircleCheckIcon className="mb-1" /> : <PencilIcon className="mb-1" />}
-          <span className="font-semibold text-[11px]">{pending ? 'Completar' : 'Editar'}</span>
-        </Swipeable.Action>
-        <DeleteTransactionDialog transactionId={transaction.id}>
-          <Swipeable.Action className="bg-red-400 text-red-50">
-            <Trash2Icon className="size-5 mb-1" />
-            <span className="font-semibold text-[11px]">Borrar</span>
-          </Swipeable.Action>
-        </DeleteTransactionDialog>
-      </Swipeable.Actions>
+      <TransactionsSwipeableActions transaction={transaction} />
     </Swipeable>
   );
 }

@@ -11,39 +11,44 @@ import { LocalDateFormat } from '@/components/local-date-format';
 import { AccountIcon, AccountName } from '@/modules/accounts/components/account-icon';
 import { TransactionDetail } from '@/modules/transactions/components/transaction-detail';
 import { Button } from '@/components/ui/button';
+import { Swipeable } from '@/components/swipeable';
+import { TransactionsSwipeableActions } from '@/modules/transactions/components/transactions-swipeable-actions';
 
 function TransactionItem({ transaction }: { transaction: Transaction }) {
   return (
-    <li className="block">
+    <Swipeable as="li">
       <TransactionDetail transaction={transaction}>
-        <button className="p-3.5 py-3 bg-card rounded-xl flex items-center gap-3 w-full text-left transition-all active:bg-muted">
-          <AccountIcon className="size-10 rounded-xl" account={transaction.account} />
-          <div className="flex-1 flex flex-col">
-            <p className="text-sm font-semibold text-foreground mb-0.5 line-clamp-1">
-              {transaction.description}
-            </p>
-            <AccountName
-              as="p"
-              account={transaction.account}
-              className="text-xs font-medium text-muted-foreground text-left line-clamp-1"
-            />
-          </div>
-          <div className="flex flex-col">
-            <FormattedMoneyTransaction
-              className="text-sm font-bold mb-0.5 text-right"
-              value={transaction.amount}
-            />
-            <LocalDateFormat
-              as="p"
-              formatStr="MMM d, yyy"
-              className="text-xs font-medium text-muted-foreground text-right first-letter:uppercase"
-            >
-              {transaction.date}
-            </LocalDateFormat>
-          </div>
-        </button>
+        <Swipeable.Item>
+          <button className="p-3.5 py-3 bg-card rounded-xl flex items-center gap-3 w-full text-left transition-all active:bg-muted data-[dragging=true]:rounded-r-none">
+            <AccountIcon className="size-10 rounded-xl" account={transaction.account} />
+            <div className="flex-1 flex flex-col">
+              <p className="text-sm font-semibold text-foreground mb-0.5 line-clamp-1">
+                {transaction.description}
+              </p>
+              <AccountName
+                as="p"
+                account={transaction.account}
+                className="text-xs font-medium text-muted-foreground text-left line-clamp-1"
+              />
+            </div>
+            <div className="flex flex-col">
+              <FormattedMoneyTransaction
+                className="text-sm font-bold mb-0.5 text-right"
+                value={transaction.amount}
+              />
+              <LocalDateFormat
+                as="p"
+                formatStr="MMM d, yyy"
+                className="text-xs font-medium text-muted-foreground text-right first-letter:uppercase"
+              >
+                {transaction.date}
+              </LocalDateFormat>
+            </div>
+          </button>
+        </Swipeable.Item>
       </TransactionDetail>
-    </li>
+      <TransactionsSwipeableActions transaction={transaction} />
+    </Swipeable>
   );
 }
 
