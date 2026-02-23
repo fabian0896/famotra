@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
 import type { Transaction } from '@/modules/transactions/models/transactions.models';
 
 export function useIsPending(transaction: Transaction) {
-  return useMemo(() => {
-    return !transaction.account_id || !transaction.category_id;
-  }, [transaction]);
+  return (
+    transaction.transaction_type !== 'transfer' &&
+    (!transaction.account_id || !transaction.category_id)
+  );
 }

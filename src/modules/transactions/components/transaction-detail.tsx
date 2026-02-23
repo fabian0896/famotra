@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { sileo } from 'sileo';
 import { Transactions } from '../services/transactions';
+import { DeleteTransactionDialog } from './delete-transacion-dialog';
 import type { Transaction } from '../models/transactions.models';
 import { FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Button } from '@/components/ui/button';
@@ -23,55 +24,11 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { AccountIcon, AccountName } from '@/modules/accounts/components/account-icon';
 import { CategoryIcon } from '@/modules/categories/components/category-icon';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Spinner } from '@/components/ui/spinner';
 import { QueryKeys } from '@/constants/query-keys';
 import { formatError } from '@/lib/format-error';
 import { LocalDateFormat } from '@/components/local-date-format';
 import { useIsPending } from '@/hooks/use-is-pending';
-
-function DeleteConfirmationDialog({
-  onConfirm,
-  children,
-}: {
-  onConfirm: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogMedia className="bg-red-500/15">
-            <Trash2Icon className="text-destructive" />
-          </AlertDialogMedia>
-          <AlertDialogTitle>¿Eliminar transacción?</AlertDialogTitle>
-          <AlertDialogDescription>
-            ¿Estás seguro de que deseas eliminar esta transacción? Esta acción no se puede deshacer.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onConfirm}>
-            <Trash2Icon />
-            Si, Eliminar
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
 
 function TransferDetails({ transaction }: { transaction: Transaction }) {
   return (
@@ -256,12 +213,15 @@ export function TransactionDetail({
                 Editar
               </Button>
             )}
-            <DeleteConfirmationDialog onConfirm={() => remove.mutate({ id: transaction.id })}>
+            <DeleteTransactionDialog
+              transactionId={transaction.id}
+              onRemoved={() => setIsOpen(false)}
+            >
               <Button disabled={remove.isPending} className="flex-1 h-12" variant="destructive">
                 {remove.isPending ? <Spinner /> : <Trash2Icon />}
                 Borrar
               </Button>
-            </DeleteConfirmationDialog>
+            </DeleteTransactionDialog>
           </div>
         </div>
       </DrawerContent>

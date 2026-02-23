@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useRef, useState } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { Slot } from '@radix-ui/react-slot';
+import type { ElementType } from 'react';
 import { cn } from '@/lib/utils';
 
 type SwipeableContextType = {
@@ -19,7 +20,13 @@ function useSwipeable() {
   return ctx;
 }
 
-function SwipeableRoot({ children }: { children: React.ReactNode }) {
+function SwipeableRoot<T extends ElementType = 'div'>({
+  children,
+  as,
+}: {
+  children: React.ReactNode;
+  as?: T;
+}) {
   const [{ translate, dragging }, set] = useState({ translate: 0, dragging: false });
   const actionsRef = useRef<HTMLDivElement>(null);
   const translateRef = useRef(translate);
@@ -47,14 +54,22 @@ function SwipeableRoot({ children }: { children: React.ReactNode }) {
     { axis: 'x', filterTaps: true }
   );
 
+  const Comp = as ?? 'div';
+
   return (
     <SwipeableContext.Provider value={{ translate, isDragging: dragging, actionsRef, bind, close }}>
-      <div className="relative overflow-hidden">{children}</div>
+      <Comp className="relative overflow-hidden block">{children}</Comp>
     </SwipeableContext.Provider>
   );
 }
 
-function SwipeableItem({ children }: { children: React.ReactNode }) {
+function SwipeableItem({
+  children,
+  onClick,
+}: {
+  children: React.ReactNode;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+}) {
   const { translate, isDragging, bind, close } = useSwipeable();
 
   return (
@@ -66,7 +81,12 @@ function SwipeableItem({ children }: { children: React.ReactNode }) {
         transform: `translateX(${translate}px)`,
         transition: isDragging ? 'none' : 'transform 200ms ease',
       }}
-      onClick={translate !== 0 ? close : undefined}
+      onClick={(event) => {
+        if (translate !== 0) {
+          close();
+        }
+        onClick?.(event);
+      }}
     >
       {children}
     </Slot>
