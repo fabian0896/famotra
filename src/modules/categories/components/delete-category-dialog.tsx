@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { sileo } from 'sileo';
 import { Categories } from '../services/categories';
 import { categoriesQueryOptions } from '../query-options/categories';
-import type { Category, CategoryResume } from '../models/categories.models';
+import type { CategoryResume } from '../models/categories.models';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,13 +31,15 @@ function updateQueryData({ id }: { id: string }) {
 }
 
 export function DeleteCategoryDialog({
-  category,
+  categoryName,
+  categoryId,
   children,
   onDeleted,
 }: {
-  category: Category;
+  categoryName: string;
+  categoryId: string;
   children: React.ReactNode;
-  onDeleted: () => void;
+  onDeleted?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -49,7 +51,7 @@ export function DeleteCategoryDialog({
         { queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES, QueryKeys.CATEGORIES_RESUME] },
         updateQueryData({ id })
       );
-      onDeleted();
+      onDeleted?.();
       sileo.info({ title: 'Categoría eliminada correctamente' });
       setIsOpen(false);
     },
@@ -71,16 +73,16 @@ export function DeleteCategoryDialog({
           <AlertDialogMedia className="bg-red-500/15">
             <Trash2Icon className="text-destructive" />
           </AlertDialogMedia>
-          <AlertDialogTitle>¿Eliminar {category.name}?</AlertDialogTitle>
+          <AlertDialogTitle>¿Eliminar {categoryName}?</AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción es permanente y eliminará todas las transacciones asociadas a{' '}
-            <span className="text-foreground font-semibold">{category.name}</span>.
+            <span className="text-foreground font-semibold">{categoryName}</span>.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => remove.mutate({ id: category.id })}
+            onClick={() => remove.mutate({ id: categoryId })}
             variant="destructive"
           >
             {remove.isPending ? <Spinner /> : <Trash2Icon />}

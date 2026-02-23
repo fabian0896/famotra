@@ -1,51 +1,12 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { Link } from '@tanstack/react-router';
 import { categoryResumeQueryOptions } from '../query-options/categories';
-import type { CategoryResume, CategoryTypes } from '../models/categories.models';
+import { CategoryItem } from './category-item';
+import type { CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/lib/date-utils';
-import { FormattedMoney, FormattedMoneyTransaction } from '@/components/formatted-money';
+import { FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Skeleton } from '@/components/ui/skeleton';
-
-export function CategoryItem({ category, range }: { category: CategoryResume; range?: DateRange }) {
-  return (
-    <li className="block h-full">
-      <Link
-        to="/dashboard/categories/$id"
-        params={{ id: category.category_id }}
-        search={{ start: range?.start, end: range?.end }}
-        className="p-3.5 h-[76px] bg-card w-full rounded-2xl flex gap-3.5 items-center"
-      >
-        <div
-          style={{ '--color': category.category_color } as React.CSSProperties}
-          className="size-11 rounded-xl bg-(--color)/15 grid place-items-center text-base"
-        >
-          {category.category_icon}
-        </div>
-        <div className="flex-1 flex flex-col gap-1">
-          <div className="flex justify-between">
-            <p className="text-sm text-foreground font-semibold">{category.category_name}</p>
-            <p className="text-sm text-foreground font-bold text-right">
-              <FormattedMoney allowNegative={false} value={category.total_amount} />
-            </p>
-          </div>
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <div
-              style={
-                {
-                  width: `${category.percentage}%`,
-                  '--color': category.category_color,
-                } as React.CSSProperties
-              }
-              className="h-full bg-(--color) rounded-full"
-            ></div>
-          </div>
-        </div>
-      </Link>
-    </li>
-  );
-}
 
 export function CategoryList({ type, range }: { type: CategoryTypes; range: DateRange }) {
   const { data: categories } = useSuspenseQuery(categoryResumeQueryOptions({ type, range }));

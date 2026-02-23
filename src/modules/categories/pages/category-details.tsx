@@ -51,13 +51,14 @@ export function CategoryDetails({ id }: { id: string }) {
         <Header.BackButton />
         <Header.Title>{category.name}</Header.Title>
         <Header.Actions>
-          <Link to="/dashboard/categories/$id/edit" params={{ id }}>
-            <Header.ActionButton size="sm">
+          <Header.ActionButton asChild size="sm">
+            <Link to="/dashboard/categories/$id/edit" params={{ id }}>
               <Edit2Icon />
-            </Header.ActionButton>
-          </Link>
+            </Link>
+          </Header.ActionButton>
           <DeleteCategoryDialog
-            category={category}
+            categoryId={category.id}
+            categoryName={category.name}
             onDeleted={() => navigate({ to: '/dashboard/categories' })}
           >
             <Header.ActionButton size="sm" variant="destructive">

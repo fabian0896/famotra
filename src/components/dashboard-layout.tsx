@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { tv } from 'tailwind-variants';
 import React from 'react';
+import { Slot } from '@radix-ui/react-slot';
 import type { VariantProps } from 'tailwind-variants';
 import { cn } from '@/lib/utils';
 
@@ -115,9 +116,11 @@ function HeaderActionButton({
   variant,
   size,
   className,
+  asChild = false,
   ...props
-}: React.ComponentProps<'button'> & VariantProps<typeof actionButton>) {
-  return <button className={cn(actionButton({ variant, size }), className)} {...props} />;
+}: { asChild?: boolean } & React.ComponentProps<'button'> & VariantProps<typeof actionButton>) {
+  const Comp = asChild ? Slot : 'button';
+  return <Comp className={cn(actionButton({ variant, size }), className)} {...props} />;
 }
 
 function BackButton({ ...props }: React.ComponentProps<typeof HeaderActionButton>) {

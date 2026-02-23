@@ -3,8 +3,8 @@ import { PlusIcon } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { CategoryList, CategoryListSkeleton } from '../components/category-list';
 import type { CategoryTypes } from '../models/categories.models';
-import { getDateRange } from '@/lib/date-utils';
 import type { DateRange } from '@/lib/date-utils';
+import { getDateRange } from '@/lib/date-utils';
 import { Content, Header, Page } from '@/components/dashboard-layout';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DateSelector } from '@/components/date-selector';
@@ -40,11 +40,11 @@ export function CategoriesPage() {
       <Header>
         <Header.Title>Categorías</Header.Title>
         <Header.Actions>
-          <Link to="/dashboard/categories/new">
-            <Header.ActionButton>
+          <Header.ActionButton asChild>
+            <Link to="/dashboard/categories/new">
               <PlusIcon />
-            </Header.ActionButton>
-          </Link>
+            </Link>
+          </Header.ActionButton>
         </Header.Actions>
       </Header>
 
