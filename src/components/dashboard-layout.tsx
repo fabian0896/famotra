@@ -10,6 +10,8 @@ import {
 import { tv } from 'tailwind-variants';
 import React from 'react';
 import { Slot } from '@radix-ui/react-slot';
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import { Spinner } from './ui/spinner';
 import type { VariantProps } from 'tailwind-variants';
 import { cn } from '@/lib/utils';
 
@@ -61,7 +63,30 @@ function NavItem({
   );
 }
 
-export function Page({ children }: { children: React.ReactNode }) {
+export function Page({
+  children,
+  onRefresh,
+}: {
+  children: React.ReactNode;
+  onRefresh?: () => Promise<unknown>;
+}) {
+  if (onRefresh) {
+    return (
+      <PullToRefresh
+        pullingContent={
+          <p className="text-xs text-muted-foreground text-center py-2">Arrastra para actualizar</p>
+        }
+        refreshingContent={
+          <div className="py-4 flex justify-center">
+            <Spinner className="size-6 text-muted-foreground" />
+          </div>
+        }
+        onRefresh={onRefresh}
+      >
+        {children}
+      </PullToRefresh>
+    );
+  }
   return <>{children}</>;
 }
 

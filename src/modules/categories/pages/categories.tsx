@@ -1,7 +1,9 @@
 import { Suspense } from 'react';
 import { PlusIcon } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { CategoryList, CategoryListSkeleton } from '../components/category-list';
+import { categoryResumeQueryOptions } from '../query-options/categories';
 import type { CategoryTypes } from '../models/categories.models';
 import type { DateRange } from '@/lib/date-utils';
 import { getDateRange } from '@/lib/date-utils';
@@ -11,6 +13,8 @@ import { DateSelector } from '@/components/date-selector';
 
 export function CategoriesPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const {
     type = 'expense',
     start = getDateRange().start,
@@ -35,8 +39,14 @@ export function CategoriesPage() {
     });
   };
 
+  const handleRefres = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: categoryResumeQueryOptions({ type, range }).queryKey,
+    });
+  };
+
   return (
-    <Page>
+    <Page onRefresh={handleRefres}>
       <Header>
         <Header.Title>Categorías</Header.Title>
         <Header.Actions>

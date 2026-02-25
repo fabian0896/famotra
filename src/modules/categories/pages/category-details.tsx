@@ -1,8 +1,8 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Edit2Icon, Trash2Icon } from 'lucide-react';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { Suspense } from 'react';
-import { categoryByIdOption } from '../query-options/categories';
+import { categoryByIdOption, categoryDetailsOptions } from '../query-options/categories';
 import { CategoryTransactions } from '../components/category-transactions';
 import { CategoryDetailsCard } from '../components/category-details-card';
 import { DeleteCategoryDialog } from '../components/delete-category-dialog';
@@ -10,6 +10,7 @@ import { Content, Header, Page } from '@/components/dashboard-layout';
 import { getDateRange } from '@/lib/date-utils';
 import { useMonthYear } from '@/hooks/use-month-year';
 import { Skeleton } from '@/components/ui/skeleton';
+import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
 
 function CategoryTransactionsSkeleton() {
   return (
@@ -44,9 +45,24 @@ export function CategoryDetails({ id }: { id: string }) {
   const { month, year } = useMonthYear({ start, end });
   const { data: category } = useSuspenseQuery(categoryByIdOption({ id }));
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const refresh = async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({
+        queryKey: categoryDetailsOptions({ id, range: { start, end } }).queryKey,
+      }),
+      queryClient.invalidateQueries({
+        queryKey: transactionsQueryOptions({
+          pageSize: 25,
+          filters: { categoryId: id, from: start, to: end },
+        }).queryKey,
+      }),
+    ]);
+  };
 
   return (
-    <Page>
+    <Page onRefresh={refresh}>
       <Header>
         <Header.BackButton />
         <Header.Title>{category.name}</Header.Title>
