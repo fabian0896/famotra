@@ -1,4 +1,4 @@
-import type { Enums, Tables, TablesInsert } from '@/models/database.types';
+import type { Database, Enums, Tables, TablesInsert } from '@/models/database.types';
 
 export type TransactionAccount = {
   id: string;
@@ -30,3 +30,5 @@ export const TRANSACTION_TYPES: Record<TransactionTypes, string> = {
   expense: 'Gasto',
   transfer: 'Transferencia',
 };
+
+export type DailyTotal = Database['public']['Functions']['get_daily_totals']['Returns'][number];

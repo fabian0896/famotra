@@ -1,4 +1,4 @@
-import { infiniteQueryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import type { TransactionFilters } from '@/modules/transactions/models/transaction-filters';
 import { QueryKeys } from '@/constants/query-keys';
 import { Transactions } from '@/modules/transactions/services/transactions';
@@ -25,3 +25,19 @@ export const transactionsQueryOptions = ({
       return { transactions, count: data.pages[0].count };
     },
   });
+
+export const balanceSummaryOptions = ({ start, end }: { start: string; end: string }) =>
+  queryOptions({
+    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.BALANCE_SUMMARY, { start, end }],
+    queryFn: () => Transactions.getBalanceSummary({ start, end }),
+    staleTime: Infinity,
+  });
+
+export const dailyTotalsOptions = ({ filters }: { filters: TransactionFilters }) => {
+  return queryOptions({
+    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.DAILY_TOTAL, filters],
+    queryFn: () => Transactions.getDailyTotals({ filters }),
+    staleTime: Infinity,
+    select: (totals) => new Map(totals.map((t) => [t.day, t.total])),
+  });
+};

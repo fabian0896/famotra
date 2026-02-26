@@ -1,6 +1,6 @@
 import { ArrowDownLeftIcon, ArrowUpRightIcon } from 'lucide-react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { resumeQueryOptions } from '../query-options/home-query-options';
+import { balanceSummaryOptions } from '@/modules/transactions/query-options/transactions';
 import type { DateRange } from '@/lib/date-utils';
 import { cn } from '@/lib/utils';
 import { getDateRange } from '@/lib/date-utils';
@@ -13,7 +13,7 @@ export function ResumeCard({
   ...props
 }: { range?: DateRange } & React.ComponentProps<'div'>) {
   const { month, year } = useMonthYear(range);
-  const { data } = useSuspenseQuery(resumeQueryOptions(range));
+  const { data } = useSuspenseQuery(balanceSummaryOptions(range));
   return (
     <div
       className={cn(

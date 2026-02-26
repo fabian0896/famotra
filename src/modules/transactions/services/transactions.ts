@@ -1,6 +1,7 @@
 import type { TransactionTypes, TransactionsInsert } from '../models/transactions.models';
 import type { TransactionFilters } from '../models/transaction-filters';
 import { supabase } from '@/integrations/supabase/client';
+import { getDateRange } from '@/lib/date-utils';
 
 export class Transactions {
   static async create(data: TransactionsInsert) {
@@ -83,6 +84,28 @@ export class Transactions {
       .range(from, to)
       .throwOnError();
     return { transactions, count };
+  }
+
+  static async getBalanceSummary({ start, end }: { start: string; end: string }) {
+    const { data } = await supabase
+      .rpc('get_balance_summary', { p_date_from: start, p_date_to: end })
+      .single()
+      .throwOnError();
+    return data;
+  }
+
+  static async getDailyTotals({ filters }: { filters: TransactionFilters }) {
+    const defaultRange = getDateRange();
+    const { data } = await supabase
+      .rpc('get_daily_totals', {
+        p_from: filters.from || defaultRange.start,
+        p_to: filters.to || defaultRange.end,
+        p_category_id: filters.categoryId,
+        p_account_id: filters.accountId,
+        p_type: filters.transactionType,
+      })
+      .throwOnError();
+    return data;
   }
 
   static async remove({ id }: { id: string }) {

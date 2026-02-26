@@ -2,13 +2,15 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ReceiptIcon } from 'lucide-react';
 import { TransactionDetail } from './transaction-detail';
 import { TransactionsSwipeableActions } from './transactions-swipeable-actions';
 import type { Transaction, TransactionTypes } from '../models/transactions.models';
 import { CategoryIcon } from '@/modules/categories/components/category-icon';
 import { AccountName } from '@/modules/accounts/components/account-icon';
-import { FormattedMoneyTransaction } from '@/components/formatted-money';
+import { FormattedMoney, FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Swipeable } from '@/components/swipeable';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function CategoryBadge({
   category,
@@ -89,10 +91,16 @@ function TransactionItem({ transaction }: { transaction: Transaction }) {
 function TransactionGoup({
   date,
   children,
+  totals,
+  totalsLoading,
 }: {
   date: string;
+  totals?: Map<string, number>;
+  totalsLoading: boolean;
   children?: React.ReactElement<React.ComponentProps<typeof TransactionItem>>[];
 }) {
+  const total = totals?.get(date);
+
   const parsedDate = parseISO(`${date}T12:00:00`);
   const defaultFormat = format(parsedDate, 'MMMM d', { locale: es });
   const formatDate = isToday(parsedDate)
@@ -105,31 +113,64 @@ function TransactionGoup({
     <div className="space-y-2">
       <div className="flex items-center justify-between py-1">
         <p className="text-sm font-semibold text-foreground first-letter:uppercase">{formatDate}</p>
-        <p className="text-sm font-semibold text-muted-foreground">$500.000</p>
+        {totalsLoading ? (
+          <Skeleton className="h-4 w-16" />
+        ) : (
+          total !== undefined && (
+            <p className="text-sm font-semibold text-muted-foreground">
+              <FormattedMoney value={total} />
+            </p>
+          )
+        )}
       </div>
       <ul className="block space-y-1 bg-card rounded-[20px] overflow-hidden">{children}</ul>
     </div>
   );
 }
 
+function EmptyList() {
+  return (
+    <div className="py-10 px-6 flex flex-col gap-4">
+      <div className="size-20 bg-card rounded-full mx-auto grid place-items-center">
+        <ReceiptIcon className="size-9 text-muted-foreground/90" />
+      </div>
+      <h2 className="text-base font-semibold text-center text-foreground leading-5">
+        No transactions yet
+      </h2>
+      <p className="text-sm font-medium text-muted-foreground text-center">
+        Your transactions for this month will appear here
+      </p>
+    </div>
+  );
+}
+
 function TransactionListRoot({
   children,
+  dailyTotals,
+  dailyTotalsLoading = false,
   ...props
 }: React.ComponentProps<typeof InfiniteScroll> & {
+  dailyTotals?: Map<string, number>;
+  dailyTotalsLoading?: boolean;
   children?: React.ReactElement<React.ComponentProps<typeof TransactionItem>>[];
 }) {
   const list = React.Children.toArray(children) as React.ReactElement<
     React.ComponentProps<typeof TransactionItem>
   >[];
 
-  if (!list.length) return <p>No hay tranacciones</p>;
+  if (!list.length) return <EmptyList />;
 
   const groups = Object.groupBy(list, (item) => item.props.transaction.date);
 
   return (
     <InfiniteScroll {...props} className="space-y-4">
       {Object.entries(groups).map(([date, transactions]) => (
-        <TransactionGoup date={date} key={date}>
+        <TransactionGoup
+          date={date}
+          key={date}
+          totals={dailyTotals}
+          totalsLoading={dailyTotalsLoading}
+        >
           {transactions}
         </TransactionGoup>
       ))}
