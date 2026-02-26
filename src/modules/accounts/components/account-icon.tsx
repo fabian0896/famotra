@@ -47,6 +47,21 @@ export function AccountIcon({
   );
 }
 
+export function AccountDot({
+  account,
+  className,
+  ...props
+}: { account: Account | TransactionAccount | null } & React.ComponentProps<'div'>) {
+  return (
+    <span
+      {...props}
+      className={cn(`overflow-hidden ${account ? 'bg-primary' : 'bg-amber-500'}`, className)}
+    >
+      {account?.bank?.logo && <img src={account.bank.logo} alt={account.bank.name} />}
+    </span>
+  );
+}
+
 export function AccountName<T extends ElementType = 'span'>({
   account,
   as,

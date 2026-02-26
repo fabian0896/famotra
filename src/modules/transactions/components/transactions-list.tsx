@@ -2,12 +2,12 @@ import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ReceiptIcon } from 'lucide-react';
+import { ArrowRightIcon, ReceiptIcon } from 'lucide-react';
 import { TransactionDetail } from './transaction-detail';
 import { TransactionsSwipeableActions } from './transactions-swipeable-actions';
 import type { Transaction, TransactionTypes } from '../models/transactions.models';
 import { CategoryIcon } from '@/modules/categories/components/category-icon';
-import { AccountName } from '@/modules/accounts/components/account-icon';
+import { AccountDot, AccountName } from '@/modules/accounts/components/account-icon';
 import { FormattedMoney, FormattedMoneyTransaction } from '@/components/formatted-money';
 import { Swipeable } from '@/components/swipeable';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -52,33 +52,62 @@ function TransactionItem({ transaction }: { transaction: Transaction }) {
         <Swipeable.Item>
           <button className="w-full bg-card text-left p-4 flex gap-3 items-center transition-colors active:bg-muted">
             <CategoryIcon
-              className="size-11 rounded-xl"
+              className="size-11 rounded-xl shrink-0"
               transactionType={transaction.transaction_type}
               category={transaction.category}
             />
             <div className="flex-1">
-              <p className="text-base font-semibold text-foreground line-clamp-1 mb-1">
-                {transaction.description}
-              </p>
-              <div className="flex items-center gap-1.5">
-                <div className="size-2 rounded-full bg-primary"></div>
-                <AccountName
-                  className="text-xs font-medium text-muted-foreground leading-[19px] line-clamp-1"
-                  as="p"
-                  account={transaction.account}
+              <div className="mb-1 flex gap-3">
+                <p className="flex-1 text-base font-semibold text-foreground line-clamp-1">
+                  {transaction.description}
+                </p>
+                <p className="font-bold text-sm">
+                  <FormattedMoneyTransaction transactionType={transaction.transaction_type}>
+                    {transaction.amount}
+                  </FormattedMoneyTransaction>
+                </p>
+              </div>
+              <div className="flex gap-3">
+                {transaction.transaction_type === 'transfer' ? (
+                  <div className="flex-1 flex gap-1.5 items-center justify-start">
+                    <div className="flex items-center gap-1.5">
+                      <AccountDot account={transaction.account} className="size-2 rounded-full" />
+                      <AccountName
+                        part="account"
+                        className="text-xs font-medium text-muted-foreground leading-[19px] line-clamp-1"
+                        as="p"
+                        account={transaction.account}
+                      />
+                    </div>
+                    <ArrowRightIcon className="size-2.5 text-muted-foreground" />
+                    <div className="flex items-center gap-1.5">
+                      <AccountDot
+                        account={transaction.destination}
+                        className="size-2 rounded-full"
+                      />
+                      <AccountName
+                        part="account"
+                        className="text-xs font-medium text-muted-foreground leading-[19px] line-clamp-1"
+                        as="p"
+                        account={transaction.destination}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex-1 flex items-center gap-1.5">
+                    <AccountDot account={transaction.account} className="size-2 rounded-full" />
+                    <AccountName
+                      className="text-xs font-medium text-muted-foreground leading-[19px] line-clamp-1"
+                      as="p"
+                      account={transaction.account}
+                    />
+                  </div>
+                )}
+                <CategoryBadge
+                  trasactionType={transaction.transaction_type}
+                  category={transaction.category}
                 />
               </div>
-            </div>
-            <div className="flex flex-col items-end">
-              <p className="font-bold text-sm mb-1">
-                <FormattedMoneyTransaction transactionType={transaction.transaction_type}>
-                  {transaction.amount}
-                </FormattedMoneyTransaction>
-              </p>
-              <CategoryBadge
-                trasactionType={transaction.transaction_type}
-                category={transaction.category}
-              />
             </div>
           </button>
         </Swipeable.Item>
