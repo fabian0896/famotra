@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import React from 'react';
 import { balanceSummaryOptions } from '../query-options/transactions';
 import type { DateRange } from '@/lib/date-utils';
 import { FormattedMoney } from '@/components/formatted-money';
@@ -37,13 +38,13 @@ export function BalanceSummarySkeleton() {
   return (
     <div className="bg-card rounded-2xl py-3 px-4 flex justify-between items-center">
       {(['Ingresos', 'Gastos', 'Balance'] as const).map((label, i) => (
-        <>
+        <React.Fragment key={label}>
           {i > 0 && <div className="h-9 w-px bg-muted" />}
           <div key={label} className="flex flex-col items-center gap-1">
             <Skeleton className="h-4 w-16" />
             <p className="text-[11px] font-medium text-muted-foreground">{label}</p>
           </div>
-        </>
+        </React.Fragment>
       ))}
     </div>
   );
