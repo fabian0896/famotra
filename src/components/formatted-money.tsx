@@ -38,13 +38,14 @@ const TYPE = {
 } as const;
 
 export function FormattedMoneyTransaction({
-  value,
   transactionType,
   className,
+  children,
   ...props
-}: { value: number; transactionType?: TransactionTypes } & React.ComponentProps<
+}: { value?: number; transactionType?: TransactionTypes; children: number } & React.ComponentProps<
   typeof NumericFormat
 >) {
+  const value = children;
   const isNeutra = transactionType === 'transfer' || value === 0;
   let signValue = value > 0 ? `+` : value < 0 ? `-` : '';
   signValue = isNeutra ? '' : signValue;

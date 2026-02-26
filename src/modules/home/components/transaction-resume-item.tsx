@@ -43,8 +43,9 @@ export function TransactionResumeItem({ transaction }: { transaction: Transactio
               <FormattedMoneyTransaction
                 className="text-sm font-bold"
                 transactionType={transaction.transaction_type}
-                value={transaction.amount}
-              />
+              >
+                {transaction.amount}
+              </FormattedMoneyTransaction>
             </div>
           </button>
         </Swipeable.Item>

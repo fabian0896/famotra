@@ -135,7 +135,9 @@ export function TransactionDetail({
                 className="text-center text-3xl font-bold"
                 transactionType={transaction.transaction_type}
                 value={transaction.amount}
-              />
+              >
+                {transaction.amount}
+              </FormattedMoneyTransaction>
             </DrawerDescription>
           </div>
           {transaction.transaction_type === 'transfer' ? (

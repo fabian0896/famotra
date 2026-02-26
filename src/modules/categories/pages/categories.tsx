@@ -31,11 +31,11 @@ export function CategoriesPage() {
     });
   };
 
-  const handleChangeRange = (event: { range: DateRange }) => {
+  const handleChangeRange = (event: DateRange) => {
     navigate({
       to: '.',
       replace: true,
-      search: (prev) => ({ ...prev, ...event.range }),
+      search: (prev) => ({ ...prev, ...event }),
     });
   };
 

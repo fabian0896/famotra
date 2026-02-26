@@ -3,8 +3,15 @@ import { DeleteTransactionDialog } from './delete-transacion-dialog';
 import type { Transaction } from '../models/transactions.models';
 import { Swipeable } from '@/components/swipeable';
 import { useIsPending } from '@/hooks/use-is-pending';
+import { cn } from '@/lib/utils';
 
-export function TransactionsSwipeableActions({ transaction }: { transaction: Transaction }) {
+export function TransactionsSwipeableActions({
+  transaction,
+  className,
+}: {
+  transaction: Transaction;
+  className?: string;
+}) {
   const pending = useIsPending(transaction);
   return (
     <Swipeable.Actions>
@@ -15,7 +22,7 @@ export function TransactionsSwipeableActions({ transaction }: { transaction: Tra
         <span className="font-semibold text-[11px]">{pending ? 'Completar' : 'Editar'}</span>
       </Swipeable.Action>
       <DeleteTransactionDialog transactionId={transaction.id}>
-        <Swipeable.Action className="bg-red-400 text-red-50 rounded-r-2xl">
+        <Swipeable.Action className={cn('bg-red-400 text-red-50 rounded-r-2xl', className)}>
           <Trash2Icon className="size-5 mb-1" />
           <span className="font-semibold text-[11px]">Borrar</span>
         </Swipeable.Action>

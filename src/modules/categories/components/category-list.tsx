@@ -21,11 +21,9 @@ export function CategoryList({ type, range }: { type: CategoryTypes; range: Date
     <div>
       <div className="py-2.5 px-3.5 flex justify-between items-center bg-card mb-2 rounded-[12px]">
         <p className="text-sm font-semibold text-foreground">{title}</p>
-        <FormattedMoneyTransaction
-          className="text-lg font-bold"
-          transactionType={type}
-          value={total}
-        />
+        <FormattedMoneyTransaction className="text-lg font-bold" transactionType={type}>
+          {total}
+        </FormattedMoneyTransaction>
       </div>
       <ul ref={parent} className="block space-y-2">
         {categories.map((category) => (

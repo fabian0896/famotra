@@ -1,11 +1,20 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { PlusIcon } from 'lucide-react';
+import { useState } from 'react';
 import { transactionsQueryOptions } from '../query-options/transactions';
+import { TransactionList } from '../components/transactions-list';
 import { Content, Header, Page } from '@/components/dashboard-layout';
 import { DateSelector } from '@/components/date-selector';
+import { Spinner } from '@/components/ui/spinner';
+import { getDateRange } from '@/lib/date-utils';
+
+const PAGE_SIZE = 20;
 
 export function TransactionsPage() {
-  const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ pageSize: 30 }));
+  const [range, setRange] = useState(() => getDateRange());
+  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
+    transactionsQueryOptions({ pageSize: PAGE_SIZE, filters: { from: range.start, to: range.end } })
+  );
 
   return (
     <Page>
@@ -19,7 +28,7 @@ export function TransactionsPage() {
       </Header>
 
       <Content className="flex flex-col gap-4">
-        <DateSelector className="mt-4" />
+        <DateSelector value={range} onValueChange={setRange} className="mt-4" />
 
         <div className="space-x-2">
           <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
@@ -53,12 +62,25 @@ export function TransactionsPage() {
           </div>
         </div>
 
-        <div>
-          <p>Aqui van las transacciones</p>
+        <TransactionList
+          next={fetchNextPage}
+          hasMore={hasNextPage}
+          dataLength={data.transactions.length}
+          loader={
+            <div className="flex justify-center py-3">
+              <Spinner className="text-muted-foreground" />
+            </div>
+          }
+          endMessage={
+            <p className="text-sm text-muted-foreground text-center py-3">
+              No hay más transacciones para este rango de fechas
+            </p>
+          }
+        >
           {data.transactions.map((t) => (
-            <div key={t.id}>{t.description}</div>
+            <TransactionList.Item key={t.id} transaction={t} />
           ))}
-        </div>
+        </TransactionList>
       </Content>
     </Page>
   );

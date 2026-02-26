@@ -45,7 +45,7 @@ function SwipeableRoot<T extends ElementType = 'div'>({
       const clamped = Math.min(0, Math.max(absolute, -actionsWidth));
 
       if (last) {
-        const shouldOpen = dx < 0 && (clamped < -(actionsWidth / 3) || vx > 0.5);
+        const shouldOpen = dx <= 0 && (clamped < -(actionsWidth / 3) || vx > 0.5);
         set({ translate: shouldOpen ? -actionsWidth : 0, dragging: false });
       } else {
         set({ translate: clamped, dragging: active });

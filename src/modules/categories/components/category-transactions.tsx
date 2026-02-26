@@ -32,10 +32,9 @@ function TransactionItem({ transaction }: { transaction: Transaction }) {
               />
             </div>
             <div className="flex flex-col">
-              <FormattedMoneyTransaction
-                className="text-sm font-bold mb-0.5 text-right"
-                value={transaction.amount}
-              />
+              <FormattedMoneyTransaction className="text-sm font-bold mb-0.5 text-right">
+                {transaction.amount}
+              </FormattedMoneyTransaction>
               <LocalDateFormat
                 as="p"
                 formatStr="MMM d, yyy"

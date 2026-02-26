@@ -15,12 +15,12 @@ export function DateSelector({
 }: {
   value?: DateRange;
   defaultValue?: DateRange;
-  onValueChange?: (event: { range: DateRange }) => void;
+  onValueChange?: (event: DateRange) => void;
 } & React.ComponentProps<'div'>) {
   const [range, setRange] = useControllableState({
     prop: value,
     defaultProp: defaultValue ?? getDateRange(),
-    onChange: (val) => onValueChange?.({ range: val }),
+    onChange: (val) => onValueChange?.(val),
   });
 
   const { month, year } = useMonthYear(range);
