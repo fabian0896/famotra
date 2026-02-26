@@ -4,14 +4,24 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ResumeCard, ResumeCardSkeleton } from '../components/resume-card';
 import { QuickActionButton, QuickActions } from '../components/quick-actions';
 import { RecentTransactions, RecentTransactionsSkeleton } from '../components/recent-transactions';
+import { resumeQueryOptions } from '../query-options/home-query-options';
 import { Content, Header, Page } from '@/components/dashboard-layout';
-import { QueryKeys } from '@/constants/query-keys';
+import { getDateRange } from '@/lib/date-utils';
+import { transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
+
+const PAGE_SIZE = 10;
 
 export function HomePage() {
   const queryClient = useQueryClient();
+  const range = getDateRange();
 
   const handleRefres = async () => {
-    await queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: resumeQueryOptions(range).queryKey }),
+      queryClient.invalidateQueries({
+        queryKey: transactionsQueryOptions({ pageSize: PAGE_SIZE }).queryKey,
+      }),
+    ]);
   };
 
   return (
@@ -22,7 +32,7 @@ export function HomePage() {
 
       <Content className="space-y-5">
         <Suspense fallback={<ResumeCardSkeleton />}>
-          <ResumeCard />
+          <ResumeCard range={range} />
         </Suspense>
 
         <QuickActions>
@@ -38,7 +48,7 @@ export function HomePage() {
         </QuickActions>
 
         <Suspense fallback={<RecentTransactionsSkeleton />}>
-          <RecentTransactions />
+          <RecentTransactions pageSize={PAGE_SIZE} />
         </Suspense>
       </Content>
     </Page>

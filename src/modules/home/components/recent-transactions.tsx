@@ -29,9 +29,12 @@ export function RecentTransactionsSkeleton({ className }: React.ComponentProps<'
   );
 }
 
-export function RecentTransactions({ className }: React.ComponentProps<'div'>) {
+export function RecentTransactions({
+  className,
+  pageSize = 10,
+}: { pageSize?: number } & React.ComponentProps<'div'>) {
   const [parent] = useAutoAnimate();
-  const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ pageSize: 10 }));
+  const { data } = useSuspenseInfiniteQuery(transactionsQueryOptions({ pageSize }));
   return (
     <div className={className}>
       <div className="flex justify-between items-center">
