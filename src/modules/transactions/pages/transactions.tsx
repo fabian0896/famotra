@@ -1,5 +1,5 @@
 import { Suspense, useState } from 'react';
-import { useQuery, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { PlusIcon } from 'lucide-react';
 import { dailyTotalsOptions, transactionsQueryOptions } from '../query-options/transactions';
 import { TransactionList } from '../components/transactions-list';
@@ -8,10 +8,12 @@ import { Content, Header, Page } from '@/components/dashboard-layout';
 import { DateSelector } from '@/components/date-selector';
 import { Spinner } from '@/components/ui/spinner';
 import { getDateRange } from '@/lib/date-utils';
+import { QueryKeys } from '@/constants/query-keys';
 
 const PAGE_SIZE = 20;
 
 export function TransactionsPage() {
+  const queryClient = useQueryClient();
   const [range, setRange] = useState(() => getDateRange());
   const filters = { from: range.start, to: range.end };
   const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
@@ -21,8 +23,12 @@ export function TransactionsPage() {
     dailyTotalsOptions({ filters })
   );
 
+  const refresh = async () => {
+    await queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+  };
+
   return (
-    <Page>
+    <Page onRefresh={refresh}>
       <Header>
         <Header.Title>Transacciones</Header.Title>
         <Header.Actions>

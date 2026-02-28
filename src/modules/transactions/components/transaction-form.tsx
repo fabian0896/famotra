@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { formatISO } from 'date-fns';
-import React from 'react';
-import { Link } from '@tanstack/react-router';
+import { FileTextIcon } from 'lucide-react';
 import { Transactions } from '../services/transactions';
 import { addTransactionsSchema } from '../models/schemas';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
@@ -11,8 +10,6 @@ import { QueryKeys } from '@/constants/query-keys';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { formatError } from '@/lib/format-error';
 import { useAppForm } from '@/hooks/form';
-import { DialogClose, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 
 export function TransactionForm({
   type,
@@ -26,8 +23,6 @@ export function TransactionForm({
   const queryClient = useQueryClient();
   const { data } = useQuery(accountsQueryOptions);
   const accounts = data?.accounts || [];
-
-  const isEdit = Boolean(transaction);
 
   const create = useMutation({
     mutationFn: Transactions.upsert,
@@ -65,59 +60,42 @@ export function TransactionForm({
   });
 
   return (
-    <React.Fragment>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          form.handleSubmit();
-        }}
-      >
-        <div className="flex flex-col gap-6 mb-6">
-          <div className="grid grid-cols-2 gap-4">
-            <form.AppField
-              name="amount"
-              children={(field) => <field.AmountField label="Valor" />}
+    <form
+      className="flex flex-col gap-6"
+      onSubmit={(event) => {
+        event.preventDefault();
+        form.handleSubmit();
+      }}
+    >
+      <div className="flex flex-col gap-2 items-center py-6">
+        <label className="text-sm font-medium text-muted-foreground" htmlFor="">
+          Valor
+        </label>
+        <input
+          className="text-5xl font-bold text-red-400 w-full text-center outline-none"
+          type="text"
+        />
+      </div>
+      <div className="flex flex-col gap-3">
+        <form.AppField
+          name="account_id"
+          children={(field) => <field.AccountsCardField label="Cuenta" />}
+        />
+        <form.AppField
+          name="category_id"
+          children={(field) => <field.CategoriesCardField label="Categoría" type="expense" />}
+        />
+        <form.AppField
+          name="description"
+          children={(field) => (
+            <field.InputCardField
+              icon={<FileTextIcon />}
+              label="Notas"
+              placeholder="Notas de la trasnferencias"
             />
-            <form.AppField
-              name="description"
-              children={(field) => <field.TextField label="Descripción" />}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <form.AppField
-                name="category_id"
-                children={(field) => <field.CategoryField type={type} label="Categoría" />}
-              />
-              <Link to="/dashboard/categories" className="text-sm inline-block mt-2 text-primary">
-                + Agregar Categoría
-              </Link>
-            </div>
-            <div>
-              <form.AppField
-                name="account_id"
-                children={(field) => <field.AccountsField label="Cuenta" />}
-              />
-              <Link to="/dashboard/accounts" className="text-sm inline-block mt-2 text-primary">
-                + Agregar Cuenta
-              </Link>
-            </div>
-          </div>
-          <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
-        </div>
-        <DialogFooter className="pt-4">
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancel
-            </Button>
-          </DialogClose>
-          <form.AppForm>
-            <form.SubmitButton>
-              {isEdit ? 'Editar' : 'Agregar'} {type === 'expense' ? 'Gasto' : 'Ingreso'}
-            </form.SubmitButton>
-          </form.AppForm>
-        </DialogFooter>
-      </form>
-    </React.Fragment>
+          )}
+        />
+      </div>
+    </form>
   );
 }

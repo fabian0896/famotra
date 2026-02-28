@@ -22,10 +22,19 @@ function InputCardRoot({ className, onClick, ...props }: React.ComponentProps<'d
   );
 }
 
-function InputCardIcon({ className, ...props }: React.ComponentProps<'div'>) {
+function InputCardIcon({
+  className,
+  position = 'start',
+  ...props
+}: { position?: 'start' | 'end' } & React.ComponentProps<'div'>) {
+  const pos = position === 'start' ? 'order-first' : 'order-last';
   return (
     <div
-      className={cn('[&_svg]:size-5 [&_svg]:text-muted-foreground shrink-0 select-none', className)}
+      className={cn(
+        "[&_svg:not([class*='size-'])]:size-5 [&_svg:not([class*='text-'])]:text-muted-foreground shrink-0 select-none",
+        pos,
+        className
+      )}
       {...props}
     />
   );

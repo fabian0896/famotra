@@ -25,7 +25,7 @@ const navItems = [
 function AddButton() {
   return (
     <Link
-      to="/dashboard/transactions"
+      to="/dashboard/transactions/new"
       className="size-16 grid place-items-center bg-linear-to-br from-primary to-primary/60 rounded-full shadow-2xl shadow-primary/60"
     >
       <PlusIcon className="text-primary-foreground size-[26px] stroke-3" />

@@ -24,6 +24,7 @@ export const transactionsQueryOptions = ({
       const transactions = data.pages.flatMap((page) => page.transactions);
       return { transactions, count: data.pages[0].count };
     },
+    maxPages: 3,
   });
 
 export const balanceSummaryOptions = ({ start, end }: { start: string; end: string }) =>

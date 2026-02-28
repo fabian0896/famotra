@@ -20,7 +20,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <TanStackDevtools
         config={{
           position: 'bottom-right',
-          openHotkey: [],
+          openHotkey: undefined,
         }}
         plugins={[
           {

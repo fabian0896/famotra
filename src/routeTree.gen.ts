@@ -15,12 +15,13 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as DashboardTransactionsRouteImport } from './routes/dashboard/transactions'
 import { Route as DashboardShortcutsRouteImport } from './routes/dashboard/shortcuts'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
 import { Route as DashboardAccountsRouteImport } from './routes/dashboard/accounts'
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
+import { Route as DashboardTransactionsIndexRouteImport } from './routes/dashboard/transactions/index'
 import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
+import { Route as DashboardTransactionsNewRouteImport } from './routes/dashboard/transactions/new'
 import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
 import { Route as DashboardCategoriesIdRouteImport } from './routes/dashboard/categories/$id'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard/admin/users'
@@ -58,11 +59,6 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardTransactionsRoute = DashboardTransactionsRouteImport.update({
-  id: '/transactions',
-  path: '/transactions',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
 const DashboardShortcutsRoute = DashboardShortcutsRouteImport.update({
   id: '/shortcuts',
   path: '/shortcuts',
@@ -83,10 +79,22 @@ const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
   path: '/admin',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardTransactionsIndexRoute =
+  DashboardTransactionsIndexRouteImport.update({
+    id: '/transactions/',
+    path: '/transactions/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardCategoriesIndexRoute =
   DashboardCategoriesIndexRouteImport.update({
     id: '/categories/',
     path: '/categories/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardTransactionsNewRoute =
+  DashboardTransactionsNewRouteImport.update({
+    id: '/transactions/new',
+    path: '/transactions/new',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
 const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
@@ -131,14 +139,15 @@ export interface FileRoutesByFullPath {
   '/dashboard/accounts': typeof DashboardAccountsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/shortcuts': typeof DashboardShortcutsRoute
-  '/dashboard/transactions': typeof DashboardTransactionsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/admin/banks': typeof DashboardAdminBanksRoute
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/transactions/new': typeof DashboardTransactionsNewRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
+  '/dashboard/transactions': typeof DashboardTransactionsIndexRoute
   '/dashboard/categories/$id/edit': typeof DashboardCategoriesIdEditRoute
 }
 export interface FileRoutesByTo {
@@ -150,14 +159,15 @@ export interface FileRoutesByTo {
   '/dashboard/accounts': typeof DashboardAccountsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/shortcuts': typeof DashboardShortcutsRoute
-  '/dashboard/transactions': typeof DashboardTransactionsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/dashboard/admin/banks': typeof DashboardAdminBanksRoute
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/transactions/new': typeof DashboardTransactionsNewRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
+  '/dashboard/transactions': typeof DashboardTransactionsIndexRoute
   '/dashboard/categories/$id/edit': typeof DashboardCategoriesIdEditRoute
 }
 export interface FileRoutesById {
@@ -171,14 +181,15 @@ export interface FileRoutesById {
   '/dashboard/accounts': typeof DashboardAccountsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/shortcuts': typeof DashboardShortcutsRoute
-  '/dashboard/transactions': typeof DashboardTransactionsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/dashboard/admin/banks': typeof DashboardAdminBanksRoute
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
+  '/dashboard/transactions/new': typeof DashboardTransactionsNewRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
+  '/dashboard/transactions/': typeof DashboardTransactionsIndexRoute
   '/dashboard/categories/$id_/edit': typeof DashboardCategoriesIdEditRoute
 }
 export interface FileRouteTypes {
@@ -193,14 +204,15 @@ export interface FileRouteTypes {
     | '/dashboard/accounts'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
-    | '/dashboard/transactions'
     | '/dashboard/'
     | '/dashboard/admin/banks'
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
     | '/dashboard/categories/new'
+    | '/dashboard/transactions/new'
     | '/dashboard/categories'
+    | '/dashboard/transactions'
     | '/dashboard/categories/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -212,14 +224,15 @@ export interface FileRouteTypes {
     | '/dashboard/accounts'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
-    | '/dashboard/transactions'
     | '/dashboard'
     | '/dashboard/admin/banks'
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
     | '/dashboard/categories/new'
+    | '/dashboard/transactions/new'
     | '/dashboard/categories'
+    | '/dashboard/transactions'
     | '/dashboard/categories/$id/edit'
   id:
     | '__root__'
@@ -232,14 +245,15 @@ export interface FileRouteTypes {
     | '/dashboard/accounts'
     | '/dashboard/settings'
     | '/dashboard/shortcuts'
-    | '/dashboard/transactions'
     | '/dashboard/'
     | '/dashboard/admin/banks'
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
     | '/dashboard/categories/new'
+    | '/dashboard/transactions/new'
     | '/dashboard/categories/'
+    | '/dashboard/transactions/'
     | '/dashboard/categories/$id_/edit'
   fileRoutesById: FileRoutesById
 }
@@ -295,13 +309,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
-    '/dashboard/transactions': {
-      id: '/dashboard/transactions'
-      path: '/transactions'
-      fullPath: '/dashboard/transactions'
-      preLoaderRoute: typeof DashboardTransactionsRouteImport
-      parentRoute: typeof DashboardRouteRoute
-    }
     '/dashboard/shortcuts': {
       id: '/dashboard/shortcuts'
       path: '/shortcuts'
@@ -330,11 +337,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminRouteRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/transactions/': {
+      id: '/dashboard/transactions/'
+      path: '/transactions'
+      fullPath: '/dashboard/transactions'
+      preLoaderRoute: typeof DashboardTransactionsIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/categories/': {
       id: '/dashboard/categories/'
       path: '/categories'
       fullPath: '/dashboard/categories'
       preLoaderRoute: typeof DashboardCategoriesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/transactions/new': {
+      id: '/dashboard/transactions/new'
+      path: '/transactions/new'
+      fullPath: '/dashboard/transactions/new'
+      preLoaderRoute: typeof DashboardTransactionsNewRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/categories/new': {
@@ -402,11 +423,12 @@ interface DashboardRouteRouteChildren {
   DashboardAccountsRoute: typeof DashboardAccountsRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardShortcutsRoute: typeof DashboardShortcutsRoute
-  DashboardTransactionsRoute: typeof DashboardTransactionsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardCategoriesIdRoute: typeof DashboardCategoriesIdRoute
   DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
+  DashboardTransactionsNewRoute: typeof DashboardTransactionsNewRoute
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
+  DashboardTransactionsIndexRoute: typeof DashboardTransactionsIndexRoute
   DashboardCategoriesIdEditRoute: typeof DashboardCategoriesIdEditRoute
 }
 
@@ -415,11 +437,12 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardAccountsRoute: DashboardAccountsRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardShortcutsRoute: DashboardShortcutsRoute,
-  DashboardTransactionsRoute: DashboardTransactionsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardCategoriesIdRoute: DashboardCategoriesIdRoute,
   DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
+  DashboardTransactionsNewRoute: DashboardTransactionsNewRoute,
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
+  DashboardTransactionsIndexRoute: DashboardTransactionsIndexRoute,
   DashboardCategoriesIdEditRoute: DashboardCategoriesIdEditRoute,
 }
 
