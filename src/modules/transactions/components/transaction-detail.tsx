@@ -9,6 +9,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { sileo } from 'sileo';
+import { Link } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
 import { DeleteTransactionDialog } from './delete-transacion-dialog';
 import type { Transaction } from '../models/transactions.models';
@@ -203,16 +204,21 @@ export function TransactionDetail({
           <div className="flex gap-3">
             {isPending ? (
               <Button
+                asChild
                 className="flex-1 h-12 bg-amber-500/10! border-amber-600! text-amber-400"
                 variant="outline"
               >
-                <CircleCheckIcon />
-                Completar
+                <Link to="/dashboard/transactions/$id/edit" params={{ id: transaction.id }}>
+                  <CircleCheckIcon />
+                  Completar
+                </Link>
               </Button>
             ) : (
-              <Button className="flex-1 h-12" variant="outline">
-                <Edit2Icon />
-                Editar
+              <Button asChild className="flex-1 h-12" variant="outline">
+                <Link to="/dashboard/transactions/$id/edit" params={{ id: transaction.id }}>
+                  <Edit2Icon />
+                  Editar
+                </Link>
               </Button>
             )}
             <DeleteTransactionDialog

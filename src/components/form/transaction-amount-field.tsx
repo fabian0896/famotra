@@ -32,6 +32,7 @@ export function TransactionAmountField({ type }: { type: CategoryTypes | 'neutra
         decimalSeparator=","
         placeholder="$ 0"
         inputMode="numeric"
+        allowNegative={false}
         autoFocus
       />
       <FieldError errors={field.state.meta.errors} />

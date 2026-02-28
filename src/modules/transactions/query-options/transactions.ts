@@ -3,6 +3,13 @@ import type { TransactionFilters } from '@/modules/transactions/models/transacti
 import { QueryKeys } from '@/constants/query-keys';
 import { Transactions } from '@/modules/transactions/services/transactions';
 
+export const transactionByIdOptions = (id: string) =>
+  queryOptions({
+    queryKey: [QueryKeys.TRANSACTIONS, { id }],
+    queryFn: () => Transactions.getById(id),
+    staleTime: Infinity,
+  });
+
 export const transactionsQueryOptions = ({
   filters,
   pageSize = 25,

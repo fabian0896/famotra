@@ -86,6 +86,36 @@ export class Transactions {
     return { transactions, count };
   }
 
+  static async getById(id: string) {
+    const { data } = await supabase
+      .from('transactions')
+      .select(
+        `
+        *,
+        category:categories (id, name, icon, color),
+        account:accounts!account_id (
+          id,
+          name,
+          custom_bank_name,
+          custom_bank_icon,
+          bank:bank_list (id, logo, name)
+        ),
+        destination:accounts!destination_account_id (
+          id,
+          name,
+          custom_bank_name,
+          custom_bank_icon,
+          bank:bank_list (id, logo, name)
+        ),
+        card:shorcut_cards!card_id (name)
+        `
+      )
+      .eq('id', id)
+      .single()
+      .throwOnError();
+    return data;
+  }
+
   static async getBalanceSummary({ start, end }: { start: string; end: string }) {
     const { data } = await supabase
       .rpc('get_balance_summary', { p_date_from: start, p_date_to: end })

@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatISO } from 'date-fns';
 import { FileTextIcon } from 'lucide-react';
 import { sileo } from 'sileo';
-import { useRouter } from '@tanstack/react-router';
 import { addTransferSchema } from '../models/schemas';
 import { Transactions } from '../services/transactions';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
@@ -14,24 +13,20 @@ import { InputGroupCard } from '@/components/input-card';
 
 export function TransferForm({
   transaction,
+  onSuccess,
 }: {
   transaction?: Transaction;
   onSuccess?: () => void;
 }) {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const isEdit = Boolean(transaction);
 
   const create = useMutation({
-    mutationFn: Transactions.create,
+    mutationFn: Transactions.upsert,
     onSuccess: () => {
       sileo.success({ title: 'Transaccion creada correctamente!' });
-      if (router.history.canGoBack()) {
-        router.history.back();
-      } else {
-        router.navigate({ to: '/dashboard/transactions' });
-      }
+      onSuccess?.();
     },
     onError: (error) => {
       const { message } = formatError(error);
@@ -40,7 +35,6 @@ export function TransferForm({
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       queryClient.invalidateQueries({ queryKey: [QueryKeys.ACCOUNTS] });
-      form.reset();
     },
   });
 

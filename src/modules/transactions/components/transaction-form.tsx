@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatISO } from 'date-fns';
 import { FileTextIcon } from 'lucide-react';
 import { sileo } from 'sileo';
-import { useRouter } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
 import { addTransactionsSchema } from '../models/schemas';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
@@ -16,11 +15,12 @@ import { Footer } from '@/components/dashboard-layout';
 export function TransactionForm({
   type,
   transaction,
+  onSuccess,
 }: {
   type: CategoryTypes;
   transaction?: Transaction;
+  onSuccess?: () => void;
 }) {
-  const router = useRouter();
   const queryClient = useQueryClient();
   const { data } = useQuery(accountsQueryOptions);
   const accounts = data?.accounts || [];
@@ -31,11 +31,7 @@ export function TransactionForm({
     mutationFn: Transactions.upsert,
     onSuccess: () => {
       sileo.success({ title: 'Transaccion creada correctamente!' });
-      if (router.history.canGoBack()) {
-        router.history.back();
-      } else {
-        router.navigate({ to: '/dashboard/transactions' });
-      }
+      onSuccess?.();
     },
     onError: (error) => {
       const { message } = formatError(error);
@@ -44,7 +40,6 @@ export function TransactionForm({
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
-      form.reset();
     },
   });
 

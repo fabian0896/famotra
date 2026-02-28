@@ -1,4 +1,4 @@
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useRouter, useSearch } from '@tanstack/react-router';
 import { TransactionForm } from '../components/transaction-form';
 import { TransferForm } from '../components/transfer-form';
 import { Content, Header, Page } from '@/components/dashboard-layout';
@@ -11,8 +11,15 @@ const NAME = {
 } as const;
 
 export function NewTransactionPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { type = 'expense' } = useSearch({ from: '/dashboard/transactions/new' });
+
+  const onSuccess = () => {
+    if (router.history.canGoBack()) {
+      return router.history.back();
+    }
+    return router.navigate({ to: '/dashboard/transactions' });
+  };
 
   return (
     <Page>
@@ -25,7 +32,7 @@ export function NewTransactionPage() {
         <Tabs
           value={type}
           onValueChange={(tab) =>
-            navigate({
+            router.navigate({
               to: '.',
               search: { type: tab as 'expense' | 'income' | 'transfer' },
               replace: true,
@@ -39,13 +46,13 @@ export function NewTransactionPage() {
             <TabsTrigger value="transfer">Transferencia</TabsTrigger>
           </TabsList>
           <TabsContent value="expense">
-            <TransactionForm type="expense" />
+            <TransactionForm type="expense" onSuccess={onSuccess} />
           </TabsContent>
           <TabsContent value="income">
-            <TransactionForm type="income" />
+            <TransactionForm type="income" onSuccess={onSuccess} />
           </TabsContent>
           <TabsContent value="transfer">
-            <TransferForm />
+            <TransferForm onSuccess={onSuccess} />
           </TabsContent>
         </Tabs>
       </Content>
