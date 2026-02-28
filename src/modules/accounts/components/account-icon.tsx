@@ -39,10 +39,13 @@ export function AccountIcon({
 
   return (
     <div
-      className={cn('flex items-center justify-center bg-primary/20 text-foreground', className)}
+      className={cn(
+        'flex items-center justify-center bg-primary/20 text-foreground overflow-hidden',
+        className
+      )}
       {...props}
     >
-      <Icon className="w-[60%] h-[60%]" />
+      <Icon size="55%" />
     </div>
   );
 }

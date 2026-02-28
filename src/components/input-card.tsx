@@ -1,3 +1,4 @@
+import { ArrowUpDownIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 function InputCardRoot({ className, onClick, ...props }: React.ComponentProps<'div'>) {
@@ -73,6 +74,30 @@ function InputCardInput({ className, ...props }: React.ComponentProps<'input'>) 
     />
   );
 }
+
+export function InputGroupCardRoot({ className, children, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div className={cn('bg-card rounded-2xl py-2', className)} {...props}>
+      {children}
+    </div>
+  );
+}
+
+export function InputCardGroupSeparator() {
+  return (
+    <div className="flex items-center justify-center -mb-2">
+      <div className="flex-1 h-px bg-border"></div>
+      <div className="size-9 rounded-full border border-border bg-card grid place-items-center [&_svg]:text-primary [&_svg]:size-4 z-10">
+        <ArrowUpDownIcon />
+      </div>
+      <div className="flex-1 h-px bg-border"></div>
+    </div>
+  );
+}
+
+export const InputGroupCard = Object.assign(InputGroupCardRoot, {
+  Separator: InputCardGroupSeparator,
+});
 
 export const InputCard = Object.assign(InputCardRoot, {
   Icon: InputCardIcon,

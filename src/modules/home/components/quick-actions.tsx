@@ -1,4 +1,5 @@
 import { cva } from 'class-variance-authority';
+import { Link } from '@tanstack/react-router';
 import type { VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
@@ -28,21 +29,22 @@ export function QuickActionButton({
   children,
   label,
   variant,
-  ...props
 }: {
   label: string;
   variant: VariantProps<typeof actionStyles>['variant'];
 } & React.ComponentProps<'button'>) {
+  const type = variant ?? 'expense';
   return (
-    <button
+    <Link
+      to="/dashboard/transactions/new"
+      search={{ type }}
       className={cn(
         'flex-1 flex flex-col gap-2 items-center justify-center p-4 bg-card rounded-2xl transition-all active:scale-105',
         className
       )}
-      {...props}
     >
       <div className={actionStyles({ variant })}>{children}</div>
       <span className="text-xs font-bold text-muted-foreground">{label}</span>
-    </button>
+    </Link>
   );
 }

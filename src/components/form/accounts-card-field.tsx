@@ -4,7 +4,7 @@ import { CheckIcon, ChevronRightIcon, SearchIcon, WalletIcon } from 'lucide-reac
 import { NumericFormat } from 'react-number-format';
 import { useFieldContext } from '@/hooks/form';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
-import { AccountIcon } from '@/modules/accounts/components/account-icon';
+import { AccountIcon, AccountName } from '@/modules/accounts/components/account-icon';
 import { InputCard } from '@/components/input-card';
 import { FieldError } from '@/components/ui/field';
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/ui/drawer';
@@ -48,7 +48,12 @@ export function AccountsCardField({ label }: { label: string }) {
         <InputCard.Content>
           <InputCard.Label>{label}</InputCard.Label>
           {selected ? (
-            <span className="text-foreground font-medium truncate">{selected.name}</span>
+            <AccountName
+              className="text-foreground font-medium truncate"
+              as="span"
+              account={selected}
+              part="full"
+            />
           ) : (
             <span className="text-muted-foreground/50 font-medium">Selecciona una cuenta</span>
           )}

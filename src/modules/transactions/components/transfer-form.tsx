@@ -1,25 +1,24 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { formatISO } from 'date-fns';
-import React from 'react';
-import { Link } from '@tanstack/react-router';
-import { ArrowRight } from 'lucide-react';
+import { FileTextIcon } from 'lucide-react';
+import { sileo } from 'sileo';
+import { useRouter } from '@tanstack/react-router';
 import { addTransferSchema } from '../models/schemas';
 import { Transactions } from '../services/transactions';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
 import { QueryKeys } from '@/constants/query-keys';
 import { useAppForm } from '@/hooks/form';
 import { formatError } from '@/lib/format-error';
-import { DialogClose, DialogFooter } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Footer } from '@/components/dashboard-layout';
+import { InputGroupCard } from '@/components/input-card';
 
 export function TransferForm({
   transaction,
-  onSuccess,
 }: {
   transaction?: Transaction;
   onSuccess?: () => void;
 }) {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const isEdit = Boolean(transaction);
@@ -27,16 +26,21 @@ export function TransferForm({
   const create = useMutation({
     mutationFn: Transactions.create,
     onSuccess: () => {
-      toast.success('Transaccion creada correctamente!');
-      onSuccess?.();
+      sileo.success({ title: 'Transaccion creada correctamente!' });
+      if (router.history.canGoBack()) {
+        router.history.back();
+      } else {
+        router.navigate({ to: '/dashboard/transactions' });
+      }
     },
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       queryClient.invalidateQueries({ queryKey: [QueryKeys.ACCOUNTS] });
+      form.reset();
     },
   });
 
@@ -53,67 +57,54 @@ export function TransferForm({
     validators: {
       onSubmit: addTransferSchema,
     },
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ value }) => {
       await create.mutateAsync(value);
-      formApi.reset();
     },
   });
 
   return (
-    <React.Fragment>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          form.handleSubmit();
-        }}
-      >
-        <div className="flex flex-col gap-6 mb-6">
-          <div className="grid grid-cols-2 gap-4">
-            <form.AppField
-              name="amount"
-              children={(field) => <field.AmountField label="Monto" />}
+    <form
+      className="flex flex-col gap-6"
+      onSubmit={(event) => {
+        event.preventDefault();
+        form.handleSubmit();
+      }}
+    >
+      <div className="py-6">
+        <form.AppField
+          name="amount"
+          children={(field) => <field.TransactionAmountField type="neutral" />}
+        />
+      </div>
+      <div className="flex flex-col gap-3">
+        <InputGroupCard>
+          <form.AppField
+            name="account_id"
+            children={(field) => <field.AccountsCardField label="Origen" />}
+          />
+          <InputGroupCard.Separator />
+          <form.AppField
+            name="destination_account_id"
+            children={(field) => <field.AccountsCardField label="Destino" />}
+          />
+        </InputGroupCard>
+        <form.AppField
+          name="description"
+          children={(field) => (
+            <field.InputCardField
+              icon={<FileTextIcon />}
+              label="Notas"
+              placeholder="Notas de la trasnferencia"
             />
-            <form.AppField
-              name="description"
-              children={(field) => <field.TextField label="Descripción" />}
-            />
-          </div>
-          <div className="flex gap-2.5 items-end">
-            <div className="flex-1">
-              <form.AppField
-                name="account_id"
-                children={(field) => <field.AccountsField label="Desde" />}
-              />
-              <Link to="/dashboard/accounts" className="text-sm inline-block mt-2 text-primary">
-                + Agregar Cuenta
-              </Link>
-            </div>
-            <div className="h-9 flex items-center mb-7">
-              <ArrowRight strokeWidth={2.5} size="20" />
-            </div>
-            <div className="flex-1">
-              <form.AppField
-                name="destination_account_id"
-                children={(field) => <field.AccountsField label="Hasta" />}
-              />
-              <Link to="/dashboard/accounts" className="text-sm inline-block mt-2 text-primary">
-                + Agregar Cuenta
-              </Link>
-            </div>
-          </div>
-          <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
-        </div>
-        <DialogFooter className="pt-4">
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancel
-            </Button>
-          </DialogClose>
-          <form.AppForm>
-            <form.SubmitButton>{isEdit ? 'Editar' : 'Agregar'} Transferencia</form.SubmitButton>
-          </form.AppForm>
-        </DialogFooter>
-      </form>
-    </React.Fragment>
+          )}
+        />
+        <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
+      </div>
+      <Footer>
+        <form.AppForm>
+          <form.SubmitButton>{isEdit ? 'Editar' : 'Agregar'} Transferencia</form.SubmitButton>
+        </form.AppForm>
+      </Footer>
+    </form>
   );
 }

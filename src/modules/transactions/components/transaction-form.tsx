@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { formatISO } from 'date-fns';
 import { FileTextIcon } from 'lucide-react';
+import { sileo } from 'sileo';
+import { useRouter } from '@tanstack/react-router';
 import { Transactions } from '../services/transactions';
 import { addTransactionsSchema } from '../models/schemas';
 import type { Transaction, TransactionsInsert } from '../models/transactions.models';
@@ -10,33 +11,40 @@ import { QueryKeys } from '@/constants/query-keys';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import { formatError } from '@/lib/format-error';
 import { useAppForm } from '@/hooks/form';
+import { Footer } from '@/components/dashboard-layout';
 
 export function TransactionForm({
   type,
   transaction,
-  onSuccess,
 }: {
   type: CategoryTypes;
   transaction?: Transaction;
-  onSuccess?: () => void;
 }) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { data } = useQuery(accountsQueryOptions);
   const accounts = data?.accounts || [];
 
+  const isEdit = Boolean(transaction);
+
   const create = useMutation({
     mutationFn: Transactions.upsert,
     onSuccess: () => {
-      toast.success('Transaccion creada correctamente!');
-      onSuccess?.();
+      sileo.success({ title: 'Transaccion creada correctamente!' });
+      if (router.history.canGoBack()) {
+        router.history.back();
+      } else {
+        router.navigate({ to: '/dashboard/transactions' });
+      }
     },
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
       queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
+      form.reset();
     },
   });
 
@@ -53,9 +61,8 @@ export function TransactionForm({
     validators: {
       onSubmit: addTransactionsSchema,
     },
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ value }) => {
       await create.mutateAsync(value);
-      formApi.reset();
     },
   });
 
@@ -67,13 +74,10 @@ export function TransactionForm({
         form.handleSubmit();
       }}
     >
-      <div className="flex flex-col gap-2 items-center py-6">
-        <label className="text-sm font-medium text-muted-foreground" htmlFor="">
-          Valor
-        </label>
-        <input
-          className="text-5xl font-bold text-red-400 w-full text-center outline-none"
-          type="text"
+      <div className="py-6">
+        <form.AppField
+          name="amount"
+          children={(field) => <field.TransactionAmountField type={type} />}
         />
       </div>
       <div className="flex flex-col gap-3">
@@ -83,7 +87,7 @@ export function TransactionForm({
         />
         <form.AppField
           name="category_id"
-          children={(field) => <field.CategoriesCardField label="Categoría" type="expense" />}
+          children={(field) => <field.CategoriesCardField label="Categoría" type={type} />}
         />
         <form.AppField
           name="description"
@@ -91,11 +95,19 @@ export function TransactionForm({
             <field.InputCardField
               icon={<FileTextIcon />}
               label="Notas"
-              placeholder="Notas de la trasnferencias"
+              placeholder="Notas de la transacción"
             />
           )}
         />
         <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
+
+        <Footer>
+          <form.AppForm>
+            <form.SubmitButton>
+              {isEdit ? 'Editar' : 'Agregar'} {type === 'expense' ? 'gasto' : 'ingreso'}
+            </form.SubmitButton>
+          </form.AppForm>
+        </Footer>
       </div>
     </form>
   );

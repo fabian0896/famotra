@@ -14,6 +14,7 @@ import { CategoryTypeField } from '@/components/form/category-type-field';
 import { AmountCardField } from '@/components/form/amount-card-field';
 import { AccountsCardField } from '@/components/form/accounts-card-field';
 import { CategoriesCardField } from '@/components/form/categories-card-field';
+import { TransactionAmountField } from '@/components/form/transaction-amount-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -33,6 +34,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     AmountCardField,
     AccountsCardField,
     CategoriesCardField,
+    TransactionAmountField,
     CategoryTypeField,
   },
   formComponents: {

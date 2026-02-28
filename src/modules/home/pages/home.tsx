@@ -6,7 +6,10 @@ import { QuickActionButton, QuickActions } from '../components/quick-actions';
 import { RecentTransactions, RecentTransactionsSkeleton } from '../components/recent-transactions';
 import { Content, Header, Page } from '@/components/dashboard-layout';
 import { getDateRange } from '@/lib/date-utils';
-import { balanceSummaryOptions, transactionsQueryOptions } from '@/modules/transactions/query-options/transactions';
+import {
+  balanceSummaryOptions,
+  transactionsQueryOptions,
+} from '@/modules/transactions/query-options/transactions';
 
 const PAGE_SIZE = 10;
 
@@ -35,11 +38,11 @@ export function HomePage() {
         </Suspense>
 
         <QuickActions>
-          <QuickActionButton label="Ingreso" variant="income">
-            <PlusIcon />
-          </QuickActionButton>
           <QuickActionButton label="Gasto" variant="expense">
             <MinusIcon />
+          </QuickActionButton>
+          <QuickActionButton label="Ingreso" variant="income">
+            <PlusIcon />
           </QuickActionButton>
           <QuickActionButton label="Transferencia" variant="transfer">
             <ArrowRightLeftIcon />
