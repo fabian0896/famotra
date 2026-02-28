@@ -20,7 +20,6 @@ export type Database = {
           bank_id: string | null
           created_at: string
           custom_bank_icon: string | null
-          custom_bank_name: string | null
           id: string
           name: string
           user_id: string
@@ -30,7 +29,6 @@ export type Database = {
           bank_id?: string | null
           created_at?: string
           custom_bank_icon?: string | null
-          custom_bank_name?: string | null
           id?: string
           name: string
           user_id?: string
@@ -40,7 +38,6 @@ export type Database = {
           bank_id?: string | null
           created_at?: string
           custom_bank_icon?: string | null
-          custom_bank_name?: string | null
           id?: string
           name?: string
           user_id?: string
@@ -520,6 +517,13 @@ export type Database = {
               total: number
             }[]
           }
+      get_net_worth_summary: {
+        Args: never
+        Returns: {
+          current_net_worth: number
+          monthly_change: number
+        }[]
+      }
       get_user_role: {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]

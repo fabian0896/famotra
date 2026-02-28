@@ -44,14 +44,12 @@ export class Transactions {
         account:accounts!account_id (
           id,
           name,
-          custom_bank_name,
           custom_bank_icon,
           bank:bank_list (id, logo, name)
         ),
         destination:accounts!destination_account_id (
           id,
           name,
-          custom_bank_name,
           custom_bank_icon,
           bank:bank_list (id, logo, name)
         ),
@@ -97,14 +95,12 @@ export class Transactions {
         account:accounts!account_id (
           id,
           name,
-          custom_bank_name,
           custom_bank_icon,
           bank:bank_list (id, logo, name)
         ),
         destination:accounts!destination_account_id (
           id,
           name,
-          custom_bank_name,
           custom_bank_icon,
           bank:bank_list (id, logo, name)
         ),

@@ -53,24 +53,26 @@ export function CategoriesCardField({ label, type }: { label: string; type: Cate
 
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent>
-          <div className="px-6 pt-4 pb-8 flex flex-col gap-4">
-            <DrawerTitle className="text-lg font-bold">Seleccionar categoría</DrawerTitle>
-            <DrawerDescription className="flex items-center gap-2 bg-muted rounded-2xl px-3 py-2.5">
-              <SearchIcon className="w-4 h-4 text-muted-foreground shrink-0" />
-              <input
-                className="bg-transparent outline-none flex-1 text-sm placeholder:text-muted-foreground"
-                placeholder="Buscar categorías..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </DrawerDescription>
+          <div className="flex flex-col overflow-hidden">
+            <div className="px-6 pt-4 pb-3 flex flex-col gap-3">
+              <DrawerTitle className="text-lg font-bold">Seleccionar categoría</DrawerTitle>
+              <DrawerDescription className="flex items-center gap-2 bg-muted rounded-2xl px-3 py-2.5">
+                <SearchIcon className="w-4 h-4 text-muted-foreground shrink-0" />
+                <input
+                  className="bg-transparent outline-none flex-1 text-sm placeholder:text-muted-foreground"
+                  placeholder="Buscar categorías..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </DrawerDescription>
+            </div>
 
             {isLoading ? (
               <div className="flex justify-center p-6">
                 <Spinner />
               </div>
             ) : (
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-2 overflow-y-auto px-6 pb-8">
                 {filtered.map((category) => {
                   const isSelected = field.state.value === category.id;
                   return (

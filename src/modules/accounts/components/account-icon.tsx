@@ -28,8 +28,8 @@ export function AccountIcon({
     );
   }
 
-  if (!account.custom_bank_icon || !account.custom_bank_name) {
-    throw new Error('AccountIcon needs a bank_id or a custom_bank_name and custom_bank_icon');
+  if (!account.custom_bank_icon) {
+    throw new Error('AccountIcon needs a bank_id or a custom_bank_icon');
   }
 
   const Icon = ACOUNTS_ICONS[account.custom_bank_icon as keyof typeof ACOUNTS_ICONS].Icon;

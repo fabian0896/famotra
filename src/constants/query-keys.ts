@@ -4,6 +4,7 @@ export const QueryKeys = {
   CATEGORIES_RESUME: 'categories-resume',
   CATEGORIES_DETAILS: 'categories-details',
   ACCOUNTS: 'accounts',
+  NET_WORTH_SUMMARY: 'get_net_worth_summary',
   BANKS: 'banks',
   TOTAL_BALANCES: 'total-balances',
   TRANSACTIONS: 'transactions',

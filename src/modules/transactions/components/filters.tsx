@@ -102,7 +102,7 @@ export function AccountFilter({
   value?: string[];
   onChange?: (ids: string[]) => void;
 }) {
-  const { data } = useQuery(accountsQueryOptions);
+  const { data } = useQuery(accountsQueryOptions());
   const accounts = data?.accounts ?? [];
   const toggle = useToggle(value, onChange);
   const isActive = value.length > 0;

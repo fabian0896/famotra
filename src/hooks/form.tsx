@@ -10,6 +10,7 @@ import { BankField } from '@/components/form/bank-field';
 import { AccountsField } from '@/components/form/accounts-field';
 import { AccountIconField } from '@/components/form/account-icon-field';
 import { InputCardField } from '@/components/form/input-card-field';
+import { MoneyCardField } from '@/components/form/money-card-field';
 import { CategoryTypeField } from '@/components/form/category-type-field';
 import { AmountCardField } from '@/components/form/amount-card-field';
 import { AccountsCardField } from '@/components/form/accounts-card-field';
@@ -31,6 +32,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     AccountsField,
     AccountIconField,
     InputCardField,
+    MoneyCardField,
     AmountCardField,
     AccountsCardField,
     CategoriesCardField,

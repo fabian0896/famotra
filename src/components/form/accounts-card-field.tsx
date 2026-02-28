@@ -12,7 +12,7 @@ import { Spinner } from '@/components/ui/spinner';
 
 export function AccountsCardField({ label }: { label: string }) {
   const field = useFieldContext<string>();
-  const { data, isLoading } = useQuery(accountsQueryOptions);
+  const { data, isLoading } = useQuery(accountsQueryOptions());
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -65,20 +65,22 @@ export function AccountsCardField({ label }: { label: string }) {
 
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent>
-          <div className="px-6 pt-4 pb-8 flex flex-col gap-4">
-            <DrawerTitle className="text-lg font-bold">Seleccionar cuenta</DrawerTitle>
+          <div className="flex flex-col overflow-hidden">
+            <div className="px-6 pt-4 pb-3 flex flex-col gap-3">
+              <DrawerTitle className="text-lg font-bold">Seleccionar cuenta</DrawerTitle>
 
-            <DrawerDescription className="flex items-center gap-2 bg-muted rounded-2xl px-3 py-2.5">
-              <SearchIcon className="w-4 h-4 text-muted-foreground shrink-0" />
-              <input
-                className="bg-transparent outline-none flex-1 text-sm placeholder:text-muted-foreground"
-                placeholder="Buscar cuentas..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </DrawerDescription>
+              <DrawerDescription className="flex items-center gap-2 bg-muted rounded-2xl px-3 py-2.5">
+                <SearchIcon className="w-4 h-4 text-muted-foreground shrink-0" />
+                <input
+                  className="bg-transparent outline-none flex-1 text-sm placeholder:text-muted-foreground"
+                  placeholder="Buscar cuentas..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </DrawerDescription>
+            </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 overflow-y-auto px-6 pb-8">
               {isLoading ? (
                 <div className="flex justify-center p-6">
                   <Spinner />

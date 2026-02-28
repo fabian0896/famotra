@@ -21,7 +21,7 @@ export function AccountsField({
   ...props
 }: { label?: string } & React.ComponentProps<typeof Field>) {
   const field = useFieldContext<string>();
-  const { data, isLoading } = useQuery(accountsQueryOptions);
+  const { data, isLoading } = useQuery(accountsQueryOptions());
 
   const accounts = data?.accounts ?? [];
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;

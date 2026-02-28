@@ -3,7 +3,6 @@ import type { Database, Enums, Tables, TablesInsert } from '@/models/database.ty
 export type TransactionAccount = {
   id: string;
   name: string;
-  custom_bank_name: string | null;
   custom_bank_icon: string | null;
   bank: {
     id: string;
