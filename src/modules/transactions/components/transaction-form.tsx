@@ -95,6 +95,7 @@ export function TransactionForm({
             />
           )}
         />
+        <form.AppField name="date" children={(field) => <field.DateField label="Fecha" />} />
       </div>
     </form>
   );
