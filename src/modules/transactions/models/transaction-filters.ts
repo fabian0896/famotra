@@ -3,8 +3,8 @@ import type { TransactionTypes } from './transactions.models';
 export interface TransactionFilters {
   from?: string;
   to?: string;
-  categoryId?: string;
-  accountId?: string;
+  categoryIds?: string[];
+  accountIds?: string[];
   transactionType?: TransactionTypes;
 }
 

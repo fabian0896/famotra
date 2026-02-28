@@ -66,13 +66,14 @@ export class Transactions {
     if (filters?.to) {
       query = query.lte('date', filters.to);
     }
-    if (filters?.categoryId) {
-      query = query.eq('category_id', filters.categoryId);
+    if (filters?.categoryIds?.length) {
+      query = query.in('category_id', filters.categoryIds);
     }
-    if (filters?.accountId) {
-      query = query.or(
-        `account_id.eq.${filters.accountId},destination_account_id.eq.${filters.accountId}`
-      );
+    if (filters?.accountIds?.length) {
+      const clauses = filters.accountIds
+        .map((id) => `account_id.eq.${id},destination_account_id.eq.${id}`)
+        .join(',');
+      query = query.or(clauses);
     }
     if (filters?.transactionType) {
       query = query.eq('transaction_type', filters.transactionType);
@@ -130,9 +131,9 @@ export class Transactions {
       .rpc('get_daily_totals', {
         p_from: filters.from || defaultRange.start,
         p_to: filters.to || defaultRange.end,
-        p_category_id: filters.categoryId,
-        p_account_id: filters.accountId,
-        p_type: filters.transactionType,
+        p_account_ids: filters.accountIds?.length ? filters.accountIds : undefined,
+        p_category_ids: filters.categoryIds?.length ? filters.categoryIds : undefined,
+        p_type: filters.transactionType ?? undefined,
       })
       .throwOnError();
     return data;

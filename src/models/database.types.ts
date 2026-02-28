@@ -493,19 +493,33 @@ export type Database = {
           transaction_count: number
         }[]
       }
-      get_daily_totals: {
-        Args: {
-          p_account_id?: string
-          p_category_id?: string
-          p_from: string
-          p_to: string
-          p_type?: string
-        }
-        Returns: {
-          day: string
-          total: number
-        }[]
-      }
+      get_daily_totals:
+        | {
+            Args: {
+              p_account_id?: string
+              p_category_id?: string
+              p_from: string
+              p_to: string
+              p_type?: string
+            }
+            Returns: {
+              day: string
+              total: number
+            }[]
+          }
+        | {
+            Args: {
+              p_account_ids?: string[]
+              p_category_ids?: string[]
+              p_from: string
+              p_to: string
+              p_type?: string
+            }
+            Returns: {
+              day: string
+              total: number
+            }[]
+          }
       get_user_role: {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]

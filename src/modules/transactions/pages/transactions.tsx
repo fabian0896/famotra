@@ -1,10 +1,13 @@
 import { Suspense, useState } from 'react';
 import { useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { PlusIcon } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 import { dailyTotalsOptions, transactionsQueryOptions } from '../query-options/transactions';
 import { TransactionList, TransactionListSkeleton } from '../components/transactions-list';
 import { BalanceSummary, BalanceSummarySkeleton } from '../components/balance-summary';
+import { AccountFilter, CategoryFilter, FiltersBar, TypeFilter } from '../components/filters';
 import type { TransactionFilters } from '../models/transaction-filters';
+import type { TransactionTypes } from '../models/transactions.models';
 import { Content, Header, Page } from '@/components/dashboard-layout';
 import { DateSelector } from '@/components/date-selector';
 import { Spinner } from '@/components/ui/spinner';
@@ -49,7 +52,25 @@ function TransactionListData({ filters }: { filters: TransactionFilters }) {
 export function TransactionsPage() {
   const queryClient = useQueryClient();
   const [range, setRange] = useState(() => getDateRange());
-  const filters = { from: range.start, to: range.end };
+  const [accountIds, setAccountIds] = useState<string[]>([]);
+  const [categoryIds, setCategoryIds] = useState<string[]>([]);
+  const [transactionType, setTransactionType] = useState<TransactionTypes | undefined>();
+  const filters = {
+    from: range.start,
+    to: range.end,
+    accountIds: accountIds.length ? accountIds : undefined,
+    categoryIds: categoryIds.length ? categoryIds : undefined,
+    transactionType,
+  };
+
+  const hasActiveFilters =
+    accountIds.length > 0 || categoryIds.length > 0 || transactionType !== undefined;
+
+  const clearAllFilters = () => {
+    setAccountIds([]);
+    setCategoryIds([]);
+    setTransactionType(undefined);
+  };
 
   const refresh = async () => {
     await queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
@@ -60,8 +81,10 @@ export function TransactionsPage() {
       <Header>
         <Header.Title>Transacciones</Header.Title>
         <Header.Actions>
-          <Header.ActionButton>
-            <PlusIcon />
+          <Header.ActionButton asChild>
+            <Link to="/dashboard/transactions/new">
+              <PlusIcon />
+            </Link>
           </Header.ActionButton>
         </Header.Actions>
       </Header>
@@ -69,20 +92,11 @@ export function TransactionsPage() {
       <Content className="flex flex-col gap-4">
         <DateSelector value={range} onValueChange={setRange} className="mt-4" />
 
-        <div className="space-x-2">
-          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
-            All
-          </span>
-          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
-            Type
-          </span>
-          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
-            Account
-          </span>
-          <span className="px-4 py-2 bg-card border border-border rounded-full text-sm font-medium text-muted-foreground inline-block">
-            Category
-          </span>
-        </div>
+        <FiltersBar isAllActive={!hasActiveFilters} onClearAll={clearAllFilters}>
+          <TypeFilter value={transactionType} onChange={setTransactionType} />
+          <AccountFilter value={accountIds} onChange={setAccountIds} />
+          <CategoryFilter value={categoryIds} onChange={setCategoryIds} />
+        </FiltersBar>
 
         <Suspense fallback={<BalanceSummarySkeleton />}>
           <BalanceSummary range={range} />
