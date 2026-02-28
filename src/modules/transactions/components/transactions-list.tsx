@@ -210,3 +210,47 @@ function TransactionListRoot({
 export const TransactionList = Object.assign(TransactionListRoot, {
   Item: TransactionItem,
 });
+
+function TransactionItemSkeleton() {
+  return (
+    <li className="w-full bg-card p-4 flex gap-3 items-center">
+      <Skeleton className="size-11 rounded-xl shrink-0" />
+      <div className="flex-1 flex flex-col gap-2">
+        <div className="flex justify-between gap-3">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-14" />
+        </div>
+        <div className="flex justify-between gap-3">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-3 w-16 rounded-full" />
+        </div>
+      </div>
+    </li>
+  );
+}
+
+function TransactionGroupSkeleton({ count = 3 }: { count?: number }) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between py-1">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-4 w-16" />
+      </div>
+      <ul className="block space-y-1 bg-card rounded-[20px] overflow-hidden">
+        {Array.from({ length: count }).map((_, i) => (
+          <TransactionItemSkeleton key={i} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function TransactionListSkeleton() {
+  return (
+    <div className="space-y-4">
+      <TransactionGroupSkeleton count={3} />
+      <TransactionGroupSkeleton count={2} />
+      <TransactionGroupSkeleton count={4} />
+    </div>
+  );
+}

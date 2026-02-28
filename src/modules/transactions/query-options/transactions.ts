@@ -1,12 +1,28 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
+import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 import type { TransactionFilters } from '@/modules/transactions/models/transaction-filters';
+import type { Transaction } from '@/modules/transactions/models/transactions.models';
 import { QueryKeys } from '@/constants/query-keys';
 import { Transactions } from '@/modules/transactions/services/transactions';
 
-export const transactionByIdOptions = (id: string) =>
+export const transactionByIdOptions = (id: string, queryClient?: QueryClient) =>
   queryOptions({
     queryKey: [QueryKeys.TRANSACTIONS, { id }],
     queryFn: () => Transactions.getById(id),
+    placeholderData: () => {
+      if (!queryClient) return undefined;
+      const cached = queryClient.getQueriesData<
+        InfiniteData<{ transactions: Transaction[]; count: number | null }>
+      >({ queryKey: [QueryKeys.TRANSACTIONS] });
+      for (const [, data] of cached) {
+        if (!data?.pages) continue;
+        for (const page of data.pages) {
+          const found = page.transactions.find((t) => t.id === id);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    },
     staleTime: Infinity,
   });
 

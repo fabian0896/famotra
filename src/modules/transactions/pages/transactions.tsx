@@ -2,8 +2,9 @@ import { Suspense, useState } from 'react';
 import { useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { PlusIcon } from 'lucide-react';
 import { dailyTotalsOptions, transactionsQueryOptions } from '../query-options/transactions';
-import { TransactionList } from '../components/transactions-list';
+import { TransactionList, TransactionListSkeleton } from '../components/transactions-list';
 import { BalanceSummary, BalanceSummarySkeleton } from '../components/balance-summary';
+import type { TransactionFilters } from '../models/transaction-filters';
 import { Content, Header, Page } from '@/components/dashboard-layout';
 import { DateSelector } from '@/components/date-selector';
 import { Spinner } from '@/components/ui/spinner';
@@ -12,16 +13,43 @@ import { QueryKeys } from '@/constants/query-keys';
 
 const PAGE_SIZE = 20;
 
-export function TransactionsPage() {
-  const queryClient = useQueryClient();
-  const [range, setRange] = useState(() => getDateRange());
-  const filters = { from: range.start, to: range.end };
+function TransactionListData({ filters }: { filters: TransactionFilters }) {
   const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
     transactionsQueryOptions({ pageSize: PAGE_SIZE, filters })
   );
   const { data: dailyTotals, isLoading: dailyTotalsLoading } = useQuery(
     dailyTotalsOptions({ filters })
   );
+
+  return (
+    <TransactionList
+      dailyTotals={dailyTotals}
+      dailyTotalsLoading={dailyTotalsLoading}
+      next={fetchNextPage}
+      hasMore={hasNextPage}
+      dataLength={data.transactions.length}
+      loader={
+        <div className="flex justify-center py-3">
+          <Spinner className="text-muted-foreground" />
+        </div>
+      }
+      endMessage={
+        <p className="text-sm text-muted-foreground text-center py-3">
+          No hay más transacciones para este rango de fechas
+        </p>
+      }
+    >
+      {data.transactions.map((t) => (
+        <TransactionList.Item key={t.id} transaction={t} />
+      ))}
+    </TransactionList>
+  );
+}
+
+export function TransactionsPage() {
+  const queryClient = useQueryClient();
+  const [range, setRange] = useState(() => getDateRange());
+  const filters = { from: range.start, to: range.end };
 
   const refresh = async () => {
     await queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
@@ -60,27 +88,9 @@ export function TransactionsPage() {
           <BalanceSummary range={range} />
         </Suspense>
 
-        <TransactionList
-          dailyTotals={dailyTotals}
-          dailyTotalsLoading={dailyTotalsLoading}
-          next={fetchNextPage}
-          hasMore={hasNextPage}
-          dataLength={data.transactions.length}
-          loader={
-            <div className="flex justify-center py-3">
-              <Spinner className="text-muted-foreground" />
-            </div>
-          }
-          endMessage={
-            <p className="text-sm text-muted-foreground text-center py-3">
-              No hay más transacciones para este rango de fechas
-            </p>
-          }
-        >
-          {data.transactions.map((t) => (
-            <TransactionList.Item key={t.id} transaction={t} />
-          ))}
-        </TransactionList>
+        <Suspense fallback={<TransactionListSkeleton />}>
+          <TransactionListData filters={filters} />
+        </Suspense>
       </Content>
     </Page>
   );

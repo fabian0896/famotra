@@ -4,6 +4,6 @@ import { transactionByIdOptions } from '@/modules/transactions/query-options/tra
 
 export const Route = createFileRoute('/dashboard/transactions/$id/edit')({
   loader: ({ context, params }) =>
-    context.queryClient.ensureQueryData(transactionByIdOptions(params.id)),
+    context.queryClient.ensureQueryData(transactionByIdOptions(params.id, context.queryClient)),
   component: EditTransactionPage,
 });
