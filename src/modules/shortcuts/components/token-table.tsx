@@ -1,13 +1,4 @@
-import {
-  CheckIcon,
-  CopyIcon,
-  EyeIcon,
-  EyeOffIcon,
-  KeyIcon,
-  MoreVertical,
-  Plus,
-  Trash2Icon,
-} from 'lucide-react';
+import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, KeyIcon, Plus, Trash2Icon } from 'lucide-react';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import React, { useState } from 'react';
@@ -16,21 +7,7 @@ import { TokenService } from '../services/tokens';
 import { CreateTokenDialog } from './create-token-dialog';
 import type { Token } from '../models/tokens.model';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { formatError } from '@/lib/format-error';
 import {
   AlertDialog,
@@ -49,6 +26,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty';
+import { Swipeable } from '@/components/swipeable';
 
 function ActionButton({
   children,
@@ -150,42 +128,40 @@ function TokenRow({ token }: { token: Token }) {
 
   return (
     <React.Fragment>
-      <TableRow>
-        <TableCell className="w-56 px-4 whitespace-normal">
-          <div className="flex flex-col">
-            <span className="font-medium mb-1">{token.name}</span>
-            <span className="text-muted-foreground">{token.description}</span>
-          </div>
-        </TableCell>
-        <TableCell className="px-4">
-          <div className="flex items-center gap-2">
-            <div className="text-xs relative flex py-1 px-2.5 rounded-full border font-mono bg-muted overflow-hidden w-[300px] h-[26px]">
-              <span className="truncate">
-                <SecretValue hide={hideToken}>{token.id}</SecretValue>
-              </span>
+      <Swipeable>
+        <Swipeable.Item>
+          <div className="bg-card rounded-2xl px-4 py-3 flex flex-col gap-2">
+            <div className="flex items-center gap-3">
+              <div className="size-11 rounded-xl bg-primary/15 grid place-items-center shrink-0">
+                <KeyIcon className="size-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground text-sm">{token.name}</p>
+                {token.description && (
+                  <p className="text-muted-foreground text-xs truncate">{token.description}</p>
+                )}
+              </div>
+              <CopyButton token={token.id} />
             </div>
-            <HideButtton hide={hideToken} onHideChange={setHideToken} />
-            <CopyButton token={token.id} />
+            <div className="flex items-center gap-2">
+              <div className="bg-muted rounded-xl px-3 py-2 font-mono text-xs flex-1 overflow-hidden">
+                <span className="truncate block">
+                  <SecretValue hide={hideToken}>{token.id}</SecretValue>
+                </span>
+              </div>
+              <HideButtton hide={hideToken} onHideChange={setHideToken} />
+            </div>
           </div>
-        </TableCell>
-        <TableCell className="px-4">
-          <div className="flex justify-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="icon" variant="ghost">
-                  <MoreVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setConfirmOpen(true)} variant="destructive">
-                  <Trash2Icon />
-                  Eliminar
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </TableCell>
-      </TableRow>
+        </Swipeable.Item>
+        <Swipeable.Actions>
+          <Swipeable.Action
+            className="bg-red-400 rounded-r-2xl"
+            onClick={() => setConfirmOpen(true)}
+          >
+            <Trash2Icon className="text-white" size={20} />
+          </Swipeable.Action>
+        </Swipeable.Actions>
+      </Swipeable>
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogTitle>Eliminar Token</AlertDialogTitle>
@@ -237,21 +213,10 @@ export function TokenTable() {
   }
 
   return (
-    <div className="border rounded-md overflow-hidden">
-      <Table className="bg-card">
-        <TableHeader className="bg-background">
-          <TableRow>
-            <TableHead className="px-4 w-56">Nombre</TableHead>
-            <TableHead className="px-4">Token</TableHead>
-            <TableHead className="px-4"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {tokens.map((token) => (
-            <TokenRow token={token} key={token.id} />
-          ))}
-        </TableBody>
-      </Table>
+    <div className="space-y-3">
+      {tokens.map((token) => (
+        <TokenRow token={token} key={token.id} />
+      ))}
     </div>
   );
 }

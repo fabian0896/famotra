@@ -1,4 +1,3 @@
-import { CalendarIcon } from 'lucide-react';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import React, { Suspense } from 'react';
 import { toast } from 'sonner';
@@ -7,14 +6,6 @@ import { ShortcutsCardService } from '../services/shortcuts-cards';
 import { CardIcon } from './card-icon';
 import { RelativeDate } from './relative-date';
 import type { ShortcutCard } from '../models/shortcut-cards';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { accountsQueryOptions } from '@/modules/accounts/query-options/accounts';
 import {
   Select,
@@ -76,43 +67,29 @@ function CardRow({ card }: { card: ShortcutCard }) {
   const accountId = update.isPending ? update.variables.account_id : card.account_id;
 
   return (
-    <TableRow>
-      <TableCell className="px-4">
-        <div className="flex gap-2 items-center">
-          <CardIcon height={40} width={40} />
-          <div className="flex-1">
-            <p className="font-medium text-foreground text-sm mb-0.5">{card.name}</p>
-            <p className="text-muted-foreground text-xs">
-              Token <span className="font-semibold">{card.token_data.name}</span>
-            </p>
-          </div>
-        </div>
-      </TableCell>
-      <TableCell className="px-4">
-        <div className="flex gap-2 items-center">
-          <CalendarIcon className="text-muted-foreground" size={16} />
-          <p className="text-sm text-foreground font-medium">
+    <div className="bg-card rounded-2xl px-4 py-3 flex flex-col gap-3">
+      <div className="flex items-center gap-3">
+        <CardIcon height={40} width={40} className="shrink-0" />
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-foreground text-sm mb-0.5 truncate">{card.name}</p>
+          <p className="text-muted-foreground text-xs">
+            Token <span className="font-semibold">{card.token_data.name}</span>
+            {' · '}
             <RelativeDate>{card.last_used_at}</RelativeDate>
           </p>
         </div>
-      </TableCell>
-      <TableCell className="px-4 w-[200px]">
-        <Suspense fallback={<Skeleton className="w-full h-9" />}>
-          <AccountSelect
-            onValueChange={(account_id) => update.mutate({ ...card, account_id })}
-            value={accountId ?? undefined}
-          />
-        </Suspense>
-      </TableCell>
-      <TableCell className="px-4">
-        <div className="flex justify-end">
-          <Switch
-            onCheckedChange={(checked) => update.mutate({ ...card, active: checked })}
-            checked={active}
-          />
-        </div>
-      </TableCell>
-    </TableRow>
+        <Switch
+          onCheckedChange={(checked) => update.mutate({ ...card, active: checked })}
+          checked={active}
+        />
+      </div>
+      <Suspense fallback={<Skeleton className="w-full h-9" />}>
+        <AccountSelect
+          onValueChange={(account_id) => update.mutate({ ...card, account_id })}
+          value={accountId ?? undefined}
+        />
+      </Suspense>
+    </div>
   );
 }
 
@@ -137,22 +114,10 @@ export function CardsTable() {
   }
 
   return (
-    <div className="border rounded-md overflow-hidden">
-      <Table className="bg-card">
-        <TableHeader className="bg-background">
-          <TableRow>
-            <TableHead className="px-4">Tarjeta</TableHead>
-            <TableHead className="px-4">Último uso</TableHead>
-            <TableHead className="px-4 w-[200px]">Cuenta asociada</TableHead>
-            <TableHead className="px-4 text-right">Activa</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {cards.map((card) => (
-            <CardRow key={card.name + card.token} card={card} />
-          ))}
-        </TableBody>
-      </Table>
+    <div className="space-y-3">
+      {cards.map((card) => (
+        <CardRow key={card.name + card.token} card={card} />
+      ))}
     </div>
   );
 }

@@ -1,7 +1,10 @@
+import { PlusIcon } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { Cards } from '../components/cards';
-import { Merchants } from '../components/merchants';
-import { Tokens } from '../components/tokens';
+import { CreateTokenDialog } from '../components/create-token-dialog';
+import { TokenTable } from '../components/token-table';
+import { CardsTable } from '../components/cards-table';
+import { MerchantsTable } from '../components/merchants-table';
+import { Content, Footer, Header, Page } from '@/components/dashboard-layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function ShortcutsPage({ tab = 'tokens' }: { tab?: string }) {
@@ -16,29 +19,47 @@ export function ShortcutsPage({ tab = 'tokens' }: { tab?: string }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <header className="mb-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-balance mb-2">Atajos</h1>
-        <p className="text-muted-foreground">
-          Configura todos los datos para poder usar la api en tus atajos
-        </p>
-      </header>
-      <Tabs onValueChange={changeTab} value={tab} defaultValue="tokens">
-        <TabsList className="mb-4">
-          <TabsTrigger value="tokens">Tokens</TabsTrigger>
-          <TabsTrigger value="cards">Tarjetas</TabsTrigger>
-          <TabsTrigger value="merchants">Comercios</TabsTrigger>
-        </TabsList>
-        <TabsContent value="tokens">
-          <Tokens />
-        </TabsContent>
-        <TabsContent value="cards">
-          <Cards />
-        </TabsContent>
-        <TabsContent value="merchants">
-          <Merchants />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <Page>
+      <Header>
+        <Header.BackButton />
+        <Header.Title>Atajos</Header.Title>
+        {tab === 'tokens' && (
+          <Header.Actions>
+            <CreateTokenDialog>
+              <Header.ActionButton size="sm">
+                <PlusIcon />
+              </Header.ActionButton>
+            </CreateTokenDialog>
+          </Header.Actions>
+        )}
+      </Header>
+
+      <Content>
+        <Tabs value={tab} onValueChange={changeTab}>
+          <TabsList className="w-full mb-4">
+            <TabsTrigger value="tokens" className="flex-1">
+              Tokens
+            </TabsTrigger>
+            <TabsTrigger value="cards" className="flex-1">
+              Tarjetas
+            </TabsTrigger>
+            <TabsTrigger value="merchants" className="flex-1">
+              Comercios
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="tokens">
+            <TokenTable />
+          </TabsContent>
+          <TabsContent value="cards">
+            <CardsTable />
+          </TabsContent>
+          <TabsContent value="merchants">
+            <MerchantsTable />
+          </TabsContent>
+        </Tabs>
+      </Content>
+
+      <Footer.Hide />
+    </Page>
   );
 }

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense, useMemo } from 'react';
-import { CalendarIcon, StoreIcon } from 'lucide-react';
+import React, { Suspense, useMemo } from 'react';
+import { StoreIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { initials } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
@@ -15,14 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { formatError } from '@/lib/format-error';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
@@ -41,7 +33,7 @@ function MerchantAvatar({ name }: { name: string }) {
     return createAvatar(initials, { seed: name }).toDataUri();
   }, [name]);
 
-  return <img src={src} alt={name} className="w-8 h-8 rounded-lg" />;
+  return <img src={src} alt={name} className="w-10 h-10 rounded-xl shrink-0" />;
 }
 
 function CategorySelect(props: React.ComponentProps<typeof Select>) {
@@ -89,43 +81,29 @@ function MerchantRow({ merchant }: { merchant: ShortcutMerchant }) {
   const categoryId = update.isPending ? update.variables.category_id : merchant.category_id;
 
   return (
-    <TableRow>
-      <TableCell className="px-4">
-        <div className="flex gap-2.5 items-center">
-          <MerchantAvatar name={merchant.name} />
-          <div className="flex-1">
-            <p className="font-medium text-foreground text-sm mb-0.5">{merchant.name}</p>
-            <p className="text-muted-foreground text-xs">
-              Token <span className="font-semibold">{merchant.token_data.name}</span>
-            </p>
-          </div>
-        </div>
-      </TableCell>
-      <TableCell className="px-4">
-        <div className="flex gap-2 items-center">
-          <CalendarIcon className="text-muted-foreground" size={16} />
-          <p className="text-sm text-foreground font-medium">
+    <div className="bg-card rounded-2xl px-4 py-3 flex flex-col gap-3">
+      <div className="flex items-center gap-3">
+        <MerchantAvatar name={merchant.name} />
+        <div className="flex-1 min-w-0">
+          <p className="font-medium text-foreground text-sm mb-0.5 truncate">{merchant.name}</p>
+          <p className="text-muted-foreground text-xs">
+            Token <span className="font-semibold">{merchant.token_data.name}</span>
+            {' · '}
             <RelativeDate>{merchant.last_used_at}</RelativeDate>
           </p>
         </div>
-      </TableCell>
-      <TableCell className="px-4 w-[200px]">
-        <Suspense fallback={<Skeleton className="w-full h-9" />}>
-          <CategorySelect
-            onValueChange={(category_id) => update.mutate({ ...merchant, category_id })}
-            value={categoryId ?? undefined}
-          />
-        </Suspense>
-      </TableCell>
-      <TableCell className="px-4">
-        <div className="flex justify-end">
-          <Switch
-            onCheckedChange={(checked) => update.mutate({ ...merchant, active: checked })}
-            checked={active}
-          />
-        </div>
-      </TableCell>
-    </TableRow>
+        <Switch
+          onCheckedChange={(checked) => update.mutate({ ...merchant, active: checked })}
+          checked={active}
+        />
+      </div>
+      <Suspense fallback={<Skeleton className="w-full h-9" />}>
+        <CategorySelect
+          onValueChange={(category_id) => update.mutate({ ...merchant, category_id })}
+          value={categoryId ?? undefined}
+        />
+      </Suspense>
+    </div>
   );
 }
 
@@ -150,22 +128,10 @@ export function MerchantsTable() {
   }
 
   return (
-    <div className="border rounded-md overflow-hidden">
-      <Table className="bg-card">
-        <TableHeader className="bg-background">
-          <TableRow>
-            <TableHead className="px-4">Comerció</TableHead>
-            <TableHead className="px-4">Último gasto</TableHead>
-            <TableHead className="px-4 w-[200px]">Categoría asociada</TableHead>
-            <TableHead className="px-4 text-right">Activo</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {merchants.map((merchant) => (
-            <MerchantRow key={merchant.name + merchant.token} merchant={merchant} />
-          ))}
-        </TableBody>
-      </Table>
+    <div className="space-y-3">
+      {merchants.map((merchant) => (
+        <MerchantRow key={merchant.name + merchant.token} merchant={merchant} />
+      ))}
     </div>
   );
 }
