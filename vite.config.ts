@@ -28,7 +28,7 @@ export default defineConfig({
         background_color: '#18181b',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/dashboard',
         scope: '/',
         icons: [
           { src: 'logo192.png', sizes: '192x192', type: 'image/png' },
