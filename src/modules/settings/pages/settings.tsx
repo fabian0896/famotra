@@ -2,6 +2,7 @@ import {
   ArrowLeftRightIcon,
   BarChart3Icon,
   ChevronRight,
+  DownloadIcon,
   LogOutIcon,
   RepeatIcon,
   TargetIcon,
@@ -10,10 +11,18 @@ import {
 } from 'lucide-react';
 import { Link, useRouter } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { LucideIcon } from 'lucide-react';
+import type { LinkProps } from '@tanstack/react-router';
 import { Auth } from '@/modules/auth/services/auth';
 import { Content, Footer, Header, Page } from '@/components/dashboard-layout';
 
-const MENU_ITEMS = [
+type MenuItem = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+} & LinkProps;
+
+const MENU_ITEMS: MenuItem[] = [
   {
     icon: ArrowLeftRightIcon,
     title: 'Transacciones',
@@ -24,13 +33,13 @@ const MENU_ITEMS = [
     icon: RepeatIcon,
     title: 'Suscripciones',
     description: 'Controla tus pagos recurrentes',
-    to: '/dashboard/transactions',
+    to: '/dashboard/transactions/subscriptions',
   },
   {
     icon: TargetIcon,
     title: 'Presupuestos',
     description: 'Define límites para tu gasto',
-    to: '/dashboard/transactions',
+    to: '/dashboard/categories/budgets',
   },
   {
     icon: BarChart3Icon,
@@ -63,8 +72,12 @@ export function Settingspage() {
         <div className="pt-6">
           <h3 className="text-lg font-semibold text-foreground mb-3">Control</h3>
           <div className="grid grid-cols-2 gap-3">
-            {MENU_ITEMS.map(({ icon: Icon, title, description, to }) => (
-              <Link key={title} to={to} className="bg-card p-5 rounded-2xl flex flex-col gap-3.5">
+            {MENU_ITEMS.map(({ icon: Icon, title, description, ...props }) => (
+              <Link
+                key={title}
+                className="bg-card p-5 rounded-2xl flex flex-col gap-3.5"
+                {...props}
+              >
                 <div className="size-11 bg-primary/20 rounded-xl flex items-center justify-center">
                   <Icon className="size-5 text-primary" />
                 </div>
@@ -90,6 +103,11 @@ export function Settingspage() {
             <li className="p-4 flex items-center gap-3.5">
               <UserIcon className="size-5 text-muted-foreground" />
               <p className="flex-1 text-base text-foreground font-medium">Perfil</p>
+              <ChevronRight className="size-4.5 text-muted-foreground/50" />
+            </li>
+            <li className="p-4 flex items-center gap-3.5">
+              <DownloadIcon className="size-5 text-muted-foreground" />
+              <p className="flex-1 text-base text-foreground font-medium">Exportar datos</p>
               <ChevronRight className="size-4.5 text-muted-foreground/50" />
             </li>
             <li className="block">

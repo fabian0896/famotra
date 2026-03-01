@@ -21,8 +21,10 @@ import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admi
 import { Route as DashboardTransactionsIndexRouteImport } from './routes/dashboard/transactions/index'
 import { Route as DashboardCategoriesIndexRouteImport } from './routes/dashboard/categories/index'
 import { Route as DashboardAccountsIndexRouteImport } from './routes/dashboard/accounts/index'
+import { Route as DashboardTransactionsSubscriptionsRouteImport } from './routes/dashboard/transactions/subscriptions'
 import { Route as DashboardTransactionsNewRouteImport } from './routes/dashboard/transactions/new'
 import { Route as DashboardCategoriesNewRouteImport } from './routes/dashboard/categories/new'
+import { Route as DashboardCategoriesBudgetsRouteImport } from './routes/dashboard/categories/budgets'
 import { Route as DashboardCategoriesIdRouteImport } from './routes/dashboard/categories/$id'
 import { Route as DashboardAdminUsersRouteImport } from './routes/dashboard/admin/users'
 import { Route as DashboardAdminMerchantsRouteImport } from './routes/dashboard/admin/merchants'
@@ -94,6 +96,12 @@ const DashboardAccountsIndexRoute = DashboardAccountsIndexRouteImport.update({
   path: '/accounts/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardTransactionsSubscriptionsRoute =
+  DashboardTransactionsSubscriptionsRouteImport.update({
+    id: '/transactions/subscriptions',
+    path: '/transactions/subscriptions',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardTransactionsNewRoute =
   DashboardTransactionsNewRouteImport.update({
     id: '/transactions/new',
@@ -105,6 +113,12 @@ const DashboardCategoriesNewRoute = DashboardCategoriesNewRouteImport.update({
   path: '/categories/new',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardCategoriesBudgetsRoute =
+  DashboardCategoriesBudgetsRouteImport.update({
+    id: '/categories/budgets',
+    path: '/categories/budgets',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardCategoriesIdRoute = DashboardCategoriesIdRouteImport.update({
   id: '/categories/$id',
   path: '/categories/$id',
@@ -163,8 +177,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/budgets': typeof DashboardCategoriesBudgetsRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/transactions/new': typeof DashboardTransactionsNewRoute
+  '/dashboard/transactions/subscriptions': typeof DashboardTransactionsSubscriptionsRoute
   '/dashboard/accounts': typeof DashboardAccountsIndexRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/transactions': typeof DashboardTransactionsIndexRoute
@@ -186,8 +202,10 @@ export interface FileRoutesByTo {
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/budgets': typeof DashboardCategoriesBudgetsRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/transactions/new': typeof DashboardTransactionsNewRoute
+  '/dashboard/transactions/subscriptions': typeof DashboardTransactionsSubscriptionsRoute
   '/dashboard/accounts': typeof DashboardAccountsIndexRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/transactions': typeof DashboardTransactionsIndexRoute
@@ -211,8 +229,10 @@ export interface FileRoutesById {
   '/dashboard/admin/merchants': typeof DashboardAdminMerchantsRoute
   '/dashboard/admin/users': typeof DashboardAdminUsersRoute
   '/dashboard/categories/$id': typeof DashboardCategoriesIdRoute
+  '/dashboard/categories/budgets': typeof DashboardCategoriesBudgetsRoute
   '/dashboard/categories/new': typeof DashboardCategoriesNewRoute
   '/dashboard/transactions/new': typeof DashboardTransactionsNewRoute
+  '/dashboard/transactions/subscriptions': typeof DashboardTransactionsSubscriptionsRoute
   '/dashboard/accounts/': typeof DashboardAccountsIndexRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/transactions/': typeof DashboardTransactionsIndexRoute
@@ -237,8 +257,10 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
+    | '/dashboard/categories/budgets'
     | '/dashboard/categories/new'
     | '/dashboard/transactions/new'
+    | '/dashboard/transactions/subscriptions'
     | '/dashboard/accounts'
     | '/dashboard/categories'
     | '/dashboard/transactions'
@@ -260,8 +282,10 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
+    | '/dashboard/categories/budgets'
     | '/dashboard/categories/new'
     | '/dashboard/transactions/new'
+    | '/dashboard/transactions/subscriptions'
     | '/dashboard/accounts'
     | '/dashboard/categories'
     | '/dashboard/transactions'
@@ -284,8 +308,10 @@ export interface FileRouteTypes {
     | '/dashboard/admin/merchants'
     | '/dashboard/admin/users'
     | '/dashboard/categories/$id'
+    | '/dashboard/categories/budgets'
     | '/dashboard/categories/new'
     | '/dashboard/transactions/new'
+    | '/dashboard/transactions/subscriptions'
     | '/dashboard/accounts/'
     | '/dashboard/categories/'
     | '/dashboard/transactions/'
@@ -388,6 +414,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAccountsIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/transactions/subscriptions': {
+      id: '/dashboard/transactions/subscriptions'
+      path: '/transactions/subscriptions'
+      fullPath: '/dashboard/transactions/subscriptions'
+      preLoaderRoute: typeof DashboardTransactionsSubscriptionsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/transactions/new': {
       id: '/dashboard/transactions/new'
       path: '/transactions/new'
@@ -400,6 +433,13 @@ declare module '@tanstack/react-router' {
       path: '/categories/new'
       fullPath: '/dashboard/categories/new'
       preLoaderRoute: typeof DashboardCategoriesNewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/categories/budgets': {
+      id: '/dashboard/categories/budgets'
+      path: '/categories/budgets'
+      fullPath: '/dashboard/categories/budgets'
+      preLoaderRoute: typeof DashboardCategoriesBudgetsRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/categories/$id': {
@@ -483,8 +523,10 @@ interface DashboardRouteRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardAccountsNewRoute: typeof DashboardAccountsNewRoute
   DashboardCategoriesIdRoute: typeof DashboardCategoriesIdRoute
+  DashboardCategoriesBudgetsRoute: typeof DashboardCategoriesBudgetsRoute
   DashboardCategoriesNewRoute: typeof DashboardCategoriesNewRoute
   DashboardTransactionsNewRoute: typeof DashboardTransactionsNewRoute
+  DashboardTransactionsSubscriptionsRoute: typeof DashboardTransactionsSubscriptionsRoute
   DashboardAccountsIndexRoute: typeof DashboardAccountsIndexRoute
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
   DashboardTransactionsIndexRoute: typeof DashboardTransactionsIndexRoute
@@ -500,8 +542,11 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardAccountsNewRoute: DashboardAccountsNewRoute,
   DashboardCategoriesIdRoute: DashboardCategoriesIdRoute,
+  DashboardCategoriesBudgetsRoute: DashboardCategoriesBudgetsRoute,
   DashboardCategoriesNewRoute: DashboardCategoriesNewRoute,
   DashboardTransactionsNewRoute: DashboardTransactionsNewRoute,
+  DashboardTransactionsSubscriptionsRoute:
+    DashboardTransactionsSubscriptionsRoute,
   DashboardAccountsIndexRoute: DashboardAccountsIndexRoute,
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
   DashboardTransactionsIndexRoute: DashboardTransactionsIndexRoute,
