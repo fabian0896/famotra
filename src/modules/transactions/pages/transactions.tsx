@@ -1,62 +1,111 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { Plus } from 'lucide-react';
-import { transactionsQueryOptions } from '../query-options/transactions';
-import { TransactionGroup } from '../components/transaction-group';
-import { TransactionItem } from '../components/transaction-item';
-import { CreateEditTransactionDialog } from '@/modules/transactions/components/add-transaction-dialog';
-import { Button } from '@/components/ui/button';
-import {
-  EmpltyTransactionList,
-  TransactionList,
-} from '@/modules/transactions/components/transactions-list';
+import { Suspense, useState } from 'react';
+import { useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { PlusIcon } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { dailyTotalsOptions, transactionsQueryOptions } from '../query-options/transactions';
+import { TransactionList, TransactionListSkeleton } from '../components/transactions-list';
+import { BalanceSummary, BalanceSummarySkeleton } from '../components/balance-summary';
+import { AccountFilter, CategoryFilter, FiltersBar, TypeFilter } from '../components/filters';
+import type { TransactionFilters } from '../models/transaction-filters';
+import type { TransactionTypes } from '../models/transactions.models';
+import { Content, Header, Page } from '@/components/dashboard-layout';
+import { DateSelector } from '@/components/date-selector';
+import { Spinner } from '@/components/ui/spinner';
+import { getDateRange } from '@/lib/date-utils';
+import { QueryKeys } from '@/constants/query-keys';
 
-export function TransactionsPage() {
-  const {
-    data: transactions,
-    hasNextPage,
-    fetchNextPage,
-  } = useSuspenseInfiniteQuery(transactionsQueryOptions());
+const PAGE_SIZE = 20;
+
+function TransactionListData({ filters }: { filters: TransactionFilters }) {
+  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
+    transactionsQueryOptions({ pageSize: PAGE_SIZE, filters })
+  );
+  const { data: dailyTotals, isLoading: dailyTotalsLoading } = useQuery(
+    dailyTotalsOptions({ filters })
+  );
 
   return (
-    <div className="flex gap-6 max-w-2xl mx-auto">
-      <div className="flex-1">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-            Transacciones
-          </h1>
-          {transactions.length ? (
-            <CreateEditTransactionDialog>
-              <Button type="button">
-                <Plus />
-                Nueva Transacción
-              </Button>
-            </CreateEditTransactionDialog>
-          ) : null}
+    <TransactionList
+      dailyTotals={dailyTotals}
+      dailyTotalsLoading={dailyTotalsLoading}
+      next={fetchNextPage}
+      hasMore={hasNextPage}
+      dataLength={data.transactions.length}
+      loader={
+        <div className="flex justify-center py-3">
+          <Spinner className="text-muted-foreground" />
         </div>
-        <TransactionList
-          empty={<EmpltyTransactionList />}
-          dataLength={transactions.length}
-          next={fetchNextPage}
-          hasMore={hasNextPage}
-          loader={<p className="text-xs text-muted-foreground text-center">Cargando...</p>}
-          endMessage={
-            <p className="text-xs text-muted-foreground text-center">No hay más transacciones</p>
-          }
-        >
-          {transactions.map((group) => (
-            <TransactionGroup key={group.date} date={group.date}>
-              {group.transactions?.map((transaction) => (
-                <TransactionItem key={transaction.id} transaction={transaction} />
-              ))}
-            </TransactionGroup>
-          ))}
-        </TransactionList>
-      </div>
-      {/* <div className="w-[300px] xl:w-[350px]">
-        <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
-          <CategoryResume />
+      }
+      endMessage={
+        <p className="text-sm text-muted-foreground text-center py-3">
+          No hay más transacciones para este rango de fechas
+        </p>
+      }
+    >
+      {data.transactions.map((t) => (
+        <TransactionList.Item key={t.id} transaction={t} />
+      ))}
+    </TransactionList>
+  );
+}
+
+export function TransactionsPage() {
+  const queryClient = useQueryClient();
+  const [range, setRange] = useState(() => getDateRange());
+  const [accountIds, setAccountIds] = useState<string[]>([]);
+  const [categoryIds, setCategoryIds] = useState<string[]>([]);
+  const [transactionType, setTransactionType] = useState<TransactionTypes | undefined>();
+  const filters = {
+    from: range.start,
+    to: range.end,
+    accountIds: accountIds.length ? accountIds : undefined,
+    categoryIds: categoryIds.length ? categoryIds : undefined,
+    transactionType,
+  };
+
+  const hasActiveFilters =
+    accountIds.length > 0 || categoryIds.length > 0 || transactionType !== undefined;
+
+  const clearAllFilters = () => {
+    setAccountIds([]);
+    setCategoryIds([]);
+    setTransactionType(undefined);
+  };
+
+  const refresh = async () => {
+    await queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
+  };
+
+  return (
+    <Page onRefresh={refresh}>
+      <Header>
+        <Header.Title>Transacciones</Header.Title>
+        <Header.Actions>
+          <Header.ActionButton asChild>
+            <Link to="/dashboard/transactions/new">
+              <PlusIcon />
+            </Link>
+          </Header.ActionButton>
+        </Header.Actions>
+      </Header>
+
+      <Content className="flex flex-col gap-4">
+        <DateSelector value={range} onValueChange={setRange} className="mt-4" />
+
+        <FiltersBar isAllActive={!hasActiveFilters} onClearAll={clearAllFilters}>
+          <TypeFilter value={transactionType} onChange={setTransactionType} />
+          <AccountFilter value={accountIds} onChange={setAccountIds} />
+          <CategoryFilter value={categoryIds} onChange={setCategoryIds} />
+        </FiltersBar>
+
+        <Suspense fallback={<BalanceSummarySkeleton />}>
+          <BalanceSummary range={range} />
         </Suspense>
-      </div> */}
-    </div>
+
+        <Suspense fallback={<TransactionListSkeleton />}>
+          <TransactionListData filters={filters} />
+        </Suspense>
+      </Content>
+    </Page>
   );
 }

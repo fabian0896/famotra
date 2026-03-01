@@ -52,18 +52,18 @@ function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:text-destructive', {
+const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=true]:text-destructive', {
   variants: {
     orientation: {
-      vertical: ['flex-col [&>*]:w-full [&>.sr-only]:w-auto'],
+      vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
       horizontal: [
         'flex-row items-center',
-        '[&>[data-slot=field-label]]:flex-auto',
+        '*:data-[slot=field-label]:flex-auto',
         'has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
       ],
       responsive: [
-        'flex-col [&>*]:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:[&>*]:w-auto',
-        '@md/field-group:[&>[data-slot=field-label]]:flex-auto',
+        'flex-col *:w-full [&>.sr-only]:w-auto @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto',
+        '@md/field-group:*:data-[slot=field-label]:flex-auto',
         '@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
       ],
     },
@@ -107,6 +107,7 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
         'group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50',
         'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-4',
         'has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10',
+        'text-sm text-muted-foreground font-medium',
         className
       )}
       {...props}

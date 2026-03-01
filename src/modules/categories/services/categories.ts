@@ -1,3 +1,5 @@
+import { formatISO, isSameMonth, parseISO } from 'date-fns';
+import type { DateRange } from '@/lib/date-utils';
 import type {
   Category,
   CategoryDelete,
@@ -33,7 +35,7 @@ export class Categories {
   static async getById(categoryId: string) {
     const { data: category } = await supabase
       .from('categories')
-      .select()
+      .select('*, budget:budgets!category_id(amount)')
       .eq('id', categoryId)
       .single()
       .throwOnError();
@@ -45,8 +47,23 @@ export class Categories {
     return category;
   }
 
-  static async upsert(data: CategoryInsert) {
-    const { data: category } = await supabase.from('categories').upsert(data).throwOnError();
+  static async upsert({ budget, ...categoryData }: CategoryInsert & { budget?: number | null }) {
+    const { data: category } = await supabase
+      .from('categories')
+      .upsert(categoryData)
+      .select()
+      .single()
+      .throwOnError();
+
+    if (budget === 0) {
+      await supabase.from('budgets').delete().eq('category_id', category.id).throwOnError();
+    } else if (budget != null) {
+      await supabase
+        .from('budgets')
+        .upsert({ category_id: category.id, amount: budget }, { onConflict: 'category_id' })
+        .throwOnError();
+    }
+
     return category;
   }
 
@@ -60,8 +77,39 @@ export class Categories {
     return category;
   }
 
-  static async categoryResume() {
-    const { data } = await supabase.rpc('get_transactions_by_category').throwOnError();
+  static async categoryResume({
+    type = 'expense',
+    range,
+  }: {
+    type: CategoryTypes;
+    range: DateRange;
+  }) {
+    const { data } = await supabase
+      .rpc('get_categories_resume', {
+        p_type: type,
+        p_start_date: range.start,
+        p_end_date: range.end,
+      })
+      .throwOnError();
     return data;
+  }
+
+  static async categoryDetails({ id, range }: { id: string; range: DateRange }) {
+    const p_start_date = range.start;
+    let p_end_date = range.end;
+
+    const isCurrentMonth = isSameMonth(parseISO(range.start), new Date());
+    if (isCurrentMonth) {
+      p_end_date = formatISO(new Date(), { representation: 'date' });
+    }
+
+    const { data } = await supabase
+      .rpc('get_category_detail', {
+        p_category_id: id,
+        p_start_date: p_start_date,
+        p_end_date: p_end_date,
+      })
+      .throwOnError();
+    return data[0];
   }
 }

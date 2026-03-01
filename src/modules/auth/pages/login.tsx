@@ -1,9 +1,9 @@
-import { AuthLayout } from '@/modules/auth/components/auth-layout';
-import { LoginForm } from '@/modules/auth/components/login-form';
+import { AuthLayout } from '../components/auth-layout';
+import { LoginForm } from '../components/login-form';
 
 export function LoginPage() {
   return (
-    <AuthLayout>
+    <AuthLayout description="Maneja tus finanzas de una forma simple y efectiva.">
       <LoginForm />
     </AuthLayout>
   );

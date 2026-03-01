@@ -1,4 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
+import type { CategoryTypes } from '../models/categories.models';
+import type { DateRange } from '@/lib/date-utils';
 import { QueryKeys } from '@/constants/query-keys';
 import { Categories } from '@/modules/categories/services/categories';
 
@@ -8,10 +10,31 @@ export const categoriesQueryOptions = queryOptions({
   staleTime: Infinity,
 });
 
-export const cagoryResumeQueryOptions = () => {
+export const categoryByIdOption = ({ id }: { id: string }) => {
   return queryOptions({
-    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES_RESUME],
-    queryFn: () => Categories.categoryResume(),
+    queryKey: [QueryKeys.CATEGORIES, { id }],
+    queryFn: () => Categories.getById(id),
+    staleTime: Infinity,
+  });
+};
+
+export const categoryResumeQueryOptions = (options: { type: CategoryTypes; range: DateRange }) => {
+  return queryOptions({
+    queryKey: [QueryKeys.TRANSACTIONS, QueryKeys.CATEGORIES, QueryKeys.CATEGORIES_RESUME, options],
+    queryFn: () => Categories.categoryResume(options),
+    staleTime: Infinity,
+  });
+};
+
+export const categoryDetailsOptions = ({ id, range }: { id: string; range: DateRange }) => {
+  return queryOptions({
+    queryKey: [
+      QueryKeys.TRANSACTIONS,
+      QueryKeys.CATEGORIES,
+      QueryKeys.CATEGORIES_DETAILS,
+      { id, range },
+    ],
+    queryFn: () => Categories.categoryDetails({ id, range }),
     staleTime: Infinity,
   });
 };

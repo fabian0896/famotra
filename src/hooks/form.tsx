@@ -2,12 +2,20 @@ import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 import { AmountField } from '@/components/form/amount-field';
 import { CategoryField } from '@/components/form/category-field';
 import { EmojiField } from '@/components/form/emoji-field';
+import { EmojiGridField } from '@/components/form/emoji-grid-field';
 import { SubmitButton } from '@/components/form/subcribe-button';
 import { TextField } from '@/components/form/text-field';
 import { DateField } from '@/components/form/date-field';
 import { BankField } from '@/components/form/bank-field';
 import { AccountsField } from '@/components/form/accounts-field';
 import { AccountIconField } from '@/components/form/account-icon-field';
+import { InputCardField } from '@/components/form/input-card-field';
+import { MoneyCardField } from '@/components/form/money-card-field';
+import { CategoryTypeField } from '@/components/form/category-type-field';
+import { AmountCardField } from '@/components/form/amount-card-field';
+import { AccountsCardField } from '@/components/form/accounts-card-field';
+import { CategoriesCardField } from '@/components/form/categories-card-field';
+import { TransactionAmountField } from '@/components/form/transaction-amount-field';
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();
@@ -17,11 +25,19 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     TextField,
     AmountField,
     EmojiField,
+    EmojiGridField,
     CategoryField,
     DateField,
     BankField,
     AccountsField,
     AccountIconField,
+    InputCardField,
+    MoneyCardField,
+    AmountCardField,
+    AccountsCardField,
+    CategoriesCardField,
+    TransactionAmountField,
+    CategoryTypeField,
   },
   formComponents: {
     SubmitButton,

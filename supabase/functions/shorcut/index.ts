@@ -39,11 +39,11 @@ app.get('/accounts', authMiddleware, async (c) => {
   const userId = c.var.userId;
   const { data } = await supabase
     .from('accounts')
-    .select('id, name, custom_bank_name, bank:bank_list(name)')
+    .select('id, name, bank:bank_list(name)')
     .eq('user_id', userId)
     .throwOnError();
   const accounts = data.map((account) => {
-    const bankName = account.bank?.name ?? account.custom_bank_name ?? 'Unknown Bank';
+    const bankName = account.bank?.name ?? 'Personalizado';
     return {
       id: account.id,
       name: `${account.name} - ${bankName}`,
@@ -117,30 +117,36 @@ app.post('/transaction', zValidator('json', CreateTransactionSchema), authMiddle
   );
 });
 
-app.patch('transaction', zValidator('json', UpdateTransactionSchema), authMiddleware, async (c) => {
-  const data = c.req.valid('json');
+app.patch(
+  '/transaction',
+  zValidator('json', UpdateTransactionSchema),
+  authMiddleware,
+  async (c) => {
+    const data = c.req.valid('json');
 
-  const { data: transaction } = await supabase
-    .from('transactions')
-    .update({
-      category_id: data.category_id || null,
-      account_id: data.account_id || null,
-    })
-    .eq('id', data.id)
-    .select()
-    .single()
-    .throwOnError();
+    console.log({ data });
+    const { data: transaction } = await supabase
+      .from('transactions')
+      .update({
+        category_id: data.category_id || null,
+        account_id: data.account_id || null,
+      })
+      .eq('id', data.id)
+      .select()
+      .single()
+      .throwOnError();
 
-  return c.json(
-    {
-      message: 'Transaction created successfully.',
-      id: transaction.id,
-      category_id: transaction.category_id,
-      account_id: transaction.account_id,
-    },
-    200
-  );
-});
+    return c.json(
+      {
+        message: 'Transaction created successfully.',
+        id: transaction.id,
+        category_id: transaction.category_id,
+        account_id: transaction.account_id,
+      },
+      200
+    );
+  }
+);
 
 app.post(
   '/manual',
@@ -152,7 +158,7 @@ app.post(
 
     const amount = data.type === 'expense' ? data.amount * -1 : data.amount;
 
-    const destination_account_id = data.destination_account_id || null;
+    console.log({ data });
     const { data: transaction } = await supabase
       .from('transactions')
       .insert({
@@ -162,7 +168,7 @@ app.post(
         account_id: data.account_id,
         amount: amount,
         transaction_type: data.type,
-        destination_account_id,
+        destination_account_id: data.destination_account_id || null,
       })
       .select('id')
       .single()

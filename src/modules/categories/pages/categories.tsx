@@ -1,43 +1,77 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { categoriesQueryOptions } from '../query-options/categories';
-import { CategoryItem } from '../components/category-item';
-import { CreateEditCategoryDialog } from '../components/create-edit-category';
-import { CategoryList } from '../components/category-list';
-import { AddCategotyButton } from '../components/add-category-button';
+import { Suspense } from 'react';
+import { PlusIcon } from 'lucide-react';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { CategoryList, CategoryListSkeleton } from '../components/category-list';
+import { categoryResumeQueryOptions } from '../query-options/categories';
+import type { CategoryTypes } from '../models/categories.models';
+import type { DateRange } from '@/lib/date-utils';
+import { getDateRange } from '@/lib/date-utils';
+import { Content, Header, Page } from '@/components/dashboard-layout';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DateSelector } from '@/components/date-selector';
 
 export function CategoriesPage() {
-  const { data: categories } = useSuspenseQuery(categoriesQueryOptions);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const {
+    type = 'expense',
+    start = getDateRange().start,
+    end = getDateRange().end,
+  } = useSearch({ from: '/dashboard/categories/' });
+
+  const range = { start, end };
+
+  const handleChangeType = (t: CategoryTypes) => {
+    navigate({
+      to: '.',
+      search: (prev) => ({ ...prev, type: t }),
+      replace: true,
+    });
+  };
+
+  const handleChangeRange = (event: DateRange) => {
+    navigate({
+      to: '.',
+      replace: true,
+      search: (prev) => ({ ...prev, ...event }),
+    });
+  };
+
+  const handleRefres = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: categoryResumeQueryOptions({ type, range }).queryKey,
+    });
+  };
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
-        Categorías
-      </h1>
-      <div className="flex flex-col gap-10 mt-8">
-        <CategoryList
-          title="Categorías de Ingresos"
-          description="Gestiona tus categorías de ingresos aquí."
-        >
-          {categories.income.map((category) => (
-            <CategoryItem key={category.id} category={category} />
-          ))}
-          <CreateEditCategoryDialog type="income">
-            <AddCategotyButton />
-          </CreateEditCategoryDialog>
-        </CategoryList>
+    <Page onRefresh={handleRefres}>
+      <Header>
+        <Header.Title>Categorías</Header.Title>
+        <Header.Actions>
+          <Header.ActionButton asChild>
+            <Link to="/dashboard/categories/new">
+              <PlusIcon />
+            </Link>
+          </Header.ActionButton>
+        </Header.Actions>
+      </Header>
 
-        <CategoryList
-          title="Categorías de Gastos"
-          description="Gestiona tus categorías de gastos aquí."
-        >
-          {categories.expense.map((category) => (
-            <CategoryItem key={category.id} category={category} />
-          ))}
-          <CreateEditCategoryDialog type="expense">
-            <AddCategotyButton />
-          </CreateEditCategoryDialog>
-        </CategoryList>
-      </div>
-    </div>
+      <Content>
+        <DateSelector className="mb-4" value={range} onValueChange={handleChangeRange} />
+
+        <Tabs value={type} onValueChange={(value) => handleChangeType(value as CategoryTypes)}>
+          <TabsList className="mt-2 mb-4">
+            <TabsTrigger value="expense">Gastos</TabsTrigger>
+            <TabsTrigger value="income">Ingresos</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <Suspense fallback={<CategoryListSkeleton />}>
+          <CategoryList range={{ start, end }} type={type} />
+        </Suspense>
+      </Content>
+    </Page>
   );
 }

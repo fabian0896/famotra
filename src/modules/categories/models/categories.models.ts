@@ -1,4 +1,13 @@
-import type { Enums, Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
+import type { QueryData } from '@supabase/supabase-js';
+import type { Database, Enums, Tables, TablesInsert, TablesUpdate } from '@/models/database.types';
+import { supabase } from '@/integrations/supabase/client';
+
+export const categoryWithBudgetQuery = supabase
+  .from('categories')
+  .select(`*, budget:budgets!category_id(amount)`)
+  .single();
+
+export type CategoryWithBudget = QueryData<typeof categoryWithBudgetQuery>;
 
 export type Category = Tables<'categories'>;
 
@@ -13,3 +22,9 @@ export const CATEGORY_TYPES: Record<CategoryTypes, string> = {
   income: 'Ingreso',
   expense: 'Gasto',
 };
+
+export type CategoryResume =
+  Database['public']['Functions']['get_categories_resume']['Returns'][number];
+
+export type CategoryDetails =
+  Database['public']['Functions']['get_category_detail']['Returns'][number];

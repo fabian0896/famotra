@@ -20,30 +20,27 @@ export type Database = {
           bank_id: string | null
           created_at: string
           custom_bank_icon: string | null
-          custom_bank_name: string | null
           id: string
           name: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           balance?: number
           bank_id?: string | null
           created_at?: string
           custom_bank_icon?: string | null
-          custom_bank_name?: string | null
           id?: string
           name: string
-          user_id?: string | null
+          user_id?: string
         }
         Update: {
           balance?: number
           bank_id?: string | null
           created_at?: string
           custom_bank_icon?: string | null
-          custom_bank_name?: string | null
           id?: string
           name?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -100,8 +97,41 @@ export type Database = {
         }
         Relationships: []
       }
+      budgets: {
+        Row: {
+          amount: number
+          category_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budgets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: true
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
+          color: string
           created_at: string
           icon: string
           id: string
@@ -110,6 +140,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          color?: string
           created_at?: string
           icon?: string
           id?: string
@@ -118,6 +149,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          color?: string
           created_at?: string
           icon?: string
           id?: string
@@ -410,14 +442,27 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_transactions_by_category: {
+      get_balance_summary: {
         Args: {
-          p_month?: number
+          p_account_id?: string
+          p_date_from?: string
+          p_date_to?: string
+        }
+        Returns: {
+          balance: number
+          expenses: number
+          income: number
+        }[]
+      }
+      get_categories_resume: {
+        Args: {
+          p_end_date?: string
+          p_start_date?: string
           p_type?: Database["public"]["Enums"]["category_type"]
-          p_year?: number
         }
         Returns: {
           average_amount: number
+          category_color: string
           category_icon: string
           category_id: string
           category_name: string
@@ -425,6 +470,58 @@ export type Database = {
           percentage: number
           total_amount: number
           transaction_count: number
+        }[]
+      }
+      get_category_detail: {
+        Args: {
+          p_category_id: string
+          p_end_date: string
+          p_start_date: string
+        }
+        Returns: {
+          budget_amount: number
+          budget_percentage: number
+          category_color: string
+          category_icon: string
+          category_name: string
+          percentage_change: number
+          prev_total_amount: number
+          total_amount: number
+          transaction_count: number
+        }[]
+      }
+      get_daily_totals:
+        | {
+            Args: {
+              p_account_id?: string
+              p_category_id?: string
+              p_from: string
+              p_to: string
+              p_type?: string
+            }
+            Returns: {
+              day: string
+              total: number
+            }[]
+          }
+        | {
+            Args: {
+              p_account_ids?: string[]
+              p_category_ids?: string[]
+              p_from: string
+              p_to: string
+              p_type?: string
+            }
+            Returns: {
+              day: string
+              total: number
+            }[]
+          }
+      get_net_worth_summary: {
+        Args: never
+        Returns: {
+          current_net_worth: number
+          monthly_change: number
         }[]
       }
       get_user_role: {

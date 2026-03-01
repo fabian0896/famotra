@@ -1,5 +1,7 @@
 import { AlertTriangleIcon } from 'lucide-react';
+import { useMemo } from 'react';
 import { ACOUNTS_ICONS } from '../constants/accounts-icons';
+import type { ElementType } from 'react';
 import type { Account } from '../models/accounts.models';
 import type React from 'react';
 import type { TransactionAccount } from '@/modules/transactions/models/transactions.models';
@@ -26,8 +28,8 @@ export function AccountIcon({
     );
   }
 
-  if (!account.custom_bank_icon || !account.custom_bank_name) {
-    throw new Error('AccountIcon needs a bank_id or a custom_bank_name and custom_bank_icon');
+  if (!account.custom_bank_icon) {
+    throw new Error('AccountIcon needs a bank_id or a custom_bank_icon');
   }
 
   const Icon = ACOUNTS_ICONS[account.custom_bank_icon as keyof typeof ACOUNTS_ICONS].Icon;
@@ -37,10 +39,48 @@ export function AccountIcon({
 
   return (
     <div
-      className={cn('flex items-center justify-center bg-primary/20 text-foreground', className)}
+      className={cn(
+        'flex items-center justify-center bg-primary/20 text-foreground overflow-hidden',
+        className
+      )}
       {...props}
     >
-      <Icon className="w-[60%] h-[60%]" />
+      <Icon size="55%" />
     </div>
   );
+}
+
+export function AccountDot({
+  account,
+  className,
+  ...props
+}: { account: Account | TransactionAccount | null } & React.ComponentProps<'div'>) {
+  return (
+    <span
+      {...props}
+      className={cn(`overflow-hidden ${account ? 'bg-primary' : 'bg-amber-500'}`, className)}
+    >
+      {account?.bank?.logo && <img src={account.bank.logo} alt={account.bank.name} />}
+    </span>
+  );
+}
+
+export function AccountName<T extends ElementType = 'span'>({
+  account,
+  as,
+  part = 'full',
+  ...props
+}: {
+  part?: 'full' | 'bank' | 'account';
+  account: Account | TransactionAccount | null;
+  as?: T;
+} & React.ComponentProps<T>) {
+  const Tag = as ?? 'span';
+  const name = useMemo(() => {
+    if (!account) return 'Unknown Account';
+    if (part === 'bank') return account.bank?.name ?? 'Custom';
+    if (part === 'account') return account.name;
+    return [account.name, account.bank?.name].filter(Boolean).join(' · ');
+  }, [account, part]);
+  return <Tag {...props}>{name}</Tag>;
 }

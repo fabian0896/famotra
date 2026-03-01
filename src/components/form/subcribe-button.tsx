@@ -9,7 +9,7 @@ export function SubmitButton({ children, ...props }: React.ComponentProps<typeof
     <form.Subscribe
       selector={(state) => [state.canSubmit, state.isSubmitting]}
       children={([canSubmit, isSubmitting]) => (
-        <Button type="submit" disabled={!canSubmit || isSubmitting} {...props}>
+        <Button className="w-full" type="submit" disabled={!canSubmit || isSubmitting} {...props}>
           {isSubmitting && <Spinner />}
           {children}
         </Button>

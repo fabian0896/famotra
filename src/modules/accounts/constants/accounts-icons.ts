@@ -1,6 +1,8 @@
 import {
   BanknoteIcon,
+  Building2Icon,
   CircleDollarSignIcon,
+  CoinsIcon,
   CreditCardIcon,
   LandmarkIcon,
   PiggyBankIcon,
@@ -31,5 +33,13 @@ export const ACOUNTS_ICONS = {
   wallet: {
     id: 'wallet',
     Icon: WalletIcon,
+  },
+  coins: {
+    id: 'coins',
+    Icon: CoinsIcon,
+  },
+  building: {
+    id: 'building',
+    Icon: Building2Icon,
   },
 } as const;

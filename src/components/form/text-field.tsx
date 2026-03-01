@@ -1,5 +1,5 @@
 import { Field, FieldError, FieldLabel } from '../ui/field';
-import { Input } from '../ui/input';
+import { InputGroup, InputGroupInput } from '../ui/input-group';
 import { useFieldContext } from '@/hooks/form';
 
 export function TextField({
@@ -13,15 +13,17 @@ export function TextField({
   return (
     <Field data-invalid={isError}>
       <FieldLabel htmlFor={fieldId}>{label}</FieldLabel>
-      <Input
-        id={fieldId}
-        name={field.name}
-        value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
-        onBlur={field.handleBlur}
-        {...props}
-      />
-      {children}
+      <InputGroup>
+        <InputGroupInput
+          id={fieldId}
+          name={field.name}
+          value={field.state.value}
+          onChange={(e) => field.handleChange(e.target.value)}
+          onBlur={field.handleBlur}
+          {...props}
+        />
+        {children}
+      </InputGroup>
       <FieldError errors={field.state.meta.errors} />
     </Field>
   );

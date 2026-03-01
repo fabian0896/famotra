@@ -1,10 +1,10 @@
 import type { TransactionTypes } from './transactions.models';
 
 export interface TransactionFilters {
-  dateFrom?: string;
-  dateTo?: string;
-  categoryId?: string;
-  accountId?: string;
+  from?: string;
+  to?: string;
+  categoryIds?: string[];
+  accountIds?: string[];
   transactionType?: TransactionTypes;
 }
 

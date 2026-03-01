@@ -2,7 +2,9 @@ export const QueryKeys = {
   AUTH_STATE: 'auth-state',
   CATEGORIES: 'categories',
   CATEGORIES_RESUME: 'categories-resume',
+  CATEGORIES_DETAILS: 'categories-details',
   ACCOUNTS: 'accounts',
+  NET_WORTH_SUMMARY: 'get_net_worth_summary',
   BANKS: 'banks',
   TOTAL_BALANCES: 'total-balances',
   TRANSACTIONS: 'transactions',
@@ -10,4 +12,6 @@ export const QueryKeys = {
   SHORTCUTS_CARDS: 'shortcuts-cards',
   SHORTCUTS_MERCHANTS: 'shortcuts-merchants',
   USERS_LIST: 'users-list',
+  BALANCE_SUMMARY: 'balance-summary',
+  DAILY_TOTAL: 'daily-totals',
 } as const;
