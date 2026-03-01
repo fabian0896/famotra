@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { UsersIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import React, { useEffect, useState } from 'react';
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
@@ -60,11 +60,11 @@ function UserRow({ user }: { user: UserProfile }) {
       return UsersService.updateRole({ id, role });
     },
     onSuccess: () => {
-      toast.success('Rol actualizado correctamente');
+      sileo.success({ title: 'Rol actualizado correctamente' });
     },
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       return queryClient.invalidateQueries({ queryKey: [QueryKeys.USERS_LIST] });

@@ -1,5 +1,5 @@
 import { AlertCircleIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { createTokenSchema } from '../models/schemas';
@@ -29,11 +29,11 @@ export function CreateTokenDialog({ children }: { children: React.ReactNode }) {
     mutationFn: TokenService.create,
     onSuccess: () => {
       setOpen(false);
-      toast.success('Token creado correctamente');
+      sileo.success({ title: 'Token creado correctamente' });
     },
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: tokensQueryOptions.queryKey });

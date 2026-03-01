@@ -1,6 +1,6 @@
 import { Link, useRouter } from '@tanstack/react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { z } from 'zod';
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -30,14 +30,15 @@ export function SignupForm() {
       const queryKey = authQueryOptions.queryKey;
       await queryClient.invalidateQueries({ queryKey });
       if (!response.session) {
-        toast.success('Registro Exitoso', {
+        sileo.success({
+          title: 'Registro Exitoso',
           description: 'Valida tu correo para poder ingresar a la plataforma',
         });
       }
       router.navigate({ to: '/dashboard' });
     },
     onError: () => {
-      toast.error('Algo salió mal, intenta nuevamente');
+      sileo.error({ title: 'Algo salió mal, intenta nuevamente' });
     },
   });
 

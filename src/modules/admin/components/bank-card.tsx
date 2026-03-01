@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { EllipsisVertical, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { BanksAdminService } from '../services/banks-admin.service';
 import { CreateEditBankDialog } from './create-edit-bank-dialog';
 import { DeleteBankDialog } from './delete-bank-dialog';
@@ -23,10 +23,10 @@ export function BankCard({ bank }: { bank: Bank }) {
   const remove = useMutation({
     mutationFn: BanksAdminService.remove,
     onSuccess: () => {
-      toast.info('Se eliminó el banco correctamente');
+      sileo.info({ title: 'Se eliminó el banco correctamente' });
     },
     onError: () => {
-      toast.error('Algo salió mal, por favor intenta nuevamente');
+      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.BANKS] });

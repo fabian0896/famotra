@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { bankFormSchema } from '../models/banks.schemas';
 import { BanksAdminService } from '../services/banks-admin.service';
 import { ImageUpload } from './image-upload';
@@ -35,10 +35,12 @@ export function CreateEditBankDialog({
   const mutation = useMutation({
     mutationFn: BanksAdminService.upsert,
     onSuccess: () => {
-      toast.success(bank ? 'Banco actualizado correctamente' : 'Banco agregado correctamente');
+      sileo.success({
+        title: bank ? 'Banco actualizado correctamente' : 'Banco agregado correctamente',
+      });
     },
     onError: () => {
-      toast.error('Algo salió mal, por favor intenta más tarde');
+      sileo.error({ title: 'Algo salió mal, por favor intenta más tarde' });
     },
     onSettled: () => {
       return queryClient.invalidateQueries({ queryKey: [QueryKeys.BANKS] });

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import React, { Suspense } from 'react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { shortcutsCardsQueryOptions } from '../query-options/shortcuts-cards';
 import { ShortcutsCardService } from '../services/shortcuts-cards';
 import { CardIcon } from './card-icon';
@@ -53,7 +53,7 @@ function CardRow({ card }: { card: ShortcutCard }) {
     mutationFn: ShortcutsCardService.update,
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });

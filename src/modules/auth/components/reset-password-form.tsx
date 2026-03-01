@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { useRouter } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react';
@@ -27,11 +27,11 @@ export function ResetPasswordForm() {
   const resetPassword = useMutation({
     mutationFn: ({ password }: { password: string }) => Auth.resetPassword({ password }),
     onSuccess: () => {
-      toast.success('Contraseña actualizada correctamente');
+      sileo.success({ title: 'Contraseña actualizada correctamente' });
       router.navigate({ to: '/dashboard' });
     },
     onError: () => {
-      toast.error('Algo salió mal, por favor intenta nuevamente');
+      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
     },
   });
 

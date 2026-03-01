@@ -1,6 +1,6 @@
 import { CheckIcon, CopyIcon, EyeIcon, EyeOffIcon, KeyIcon, Plus, Trash2Icon } from 'lucide-react';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import React, { useState } from 'react';
 import { tokensQueryOptions } from '../query-options/tokens';
 import { TokenService } from '../services/tokens';
@@ -119,7 +119,7 @@ function TokenRow({ token }: { token: Token }) {
     },
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: tokensQueryOptions.queryKey });

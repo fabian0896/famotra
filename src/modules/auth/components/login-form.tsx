@@ -1,9 +1,9 @@
 import { Link, useRouter } from '@tanstack/react-router';
 import z from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from 'lucide-react';
 import { useState } from 'react';
+import { sileo } from 'sileo';
 import { Auth } from '../services/auth';
 import { authQueryOptions } from '../query-options/auth';
 import { Separator } from '@/components/ui/separator';
@@ -31,7 +31,7 @@ export function LoginForm() {
       router.navigate({ to: '/dashboard' });
     },
     onError: () => {
-      toast.error('Algo salió mal, por favor intenta nuevamente');
+      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
     },
   });
 

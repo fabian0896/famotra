@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { MailIcon } from 'lucide-react';
@@ -18,11 +18,11 @@ export function ForgotPasswordForm() {
   const forgotPassword = useMutation({
     mutationFn: ({ email }: { email: string }) => Auth.forgotPassword({ email }),
     onSuccess: () => {
-      toast.success('Te enviamos un correo para restablecer tu contraseña');
+      sileo.success({ title: 'Te enviamos un correo para restablecer tu contraseña' });
       navigate({ to: '/' });
     },
     onError: () => {
-      toast.error('Algo salió mal, por favor intenta nuevamente');
+      sileo.error({ title: 'Algo salió mal, por favor intenta nuevamente' });
     },
   });
 

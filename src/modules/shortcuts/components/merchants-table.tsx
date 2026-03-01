@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import React, { Suspense, useMemo } from 'react';
 import { StoreIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { sileo } from 'sileo';
 import { initials } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { shortcutsMerchantsQueryOptions } from '../query-options/shortcuts-merchants';
@@ -67,7 +67,7 @@ function MerchantRow({ merchant }: { merchant: ShortcutMerchant }) {
     },
     onError: (error) => {
       const { message } = formatError(error);
-      toast.error(message);
+      sileo.error({ title: 'Algo salió mal', description: message });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
