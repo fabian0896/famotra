@@ -49,8 +49,7 @@ function SelectAllItem({ isActive, onSelect }: { isActive: boolean; onSelect: ()
   return (
     <DropdownMenu.Item
       className="flex items-center gap-3 py-2.5 px-3 rounded-xl cursor-pointer outline-none hover:bg-muted transition-colors"
-      onSelect={(e) => {
-        e.preventDefault();
+      onSelect={() => {
         onSelect();
       }}
     >
@@ -125,8 +124,7 @@ export function AccountFilter({
                 <DropdownMenu.Item
                   key={account.id}
                   className="flex items-center gap-3 py-2.5 px-3 rounded-xl cursor-pointer outline-none hover:bg-muted transition-colors"
-                  onSelect={(e) => {
-                    e.preventDefault();
+                  onSelect={() => {
                     toggle(account.id);
                   }}
                 >
@@ -192,8 +190,7 @@ export function TypeFilter({
                 <DropdownMenu.Item
                   key={option.value}
                   className="flex items-center gap-3 py-2.5 px-3 rounded-xl cursor-pointer outline-none hover:bg-muted transition-colors"
-                  onSelect={(e) => {
-                    e.preventDefault();
+                  onSelect={() => {
                     onChange?.(selected ? undefined : option.value);
                   }}
                 >
@@ -256,8 +253,7 @@ export function CategoryFilter({
                             'flex flex-col items-center gap-1 py-2 px-1 rounded-xl cursor-pointer outline-none transition-colors hover:bg-muted',
                             selected && 'bg-primary/10 ring-1 ring-primary/30'
                           )}
-                          onSelect={(e) => {
-                            e.preventDefault();
+                          onSelect={() => {
                             toggle(category.id);
                           }}
                         >
