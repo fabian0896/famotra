@@ -183,7 +183,7 @@ export function BottomNav() {
   const [left, right] = [navItems.slice(0, 2), navItems.slice(2)];
 
   return (
-    <footer className="fixed z-30 bottom-0 inset-x-0 pb-4 px-4 group-has-data-[footer=custom]/layout:hidden">
+    <footer className="fixed z-30 bottom-0 inset-x-0 pb-[calc(1rem+var(--safe-bottom))] px-4 group-has-data-[footer=custom]/layout:hidden">
       <div className="bg-card border border-border rounded-full flex justify-between items-center px-4 h-[58px]">
         {left.map((item) => (
           <NavItem key={item.to} {...item} />
