@@ -59,7 +59,7 @@ export function CategoriesCardField({ label, type }: { label: string; type: Cate
               <DrawerDescription className="flex items-center gap-2 bg-muted rounded-2xl px-3 py-2.5">
                 <SearchIcon className="w-4 h-4 text-muted-foreground shrink-0" />
                 <input
-                  className="bg-transparent outline-none flex-1 text-sm placeholder:text-muted-foreground"
+                  className="bg-transparent outline-none flex-1 text-base placeholder:text-muted-foreground"
                   placeholder="Buscar categorías..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}

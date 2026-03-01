@@ -62,7 +62,7 @@ export function EmojiGridField({ label }: { label: string }) {
           className="w-full"
         >
           {/* <EmojiPickerPrimitive.Search
-            className="w-full bg-muted/60 rounded-xl px-3 py-2.5 text-sm outline-none placeholder:text-muted-foreground mb-3"
+            className="w-full bg-muted/60 rounded-xl px-3 py-2.5 text-base outline-none placeholder:text-muted-foreground mb-3"
             placeholder="Buscar..."
           /> */}
           <EmojiPickerPrimitive.Viewport className="h-[200px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

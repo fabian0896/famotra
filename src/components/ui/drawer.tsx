@@ -98,6 +98,7 @@ function DrawerContent({
       <DrawerOverlay />
       <DialogPrimitive.Content
         data-slot="drawer-content"
+        onOpenAutoFocus={(e) => e.preventDefault()}
         style={style}
         className={cn(
           'fixed inset-x-0 bottom-0 z-50 flex flex-col bg-card rounded-t-3xl max-h-[80vh]',

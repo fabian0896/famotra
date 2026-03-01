@@ -4,6 +4,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer base {
+  /* Prevent iOS Safari from auto-zooming when inputs are focused.
+     iOS zooms in whenever an input has font-size < 16px.
+     Tailwind utility classes (text-sm, text-5xl, etc.) override this. */
+  input,
+  textarea,
+  select {
+    font-size: 1rem;
+  }
+}
+
 body {
   @apply m-0;
   font-family:
