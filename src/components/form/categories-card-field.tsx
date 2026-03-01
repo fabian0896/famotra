@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronRightIcon, SearchIcon, TagIcon } from 'lucide-react';
 import type { CategoryTypes } from '@/modules/categories/models/categories.models';
@@ -27,6 +27,10 @@ export function CategoriesCardField({ label, type }: { label: string; type: Cate
     () => categories.filter((c) => c.name.toLowerCase().includes(search.toLowerCase())),
     [categories, search]
   );
+
+  useEffect(() => {
+    if (isOpen) setSearch('');
+  }, [isOpen]);
 
   return (
     <div className="flex flex-col gap-1.5">

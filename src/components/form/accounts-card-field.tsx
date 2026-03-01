@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { CheckIcon, ChevronRightIcon, SearchIcon, WalletIcon } from 'lucide-react';
 import { NumericFormat } from 'react-number-format';
@@ -28,6 +28,10 @@ export function AccountsCardField({ label }: { label: string }) {
     () => accounts.filter((a) => a.name.toLowerCase().includes(search.toLowerCase())),
     [accounts, search]
   );
+
+  useEffect(() => {
+    if (isOpen) setSearch('');
+  }, [isOpen]);
 
   return (
     <div className="flex flex-col gap-1.5">

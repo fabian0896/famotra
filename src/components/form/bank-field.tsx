@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { BuildingIcon, CheckIcon, ChevronRightIcon, PaletteIcon, SearchIcon } from 'lucide-react';
 import { useFieldContext } from '@/hooks/form';
@@ -38,6 +38,10 @@ export function BankField({
     [banks, search]
   );
 
+  useEffect(() => {
+    if (isOpen) setSearch('');
+  }, [isOpen]);
+
   return (
     <div className="flex flex-col gap-1.5">
       <InputCard
@@ -51,7 +55,11 @@ export function BankField({
           ) : isCustom ? (
             <PaletteIcon />
           ) : selected ? (
-            <img src={selected.logo} alt={selected.name} className="size-5 rounded-full object-cover" />
+            <img
+              src={selected.logo}
+              alt={selected.name}
+              className="size-5 rounded-full object-cover"
+            />
           ) : (
             <BuildingIcon />
           )}
