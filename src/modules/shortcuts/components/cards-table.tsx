@@ -37,7 +37,7 @@ import {
 import { QueryKeys } from '@/constants/query-keys';
 
 function AccountSelect(props: React.ComponentProps<typeof Select>) {
-  const { data: accounts } = useSuspenseQuery(accountsQueryOptions);
+  const { data: accounts } = useSuspenseQuery(accountsQueryOptions());
   return (
     <Select {...props}>
       <SelectTrigger className="w-full">

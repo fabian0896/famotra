@@ -85,7 +85,7 @@ export function CategoryTransactions({
   const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery(
     transactionsQueryOptions({
       pageSize: 25,
-      filters: { categoryId, from: range.start, to: range.end },
+      filters: { categoryIds: [categoryId], from: range.start, to: range.end },
     })
   );
   return (

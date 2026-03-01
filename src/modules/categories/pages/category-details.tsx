@@ -55,7 +55,7 @@ export function CategoryDetails({ id }: { id: string }) {
       queryClient.invalidateQueries({
         queryKey: transactionsQueryOptions({
           pageSize: 25,
-          filters: { categoryId: id, from: start, to: end },
+          filters: { categoryIds: [id], from: start, to: end },
         }).queryKey,
       }),
     ]);

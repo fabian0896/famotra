@@ -22,7 +22,7 @@ export function TransactionForm({
   onSuccess?: () => void;
 }) {
   const queryClient = useQueryClient();
-  const { data } = useQuery(accountsQueryOptions);
+  const { data } = useQuery(accountsQueryOptions());
   const accounts = data?.accounts || [];
 
   const isEdit = Boolean(transaction);
@@ -39,7 +39,7 @@ export function TransactionForm({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [QueryKeys.TRANSACTIONS] });
-      queryClient.invalidateQueries({ queryKey: accountsQueryOptions.queryKey });
+      queryClient.invalidateQueries({ queryKey: accountsQueryOptions().queryKey });
     },
   });
 
