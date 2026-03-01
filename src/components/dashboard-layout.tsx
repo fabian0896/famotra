@@ -197,7 +197,7 @@ export function BottomNav() {
   );
 }
 
-export function Footer({ className, ...props }: React.ComponentProps<'footer'>) {
+export function FooterRoot({ className, ...props }: React.ComponentProps<'footer'>) {
   return (
     <footer
       data-footer="custom"
@@ -209,6 +209,14 @@ export function Footer({ className, ...props }: React.ComponentProps<'footer'>) 
     />
   );
 }
+
+export function HideFooter() {
+  return <footer data-footer="custom" className="hidden" />;
+}
+
+export const Footer = Object.assign(FooterRoot, {
+  Hide: HideFooter,
+});
 
 export function DashboardLayout() {
   return (
