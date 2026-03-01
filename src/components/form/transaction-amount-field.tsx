@@ -1,3 +1,4 @@
+import React from 'react';
 import { NumericFormat } from 'react-number-format';
 import type { CategoryTypes } from '@/modules/categories/models/categories.models';
 import { cn } from '@/lib/utils';
@@ -13,6 +14,14 @@ const colorByType: Record<CategoryTypes | 'neutral', string> = {
 export function TransactionAmountField({ type }: { type: CategoryTypes | 'neutral' }) {
   const field = useFieldContext<number>();
   const isError = field.state.meta.isTouched && !field.state.meta.isValid;
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  // autoFocus is blocked by iOS Safari unless focus() is called close to the
+  // original user gesture. A short delay keeps us within that window.
+  React.useEffect(() => {
+    const id = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <div className="flex flex-col gap-1.5 items-center">
@@ -23,6 +32,7 @@ export function TransactionAmountField({ type }: { type: CategoryTypes | 'neutra
           colorByType[type],
           isError && 'text-destructive'
         )}
+        getInputRef={inputRef}
         name={field.name}
         value={field.state.value === 0 ? '' : field.state.value}
         onValueChange={({ floatValue }) => field.handleChange(floatValue ?? 0)}
@@ -33,7 +43,6 @@ export function TransactionAmountField({ type }: { type: CategoryTypes | 'neutra
         placeholder="$ 0"
         inputMode="numeric"
         allowNegative={false}
-        autoFocus
       />
       <FieldError errors={field.state.meta.errors} />
     </div>
