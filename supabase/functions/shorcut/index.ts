@@ -56,49 +56,61 @@ app.post('/transaction', zValidator('json', CreateTransactionSchema), authMiddle
   const token = c.var.token;
   const data = c.req.valid('json');
 
-  const { data: card } = await supabase
-    .from('shorcut_cards')
-    .upsert({
-      token: token.id,
-      name: data.card,
-      user_id: token.user_id,
-    })
-    .select()
-    .single()
-    .throwOnError();
-
-  if (!card.active) {
-    return c.json({ message: 'Card is inactive, transaction not created.' }, 200);
-  }
-
-  const { data: merchant } = await supabase
-    .from('shorcuts_merchants')
-    .upsert({
-      token: token.id,
-      name: data.merchant,
-      user_id: token.user_id,
-    })
-    .select()
-    .single()
-    .throwOnError();
-
-  if (!merchant.active) {
-    return c.json({ message: 'Merchant is inactive, transaction not created.' }, 200);
-  }
-
-  const account_id = card.account_id ?? null;
-  const category_id = merchant.category_id ?? null;
+  let card_id: string | null = null;
+  let merchant_id: string | null = null;
+  let account_id: string | null = null;
+  let category_id: string | null = null;
   const amount = parseToNumber(data.amount) * -1;
+
+  if (data.card) {
+    const { data: card } = await supabase
+      .from('shorcut_cards')
+      .upsert({
+        token: token.id,
+        name: data.card,
+        user_id: token.user_id,
+      })
+      .select()
+      .single()
+      .throwOnError();
+
+    if (!card.active) {
+      return c.json({ message: 'Card is inactive, transaction not created.' }, 200);
+    }
+
+    card_id = card.id ?? null;
+    account_id = card.account_id ?? null;
+  }
+
+  if (data.merchant) {
+    const { data: merchant } = await supabase
+      .from('shorcuts_merchants')
+      .upsert({
+        token: token.id,
+        name: data.merchant,
+        user_id: token.user_id,
+      })
+      .select()
+      .single()
+      .throwOnError();
+
+    if (!merchant.active) {
+      return c.json({ message: 'Merchant is inactive, transaction not created.' }, 200);
+    }
+
+    merchant_id = merchant.id ?? null;
+    category_id = merchant.category_id ?? null;
+  }
 
   const { data: transaction } = await supabase
     .from('transactions')
     .insert({
       amount: amount,
-      description: merchant.name,
+      description: data.merchant ?? 'Atajo vacio 😢',
       account_id: account_id,
       category_id: category_id,
-      card_id: card.id,
-      merchant_id: merchant.id,
+      card_id: card_id,
+      merchant_id: merchant_id,
       transaction_type: 'expense',
       user_id: token.user_id,
     })
